@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Instructor, InstructorType } from '../models/Instructor.model';
-import bcrypt from 'bcrypt';
+import argon2 from 'argon2';
 
 export const createInstructor = async (req: Request, res: Response): Promise<void> => {
 	console.log('\nCreating new user');
@@ -15,8 +15,7 @@ export const createInstructor = async (req: Request, res: Response): Promise<voi
 			return;
 		}
 
-		const salt = await bcrypt.genSalt(10);
-		const hashedPassword = await bcrypt.hash(newInstructor.password, salt);
+		const hashedPassword = await argon2.hash(newInstructor.password);
 
 		const newInstructorDocument = await Instructor.create({
 			...newInstructor,
