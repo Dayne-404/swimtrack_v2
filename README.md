@@ -12,9 +12,8 @@ With SwimTrack, staff can manage student progress effortlessly, saving time and 
 - Responsive design for all devices.
 - Role-based access for admins and users.
 
----
-
-## 📋 Table of Contents
+<details>
+<summary>Table of Contents</summary>
 1. [Installation](#installation)
 2. [Usage](#usage)
 3. [Technologies Used](#technologies-used)
@@ -22,5 +21,5 @@ With SwimTrack, staff can manage student progress effortlessly, saving time and 
 5. [Contributing](#contributing)
 6. [License](#license)
 7. [Contact](#contact)
+</details>
 
----
