@@ -1,15 +1,21 @@
-import { Request, Response } from 'express';
-import { Instructor } from '../models/Instructor.model';
+import { NextFunction, Request, Response } from 'express';
+import { User } from '../models/User.model';
 import argon2 from 'argon2';
-import jwt from 'jsonwebtoken';
+import {
+	generateAccessToken,
+	generateRefreshToken,
+	validateRefreshToken,
+	validateAccessToken,
+} from '../utils/authentication';
+import Token from '../models/Token.model';
 
-const JWT_SECRET = process.env.JWT_SECRET;
-
-if (!JWT_SECRET) {
-	console.error(
-		'JWT_SECRET is not set. Please provide a valid secret in the environment variables.'
-	);
-	process.exit(1);
+//I can't figure out why my regular type definitions do not work.. I hate typescript
+declare global {
+	namespace Express {
+		interface Request {
+			user?: { _id: string; role: string };
+		}
+	}
 }
 
 export const login = async (req: Request, res: Response): Promise<void> => {
@@ -18,26 +24,83 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 	const { email, password } = req.body;
 
 	try {
-		let instructor = await Instructor.findOne({ email });
-		if (!instructor) {
+		const user = await User.findOne({ email });
+		if (!user) {
 			res.status(404).json({ message: 'User not found' });
 			return;
 		}
 
-		const isMatch = await argon2.verify(instructor.password, password);
+		const isMatch = await argon2.verify(user.password, password);
 		if (!isMatch) {
 			res.status(400).json({ message: 'Incorrect password' });
+			return;
 		}
 
-		const token = jwt.sign({ id: instructor._id, role: instructor.role }, JWT_SECRET, {
-			expiresIn: '1h',
-		});
+		const { _id, role } = user;
+		const accessToken = generateAccessToken({ _id, role });
+		const refreshToken = await generateRefreshToken(_id);
 
-		res.status(200).json({ token: token });
+		res.status(200).json({ accessToken: accessToken, refreshToken: refreshToken });
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error.message);
 			res.status(500).json({ message: error.message });
+		} else {
+			console.error('An unknown error occurred');
+			res.status(500).json({ message: 'An unknown error occurred' });
+		}
+	}
+};
+
+export const refreshToken = async (req: Request, res: Response): Promise<void> => {
+	console.log('\nUser refreshing token');
+
+	const { refreshToken } = req.body;
+
+	if (!refreshToken) {
+		res.status(401).json({ message: 'Refresh token required' });
+		return;
+	}
+
+	try {
+		const storedToken = await Token.findOne({ refreshToken });
+
+		if (!storedToken) {
+			res.status(403).json({ message: 'Invalid refresh token' });
+			return;
+		}
+
+		validateRefreshToken(storedToken.refreshToken);
+		//const newAccessToken = generateAccessToken({ })
+		//res.status(200).json({accessToken: newAccessToken})
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error(error.message);
+			res.status(500).json({ message: error.message });
+		} else {
+			console.error('An unknown error occurred');
+			res.status(500).json({ message: 'An unknown error occurred' });
+		}
+	}
+};
+
+export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
+	const authHeader = req.headers['authorization'];
+	const accessToken = authHeader && authHeader.split(' ')[1];
+
+	if (!accessToken) {
+		res.status(401).json({ message: 'Access token required' });
+		return;
+	}
+
+	try {
+		const decoded = validateAccessToken(accessToken);
+		req.user = { _id: decoded._id, role: decoded.role };
+		next();
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error(error.message);
+			res.status(403).json({ message: error.message });
 		} else {
 			console.error('An unknown error occurred');
 			res.status(500).json({ message: 'An unknown error occurred' });

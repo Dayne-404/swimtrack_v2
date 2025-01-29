@@ -1,21 +1,19 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
-export interface InstructorType {
-    firstName: string;
+export interface UserDocument extends Document {
+	_id: mongoose.Types.ObjectId;
+	firstName: string;
 	lastName?: string;
 	email: string;
 	password: string;
 	avatarColor: string;
 	role: 'admin' | 'supervisor' | 'instructor';
 	active: boolean;
-}
-
-interface InstructorDocument extends InstructorType, Document {
 	createdAt?: Date;
 	updatedAt?: Date;
 }
 
-const instructorSchema: Schema<InstructorDocument> = new Schema(
+const UserSchema: Schema<UserDocument> = new Schema(
 	{
 		firstName: {
 			type: String,
@@ -53,7 +51,4 @@ const instructorSchema: Schema<InstructorDocument> = new Schema(
 	{ timestamps: true }
 );
 
-export const Instructor: Model<InstructorDocument> = mongoose.model<InstructorDocument>(
-	'Instructor',
-	instructorSchema
-);
+export const User: Model<UserDocument> = mongoose.model<UserDocument>('Users', UserSchema);

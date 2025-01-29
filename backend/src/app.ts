@@ -3,8 +3,9 @@ dotenv.config();
 
 import express, { Application } from 'express';
 import cors from 'cors';
-import instructorRoute from './routes/instructor.route';
+import userRoute from './routes/user.route';
 import authenticationRoute from './routes/authentication.route';
+import { authenticateToken } from './controllers/authentication.controller';
 
 const app: Application = express();
 
@@ -12,6 +13,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/authenticate', authenticationRoute);
-app.use('/api/instructors', instructorRoute);
+app.use('/api/users', authenticateToken, userRoute);
 
 export default app;
