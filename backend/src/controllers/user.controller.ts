@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User, UserDocument } from '../models/User.model';
+import User, { UserDocument } from '../models/User.model';
 import argon2 from 'argon2';
 
 export const createUser = async (req: Request, res: Response): Promise<any> => {
