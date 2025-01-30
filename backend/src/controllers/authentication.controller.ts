@@ -38,7 +38,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
 		const { _id, role } = user;
 		const accessToken = generateAccessToken({ _id, role });
-		const refreshToken = await generateRefreshToken(_id);
+		const refreshToken = await generateRefreshToken({ _id, role });
 
 		res.status(200).json({ accessToken: accessToken, refreshToken: refreshToken });
 	} catch (error) {
@@ -71,8 +71,9 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
 		}
 
 		validateRefreshToken(storedToken.refreshToken);
-		//const newAccessToken = generateAccessToken({ })
-		//res.status(200).json({accessToken: newAccessToken})
+		const { userId, role } = storedToken;
+		const newAccessToken = generateAccessToken({ _id: userId.toString(), role })
+		res.status(200).json({accessToken: newAccessToken})
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error.message);

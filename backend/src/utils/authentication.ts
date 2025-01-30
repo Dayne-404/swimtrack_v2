@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import Token from '../models/Token.model';
-import { Types } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 import { NextFunction } from 'express';
 import { DecodedToken } from '../types/jwt.types';
 
@@ -21,18 +21,19 @@ if (!REFRESH_TOKEN_SECRET) {
 	process.exit(1);
 }
 
-export const generateAccessToken = (user: { _id: Types.ObjectId; role: string }): string => {
+export const generateAccessToken = (user: { _id: Types.ObjectId | string; role: string }): string => {
 	return jwt.sign({ userId: user._id.toString(), role: user.role }, ACCESS_TOKEN_SECRET, {
 		expiresIn: '10m',
 	});
 };
 
-export const generateRefreshToken = async (userId: Types.ObjectId): Promise<string> => {
-	const refreshToken = jwt.sign({ userId: userId.toString() }, REFRESH_TOKEN_SECRET, {
+export const generateRefreshToken = async (user: { _id: Types.ObjectId | string; role: string }): Promise<string> => {
+	const refreshToken = jwt.sign({ userId: user._id.toString() }, REFRESH_TOKEN_SECRET, {
 		expiresIn: '7d',
 	});
 	await Token.create({
-		userId,
+		userId: user._id,
+		role: user.role,
 		refreshToken,
 		expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 	});
