@@ -26,6 +26,7 @@ const TokenSchema: Schema<TokenDocument> = new Schema({
 	expiresAt: {
 		type: Date,
 		required: true,
+		expires: 0,
 	},
 });
 

@@ -52,7 +52,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 	}
 };
 
-export const refreshToken = async (req: Request, res: Response): Promise<void> => {
+export const refreshAccessToken = async (req: Request, res: Response): Promise<void> => {
 	console.log('\nUser refreshing token');
 
 	const { refreshToken } = req.body;
@@ -72,8 +72,30 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
 
 		validateRefreshToken(storedToken.refreshToken);
 		const { userId, role } = storedToken;
-		const newAccessToken = generateAccessToken({ _id: userId.toString(), role })
-		res.status(200).json({accessToken: newAccessToken})
+		const newAccessToken = generateAccessToken({ _id: userId.toString(), role });
+		res.status(200).json({ accessToken: newAccessToken });
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error(error.message);
+			res.status(500).json({ message: error.message });
+		} else {
+			console.error('An unknown error occurred');
+			res.status(500).json({ message: 'An unknown error occurred' });
+		}
+	}
+};
+
+export const logout = async (req: Request, res: Response): Promise<void> => {
+	const { refreshToken } = req.body;
+
+	if (!refreshToken) {
+		res.status(400).json({ message: 'Refresh token is required' });
+		return;
+	}
+
+	try {
+		await Token.deleteOne({ refreshToken });
+		res.status(200).json({ message: 'Logged out successfully' });
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error.message);
