@@ -7,3 +7,11 @@ export default interface WorksheetFilterFields {
 	time?: string;
 	location?: number;
 }
+
+export const NUMERIC_FIELDS = new Set<keyof WorksheetFilterFields>([
+    'level',
+    'year',
+    'session',
+    'day',
+    'location',
+]);

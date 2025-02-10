@@ -118,7 +118,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
 
 	try {
 		const decoded = validateAccessToken(accessToken);
-		req.user = { _id: decoded._id, role: decoded.role };
+		req.user = { _id: decoded.userId, role: decoded.role };
 		next();
 	} catch (error) {
 		if (error instanceof Error) {

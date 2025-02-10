@@ -1,15 +1,32 @@
 import { Request, Response } from 'express';
 import Worksheet, { WorksheetDocument } from '../models/Worksheet.model';
 import buildFiltersQuery from '../utils/buildFilterQuery';
+import buildSortQuery from '../utils/buildSortQuery';
 
 export const findWorksheet = async (req: Request, res: Response): Promise<any> => {
-	const { specific = false, limit = 10, skip = 0, sort = [], ...filters } = req.query;
-	console.log('FILTERS:', filters);
-	console.log('SORTING', sort);
+	const { limit = 20, skip = 0, sort = [], ...filters } = req.query;
+	const isSpecific = 'specific' in req.query;
 
 	try {
-		//const filterQuery = buildFiltersQuery(filters, req.user, specific);
-		
+		const filterQuery =
+			isSpecific && req.user?._id
+				? buildFiltersQuery(filters, req.user._id)
+				: buildFiltersQuery(filters);
+
+		const sortQuery = buildSortQuery(sort as string[]);
+
+		console.log('Filter Query: ', filterQuery);
+		console.log('Sort Query: ', sortQuery);
+
+		const worksheets = await Worksheet.find(filterQuery)
+			.sort(sortQuery as { [key: string]: 1 | -1 })
+			.skip(parseInt(skip as string))
+			.limit(parseInt(limit as string))
+			.populate('instructor', '_id name');
+
+		const totalCount = await Worksheet.countDocuments(filterQuery);
+
+		res.status(200).json({worksheets, totalCount});
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error.message);
