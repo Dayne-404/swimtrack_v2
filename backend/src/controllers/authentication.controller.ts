@@ -130,3 +130,13 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
 		}
 	}
 };
+
+export const authenticateAdmin = (req: Request, res: Response, next: NextFunction) => {
+	const adminPassword = process.env.ADMIN_PASSWORD;
+	if(req.headers.authorization !== `Bearer ${adminPassword}`) {
+		res.status(403).json({ message: 'Unauthorized' });
+		return;
+	}
+	
+	next();
+}

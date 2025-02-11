@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/server.ts"
+    "dev": "nodemon src/server.ts",
+    "seed:users": "ts-node src/scripts/seedUsers.ts",
+    "seed:worksheets": "ts-node src/scripts/seedWorksheets.ts",
+    "seed:all": "npm run seed:users && npm run seed:worksheets"
   },
   "keywords": [],
   "author": "",
