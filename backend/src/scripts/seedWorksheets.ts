@@ -59,7 +59,7 @@ const seedWorksheets = async (count: number) => {
 
 		for (let i = 0; i < count; i++) {
 			worksheets.push({
-				userId: getRandomElement(userIds),
+				user: getRandomElement(userIds),
 				level: Math.floor(Math.random() * 20) + 1,
 				year: Math.floor(Math.random() * (new Date().getFullYear() - 2000 + 1)) + 2000,
 				session: getRandomElement([0, 1, 2, 3]),

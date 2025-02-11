@@ -1,5 +1,5 @@
 export default interface WorksheetFilterFields {
-	userId?: string;
+	user?: string;
 	level?: number;
 	year?: number;
 	session?: number;

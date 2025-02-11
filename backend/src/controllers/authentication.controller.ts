@@ -9,15 +9,6 @@ import {
 } from '../utils/authentication';
 import Token from '../models/Token.model';
 
-//I can't figure out why my regular type definitions do not work.. I hate typescript
-declare global {
-	namespace Express {
-		interface Request {
-			user?: { _id: string; role: string };
-		}
-	}
-}
-
 export const login = async (req: Request, res: Response): Promise<void> => {
 	console.log('\nUser attempting to login');
 

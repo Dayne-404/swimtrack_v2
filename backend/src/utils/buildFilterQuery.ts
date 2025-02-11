@@ -31,7 +31,7 @@ const buildFiltersQuery = (
 				return val;
 			});
 
-			if (userId) query.userId = userId;
+			if (userId) query.user = userId;
 			query[key] = { $in: valuesArray } as any;
 		}
 	});
