@@ -3,7 +3,7 @@ import StudentSchema, { StudentDocument } from './Student.model';
 const currentYear = new Date().getFullYear();
 
 export interface WorksheetDocument extends Document {
-	userId: mongoose.Types.ObjectId;
+	user: mongoose.Types.ObjectId;
 	level: number;
 	year: number;
 	session: number;
@@ -17,9 +17,9 @@ export interface WorksheetDocument extends Document {
 
 const WorksheetSchema: Schema<WorksheetDocument> = new Schema(
 	{
-		userId: {
+		user: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'User',
+			ref: 'Users',
 			required: [true, 'User ID is required'],
 		},
 		level: {

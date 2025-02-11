@@ -28,7 +28,23 @@ const getRandomElement = (array: string[] | number[]): string | number => {
 	return array[Math.floor(Math.random() * array.length)];
 };
 
+const generateStudents = (count: number): any[] => {
+	if (count === 0) return [];
+
+	const students = [];
+	for (let i = 0; i < count; i++) {
+		students.push({
+			name: `name${i + 1}`,
+			skills: [],
+			passed: Math.random() > 0.5,
+		});
+	}
+	return students;
+};
+
 const seedWorksheets = async (count: number) => {
+	const startTime = Date.now();
+
 	try {
 		await connectDB();
 
@@ -52,13 +68,12 @@ const seedWorksheets = async (count: number) => {
 					Math.floor(Math.random() * 60)
 				).padStart(2, '0')}`,
 				location: getRandomElement([0, 1]),
-				students: [],
+				students: generateStudents(Math.floor(Math.random() * 5) + 1),
 			});
 		}
 
 		await Worksheet.insertMany(worksheets);
 		console.log(`Sucessfully inserted ${count} test worksheets!`);
-		process.exit();
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error.message);
@@ -68,15 +83,20 @@ const seedWorksheets = async (count: number) => {
 
 		process.exit(1);
 	}
+
+	const endTime = Date.now();
+	const elapsedTime = (endTime - startTime) / 1000;
+	console.log(`\nSeed operation completed in ${elapsedTime.toFixed(2)} seconds.`);
+	process.exit();
 };
 
 const countArg = process.argv[2];
 const count = countArg ? parseInt(countArg, 10) : NaN;
 
-if(isNaN(count) || count <= 0) {
-    console.error('Please provide a valid number of documents to insert.');
-    console.error('Example: npm run seed -- 50');
-    process.exit(1);
+if (isNaN(count) || count <= 0) {
+	console.error('Please provide a valid number of documents to insert.');
+	console.error('Example: npm run seed -- 50');
+	process.exit(1);
 }
 
 seedWorksheets(count);

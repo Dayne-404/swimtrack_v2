@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import Worksheet, { WorksheetDocument } from '../models/Worksheet.model';
+import Worksheet from '../models/Worksheet.model';
+import User from '../models/User.model';
 import buildFiltersQuery from '../utils/buildFilterQuery';
 import buildSortQuery from '../utils/buildSortQuery';
 
@@ -22,7 +23,7 @@ export const findWorksheet = async (req: Request, res: Response): Promise<any> =
 			.sort(sortQuery as { [key: string]: 1 | -1 })
 			.skip(parseInt(skip as string))
 			.limit(parseInt(limit as string))
-			.populate('instructor', '_id name');
+			.populate('user', '_id firstName lastName');
 
 		const totalCount = await Worksheet.countDocuments(filterQuery);
 
