@@ -57,10 +57,10 @@ export const getWorksheetById = async (
 	res: Response,
 	next: NextFunction
 ): Promise<any> => {
-	const { _id } = req.params;
+	const { id } = req.params;
 
 	try {
-		const worksheet = await Worksheet.findById(_id).populate('user', '_id firstName lastName');
+		const worksheet = await Worksheet.findById(id).populate('user', '_id firstName lastName');
 		if (!worksheet) {
 			res.status(404).json({ message: 'Worksheet not found' });
 			return;
@@ -77,10 +77,10 @@ export const updateWorksheet = async (
 	next: NextFunction
 ): Promise<any> => {
 	const user = req.user;
-	const { _id } = req.params;
+	const { id } = req.params;
 
 	try {
-		const worksheet = await Worksheet.findById(_id);
+		const worksheet = await Worksheet.findById(id);
 		if (!worksheet) {
 			res.status(404).json({ message: 'Worksheet not found' });
 			return;
@@ -91,7 +91,7 @@ export const updateWorksheet = async (
 			return;
 		}
 
-		const updatedWorksheet = await Worksheet.findByIdAndUpdate(_id, req.body, { new: true });
+		const updatedWorksheet = await Worksheet.findByIdAndUpdate(id, req.body, { new: true });
 		res.status(200).json(updatedWorksheet);
 	} catch (error) {
 		next(error);
@@ -104,10 +104,10 @@ export const deleteWorksheet = async (
 	next: NextFunction
 ): Promise<any> => {
 	const user = req.user;
-	const { _id } = req.params;
+	const { id } = req.params;
 
 	try {
-		const worksheet = await Worksheet.findById(_id);
+		const worksheet = await Worksheet.findById(id);
 		if (!worksheet) {
 			res.status(404).json({ message: 'Worksheet not found' });
 			return;
@@ -118,7 +118,7 @@ export const deleteWorksheet = async (
 			return;
 		}
 
-		await Worksheet.findByIdAndDelete(_id);
+		await Worksheet.findByIdAndDelete(id);
 		res.status(200).json({ message: 'Worksheet deleted successfully' });
 	} catch (error) {
 		next(error);
