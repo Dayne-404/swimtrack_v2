@@ -7,6 +7,7 @@ import userRoute from './routes/user.route';
 import worksheetRoute from './routes/worksheet.route';
 import authenticationRoute from './routes/authentication.route';
 import { authenticateToken } from './controllers/authentication.controller';
+import { errorHandler } from './utils/errorHandler';
 
 const app: Application = express();
 
@@ -16,5 +17,7 @@ app.use(express.json());
 app.use('/api/authenticate', authenticationRoute);
 app.use('/api/worksheets', authenticateToken, worksheetRoute);
 app.use('/api/users', authenticateToken, userRoute);
+
+app.use(errorHandler);
 
 export default app;

@@ -1,10 +1,14 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import Worksheet from '../models/Worksheet.model';
-import User from '../models/User.model';
 import buildFiltersQuery from '../utils/buildFilterQuery';
 import buildSortQuery from '../utils/buildSortQuery';
+import { isAuthorized } from '../utils/authentication';
 
-export const findWorksheet = async (req: Request, res: Response): Promise<any> => {
+export const findWorksheet = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<any> => {
 	const { limit = 20, skip = 0, sort = [], ...filters } = req.query;
 	const isSpecific = 'specific' in req.query;
 
@@ -27,31 +31,96 @@ export const findWorksheet = async (req: Request, res: Response): Promise<any> =
 
 		const totalCount = await Worksheet.countDocuments(filterQuery);
 
-		res.status(200).json({worksheets, totalCount});
+		res.status(200).json({ worksheets, totalCount });
 	} catch (error) {
-		if (error instanceof Error) {
-			console.error(error.message);
-			res.status(500).json({ message: error.message });
-		} else {
-			console.error('An unknown error occurred');
-			res.status(500).json({ message: 'An unknown error occurred' });
-		}
+		next(error);
 	}
 };
 
-export const createWorksheet = async (req: Request, res: Response): Promise<any> => {
+export const createWorksheet = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<any> => {
 	try {
 		const worksheet = await Worksheet.create(req.body);
 		res.status(200).json({
 			worksheet,
 		});
 	} catch (error) {
-		if (error instanceof Error) {
-			console.error(error.message);
-			res.status(500).json({ message: error.message });
-		} else {
-			console.error('An unknown error occurred');
-			res.status(500).json({ message: 'An unknown error occurred' });
+		next(error);
+	}
+};
+
+export const getWorksheetById = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<any> => {
+	const { _id } = req.params;
+
+	try {
+		const worksheet = await Worksheet.findById(_id).populate('user', '_id firstName lastName');
+		if (!worksheet) {
+			res.status(404).json({ message: 'Worksheet not found' });
+			return;
 		}
+		res.status(200).json({ worksheet });
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const updateWorksheet = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<any> => {
+	const user = req.user;
+	const { _id } = req.params;
+
+	try {
+		const worksheet = await Worksheet.findById(_id);
+		if (!worksheet) {
+			res.status(404).json({ message: 'Worksheet not found' });
+			return;
+		}
+
+		if (!isAuthorized(req, worksheet)) {
+			res.status(403).json({ message: 'You are not authorized to update this worksheet' });
+			return;
+		}
+
+		const updatedWorksheet = await Worksheet.findByIdAndUpdate(_id, req.body, { new: true });
+		res.status(200).json(updatedWorksheet);
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const deleteWorksheet = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<any> => {
+	const user = req.user;
+	const { _id } = req.params;
+
+	try {
+		const worksheet = await Worksheet.findById(_id);
+		if (!worksheet) {
+			res.status(404).json({ message: 'Worksheet not found' });
+			return;
+		}
+
+		if (!isAuthorized(req, worksheet)) {
+			res.status(403).json({ message: 'You are not authorized to delete this worksheet' });
+			return;
+		}
+
+		await Worksheet.findByIdAndDelete(_id);
+		res.status(200).json({ message: 'Worksheet deleted successfully' });
+	} catch (error) {
+		next(error);
 	}
 };

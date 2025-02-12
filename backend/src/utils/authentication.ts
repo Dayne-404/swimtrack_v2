@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
 import Token from '../models/Token.model';
-import { Schema, Types } from 'mongoose';
-import { NextFunction } from 'express';
+import { Types } from 'mongoose';
+import { Request } from 'express';
 import { DecodedToken } from '../types/jwt.types';
+import { WorksheetDocument } from '../models/Worksheet.model';
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
@@ -48,3 +49,13 @@ export const validateAccessToken = (token: string): DecodedToken => {
 export const validateRefreshToken = (token: string) => {
 	jwt.verify(token, REFRESH_TOKEN_SECRET);
 };
+
+export const isAuthorized = (req: Request, resource: WorksheetDocument): boolean => {
+	const user = req.user;
+	return (
+		user?._id === String(resource.user) ||
+		user?.role === 'admin' ||
+		user?.role === 'supervisor'
+	  );
+};
+

@@ -1,10 +1,22 @@
 import express, { Request, Response } from 'express';
 
-import { createWorksheet, findWorksheet } from '../controllers/worksheet.controller';
+import {
+	createWorksheet,
+	findWorksheet,
+	getWorksheetById,
+	updateWorksheet,
+	deleteWorksheet,
+} from '../controllers/worksheet.controller';
 
 const router = express.Router();
 
-router.post('/', createWorksheet);
 router.get('/', findWorksheet);
+router.get('/:id', getWorksheetById);
+
+router.post('/', createWorksheet);
+
+router.put('/:id', updateWorksheet);
+
+router.delete('/:id', deleteWorksheet);
 
 export default router;
