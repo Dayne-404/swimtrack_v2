@@ -76,7 +76,6 @@ export const updateWorksheet = async (
 	res: Response,
 	next: NextFunction
 ): Promise<any> => {
-	const user = req.user;
 	const { id } = req.params;
 
 	try {
@@ -86,7 +85,7 @@ export const updateWorksheet = async (
 			return;
 		}
 
-		if (!isAuthorized(req, worksheet)) {
+		if (!isAuthorized(req, String(worksheet.user))) {
 			res.status(403).json({ message: 'You are not authorized to update this worksheet' });
 			return;
 		}
@@ -103,7 +102,6 @@ export const deleteWorksheet = async (
 	res: Response,
 	next: NextFunction
 ): Promise<any> => {
-	const user = req.user;
 	const { id } = req.params;
 
 	try {
@@ -113,7 +111,7 @@ export const deleteWorksheet = async (
 			return;
 		}
 
-		if (!isAuthorized(req, worksheet)) {
+		if (!isAuthorized(req, String(worksheet.user))) {
 			res.status(403).json({ message: 'You are not authorized to delete this worksheet' });
 			return;
 		}

@@ -1,8 +1,9 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import User, { UserDocument } from '../models/User.model';
 import argon2 from 'argon2';
+import { isAuthorized } from '../utils/authentication';
 
-export const createUser = async (req: Request, res: Response): Promise<any> => {
+export const createUser = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
 	console.log('\nCreating new user');
 
 	const newUser: UserDocument = req.body;
@@ -34,14 +35,44 @@ export const createUser = async (req: Request, res: Response): Promise<any> => {
 
 		res.status(200).json(newUserDocument);
 	} catch (error) {
-		if (error instanceof Error) {
-			console.error(error.message);
-			res.status(500).json({ message: error.message });
-		} else {
-			console.error('An unknown error occurred');
-			res.status(500).json({ message: 'An unknown error occurred' });
-		}
+		next(error);
 	}
 };
 
+export const updateUser = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+	const userId = req.user?._id; //Id of the user making the request
+	const targetId = req.params.id; //Id that is passed through params
+	const updates = req.body;
 
+	try {
+		const userToUpdate = await User.findById(targetId ? targetId : userId);
+
+		if (!userToUpdate) {
+			res.status(404).json({ message: 'User not found' });
+			return;
+		}
+
+		//If targetId and userId are the same, or the user is an admin or supervisor, the request is authorized
+		if (!isAuthorized(req, targetId, userToUpdate.role)) {
+			res.status(403).json({
+				message: 'You are not authorized to change the email of this account',
+			});
+			return;
+		}
+
+		if (updates.password) {
+			updates.password = await argon2.hash(updates.password);
+		}
+
+		if(updates.role && req.user?.role !== 'admin') {
+			updates.role.omit();
+		}
+
+		Object.assign(userToUpdate, updates);
+		await userToUpdate.save();
+
+		res.status(200).json({ message: 'User updated successfully' });
+	} catch (error) {
+		next(error);
+	}
+};
