@@ -64,7 +64,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 			updates.password = await argon2.hash(updates.password);
 		}
 
-		if(updates.role && req.user?.role !== 'admin') {
+		if (updates.role && req.user?.role !== 'admin') {
 			updates.role.omit();
 		}
 
@@ -72,6 +72,61 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 		await userToUpdate.save();
 
 		res.status(200).json({ message: 'User updated successfully' });
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const searchForUser = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<any> => {
+	const { limit = 20, search = '' } = req.query;
+
+	let searchQuery = {};
+
+	if (search) {
+		const searchTerms = search
+			.toString()
+			.split(' ')
+			.filter((term) => term.trim() !== '');
+
+		searchQuery = {
+			$and: searchTerms.map((term) => ({
+				$or: [
+					{ firstName: { $regex: term, $options: 'i' } },
+					{ lastName: { $regex: term, $options: 'i' } },
+					{ email: { $regex: term, $options: 'i' } },
+				],
+			})),
+		};
+	}
+
+	try {
+		const users = await User.find(searchQuery).limit(Number(limit)).select('-password');
+		res.status(200).json(users);
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const getUserById = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<any> => {
+	const targetId = req.params.id;
+
+	try {
+		const user = await User.findById(targetId).select('-password');
+
+		if (!user) {
+			res.status(404).json({ message: 'User not found' });
+			return;
+		}
+
+		res.status(200).json(user);
 	} catch (error) {
 		next(error);
 	}
