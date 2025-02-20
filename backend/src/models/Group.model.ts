@@ -3,7 +3,7 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 export interface GroupDocument extends Document {
 	userId: Schema.Types.ObjectId;
 	name: string;
-	worksheets: mongoose.Types.ObjectId;
+	worksheets: mongoose.Types.ObjectId[];
 	createdAt?: Date;
 	updatedAt?: Date;
 }
@@ -18,11 +18,10 @@ const GroupSchema: Schema<GroupDocument> = new Schema(
 		name: {
 			type: String,
 			required: true,
-			unique: true,
 		},
 		worksheets: [
 			{
-				type: Schema.Types.ObjectId,
+				type: mongoose.Schema.Types.ObjectId,
 				ref: 'Worksheets',
 			},
 		],
@@ -30,6 +29,6 @@ const GroupSchema: Schema<GroupDocument> = new Schema(
 	{ timestamps: true }
 );
 
-const Group: Model<GroupDocument> = mongoose.model<GroupDocument>('Worksheets', GroupSchema);
+const Group: Model<GroupDocument> = mongoose.model<GroupDocument>('Groups', GroupSchema);
 
 export default Group;
