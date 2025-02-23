@@ -4,6 +4,7 @@ import buildFiltersQuery from '../utils/buildFilterQuery';
 import buildSortQuery from '../utils/buildSortQuery';
 import { isAuthorized } from '../utils/authentication';
 
+//TODO Change to align closer to getGroups
 export const getWorksheets = async (
 	req: Request,
 	res: Response,

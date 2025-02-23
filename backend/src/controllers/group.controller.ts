@@ -13,7 +13,7 @@ export const createGroup = async (
 	const { name, worksheets } = req.body;
 
 	if (targetId && (userId !== targetId || req.user?.role !== 'admin')) {
-        res.status(403).json({ message: 'You are not authorized to create a group for this user' });
+		res.status(403).json({ message: 'You are not authorized to create a group for this user' });
 		return;
 	}
 
@@ -30,23 +30,38 @@ export const createGroup = async (
 	}
 };
 
-//TODO
+//TODO Align closer to getWorksheets
 export const getGroups = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    const userId = req.user?._id;
-    const targetId = req.params.id;
-    const { limit = 20, skip = 0, sort = ['-createdAt'], search = '' } = req.query;
+	const userId = req.user?._id;
+	const targetId = req.params.id;
+	const { limit = 20, skip = 0, sort = '-createdAt', search = ''} = req.query;
 
-    let searchQuery: any = targetId ? { user: targetId } : { user: userId };
-    
-    if(search) {
-        searchQuery = {
-            ...searchQuery,
-            $or: [{ name: { $regex: search, $options: 'i' } }],
-        };
+	let filterQuery: any = targetId ? { user: targetId } : { user: userId };
+
+	if (search) {
+		filterQuery = {
+			...filterQuery,
+			$or: [{ name: { $regex: search, $options: 'i' } }],
+		};
+	}
+
+	const sortString = sort as string;
+	const order = sortString.startsWith('-') ? -1 : 1;
+	const key = sortString.replace(/^-/, '');
+	const sortQuery: any = { [key]: order };
+
+    try {
+        const groups = await Group.find(filterQuery)
+            .sort(sortQuery)
+            .skip(skip as number)
+            .limit(limit as number);
+
+        const totalCount = await Group.countDocuments(filterQuery);
+
+        res.status(200).json({ groups, totalCount });
+    } catch (error) {
+        next(error);
     }
-
-
-
 };
 
 export const getWorksheetsByGroupId = async (
@@ -54,60 +69,60 @@ export const getWorksheetsByGroupId = async (
 	res: Response,
 	next: NextFunction
 ): Promise<any> => {
-    const groupId = req.params.id;
+	const groupId = req.params.id;
 
-    try {
-        const group = await Group.findById(groupId);
+	try {
+		const group = await Group.findById(groupId);
 
-        if(!group) {
-            throw new Error(`Group with ID ${groupId} not found`);
-        }
+		if (!group) {
+			throw new Error(`Group with ID ${groupId} not found`);
+		}
 
-        res.status(200).json(group);
-    } catch (error) {
-        next(error);
-    }
+		res.status(200).json(group);
+	} catch (error) {
+		next(error);
+	}
 };
 
 //TODO Make sure that all the worksheets belong to the user
 export const addWorksheetToGroups = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
+	req: Request,
+	res: Response,
+	next: NextFunction
 ): Promise<any> => {
-    const { worksheetIds, groupIds } = req.body;
+	const { worksheetIds, groupIds } = req.body;
 
-    if (!Array.isArray(worksheetIds) || !Array.isArray(groupIds)) {
-        return res.status(400).json({ message: 'worksheetIds and groupIds must be arrays' });
-    }
+	if (!Array.isArray(worksheetIds) || !Array.isArray(groupIds)) {
+		return res.status(400).json({ message: 'worksheetIds and groupIds must be arrays' });
+	}
 
-    try {
-        // Validate that all worksheet IDs exist
-        const worksheets = await Worksheet.find({ _id: { $in: worksheetIds } });
-        if (worksheets.length !== worksheetIds.length) {
-            return res.status(404).json({ message: 'One or more worksheet IDs are invalid' });
-        }
+	try {
+		// Validate that all worksheet IDs exist
+		const worksheets = await Worksheet.find({ _id: { $in: worksheetIds } });
+		if (worksheets.length !== worksheetIds.length) {
+			return res.status(404).json({ message: 'One or more worksheet IDs are invalid' });
+		}
 
-        // Add each worksheet to each group
-        const updatePromises = groupIds.map(async (groupId) => {
-            const group = await Group.findById(groupId);
-            if (!group) {
-                throw new Error(`Group with ID ${groupId} not found`);
-            }
+		// Add each worksheet to each group
+		const updatePromises = groupIds.map(async (groupId) => {
+			const group = await Group.findById(groupId);
+			if (!group) {
+				throw new Error(`Group with ID ${groupId} not found`);
+			}
 
-            worksheetIds.forEach((worksheetId) => {
-                if (!group.worksheets.includes(worksheetId)) {
-                    group.worksheets.push(worksheetId);
-                }
-            });
+			worksheetIds.forEach((worksheetId) => {
+				if (!group.worksheets.includes(worksheetId)) {
+					group.worksheets.push(worksheetId);
+				}
+			});
 
-            return group.save();
-        });
+			return group.save();
+		});
 
-        await Promise.all(updatePromises);
+		await Promise.all(updatePromises);
 
-        res.status(200).json({ message: 'Worksheets added to groups successfully' });
-    } catch (error) {
-        next(error);
-    }
+		res.status(200).json({ message: 'Worksheets added to groups successfully' });
+	} catch (error) {
+		next(error);
+	}
 };

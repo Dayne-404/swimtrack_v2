@@ -1,10 +1,12 @@
 import express from 'express';
-import { addWorksheetToGroups, createGroup, getWorksheetsByGroupId } from '../controllers/group.controller';
+import { addWorksheetToGroups, createGroup, getGroups, getWorksheetsByGroupId } from '../controllers/group.controller';
 
 const router = express.Router();
 
 //Get Groups
-router.get('/:id/worksheets', getWorksheetsByGroupId);
+router.get('/user/:id/worksheets', getWorksheetsByGroupId);
+router.get('/user/:id', getGroups);
+router.get('/', getGroups);
 
 //Update Group
 router.put('/addWorksheetsToGroups', addWorksheetToGroups);
