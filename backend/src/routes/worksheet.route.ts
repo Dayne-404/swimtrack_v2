@@ -2,7 +2,7 @@ import express from 'express';
 
 import {
 	createWorksheet,
-	findWorksheet,
+	getWorksheets,
 	getWorksheetById,
 	updateWorksheet,
 	deleteWorksheet,
@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.get('/', findWorksheet);
+router.get('/', getWorksheets);
 router.get('/:id', getWorksheetById);
 
 router.post('/', createWorksheet);

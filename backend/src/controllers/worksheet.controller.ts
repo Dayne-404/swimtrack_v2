@@ -4,7 +4,7 @@ import buildFiltersQuery from '../utils/buildFilterQuery';
 import buildSortQuery from '../utils/buildSortQuery';
 import { isAuthorized } from '../utils/authentication';
 
-export const findWorksheet = async (
+export const getWorksheets = async (
 	req: Request,
 	res: Response,
 	next: NextFunction

@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface GroupDocument extends Document {
-	userId: Schema.Types.ObjectId;
+	user: Schema.Types.ObjectId;
 	name: string;
 	worksheets: mongoose.Types.ObjectId[];
 	createdAt?: Date;
@@ -10,9 +10,9 @@ export interface GroupDocument extends Document {
 
 const GroupSchema: Schema<GroupDocument> = new Schema(
 	{
-		userId: {
+		user: {
 			type: Schema.Types.ObjectId,
-			ref: 'User',
+			ref: 'Users',
 			required: [true, 'User ID is required'],
 		},
 		name: {

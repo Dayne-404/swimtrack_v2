@@ -1,23 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import Group, { GroupDocument } from '../models/Group.model';
+import Group from '../models/Group.model';
+import User from '../models/User.model';
 import Worksheet from '../models/Worksheet.model';
-
-// export const createGroup = async (req: Request, res: Response): Promise<any> => {
-// 	try {
-// 		const worksheet = await Worksheet.create(req.body);
-// 		res.status(200).json({
-// 			worksheet,
-// 		});
-// 	} catch (error) {
-// 		if (error instanceof Error) {
-// 			console.error(error.message);
-// 			res.status(500).json({ message: error.message });
-// 		} else {
-// 			console.error('An unknown error occurred');
-// 			res.status(500).json({ message: 'An unknown error occurred' });
-// 		}
-// 	}
-// };
 
 export const createGroup = async (
 	req: Request,
@@ -29,13 +13,13 @@ export const createGroup = async (
 	const { name, worksheets } = req.body;
 
 	if (targetId && (userId !== targetId || req.user?.role !== 'admin')) {
-		res.status(403).json({ message: 'You are not authorized to create a group for this user' });
+        res.status(403).json({ message: 'You are not authorized to create a group for this user' });
 		return;
 	}
 
 	try {
 		const group = await Group.create({
-			userId: targetId ? targetId : userId,
+			user: targetId ? targetId : userId,
 			name: name,
 			worksheets: worksheets,
 		});
@@ -46,7 +30,25 @@ export const createGroup = async (
 	}
 };
 
-//TODO: Fix or change this
+//TODO
+export const getGroups = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    const userId = req.user?._id;
+    const targetId = req.params.id;
+    const { limit = 20, skip = 0, sort = ['-createdAt'], search = '' } = req.query;
+
+    let searchQuery: any = targetId ? { user: targetId } : { user: userId };
+    
+    if(search) {
+        searchQuery = {
+            ...searchQuery,
+            $or: [{ name: { $regex: search, $options: 'i' } }],
+        };
+    }
+
+
+
+};
+
 export const getWorksheetsByGroupId = async (
 	req: Request,
 	res: Response,
@@ -55,10 +57,11 @@ export const getWorksheetsByGroupId = async (
     const groupId = req.params.id;
 
     try {
-        const group = await Group.findById(groupId).populate({
-            path: 'userId',
-            select: '_id firstName',
-        });
+        const group = await Group.findById(groupId);
+
+        if(!group) {
+            throw new Error(`Group with ID ${groupId} not found`);
+        }
 
         res.status(200).json(group);
     } catch (error) {
@@ -66,6 +69,7 @@ export const getWorksheetsByGroupId = async (
     }
 };
 
+//TODO Make sure that all the worksheets belong to the user
 export const addWorksheetToGroups = async (
     req: Request,
     res: Response,
