@@ -9,7 +9,7 @@ export const createGroup = async (
 	next: NextFunction
 ): Promise<any> => {
 	const userId = req.user?._id; //Id of the user making the request
-	const targetId = req.params.id; //Id that is passed through params
+	const targetId = req.params.userId; //Id that is passed through params
 	const { name, worksheets } = req.body;
 
 	if (targetId && (userId !== targetId || req.user?.role !== 'admin')) {
@@ -32,7 +32,7 @@ export const createGroup = async (
 
 export const getGroups = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
 	const userId = req.user?._id;
-	const targetId = req.params.id;
+	const targetId = req.params.userId;
 	const { limit = 20, skip = 0, sort = '-createdAt', search = '' } = req.query;
 
 	let filterQuery: any = targetId ? { user: targetId } : { user: userId };
@@ -68,7 +68,7 @@ export const getWorksheetsByGroupId = async (
 	res: Response,
 	next: NextFunction
 ): Promise<any> => {
-	const groupId = req.params.id;
+	const groupId = req.params.groupId;
 
 	try {
 		const group = await Group.findById(groupId);
@@ -138,7 +138,7 @@ export const removeWorksheetsFromGroup = async (
 	res: Response,
 	next: NextFunction
 ): Promise<any> => {
-	const id = req.params.id;
+	const id = req.params.groupId;
 	const { worksheetIds } = req.body;
 
 	let worksheetArray: string[] = [];
