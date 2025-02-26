@@ -11,12 +11,12 @@ import {
 const router = express.Router();
 
 router.get('/', getWorksheets);
-router.get('/:id', getWorksheetById);
+router.get('/:worksheetId', getWorksheetById);
 
 router.post('/', createWorksheet);
 
-router.put('/:id', updateWorksheet);
+router.put('/:worksheetId', updateWorksheet);
 
-router.delete('/:id', deleteWorksheet);
+router.delete('/:worksheetId', deleteWorksheet);
 
 export default router;

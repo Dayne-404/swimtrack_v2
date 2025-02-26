@@ -41,11 +41,11 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
 
 export const updateUser = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
 	const userId = req.user?._id; //Id of the user making the request
-	const targetId = req.params.id; //Id that is passed through params
+	const { targetUserId } = req.params; //Id that is passed through params
 	const updates = req.body;
 
 	try {
-		const userToUpdate = await User.findById(targetId ? targetId : userId);
+		const userToUpdate = await User.findById(targetUserId ? targetUserId : userId);
 
 		if (!userToUpdate) {
 			res.status(404).json({ message: 'User not found' });
@@ -53,7 +53,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 		}
 
 		//If targetId and userId are the same, or the user is an admin or supervisor, the request is authorized
-		if (!isAuthorized(req, targetId, userToUpdate.role)) {
+		if (!isAuthorized(req, targetUserId, userToUpdate.role)) {
 			res.status(403).json({
 				message: 'You are not authorized to change the email of this account',
 			});
@@ -116,10 +116,10 @@ export const getUserById = async (
 	res: Response,
 	next: NextFunction
 ): Promise<any> => {
-	const targetId = req.params.id;
+	const { targetUserId } = req.params;
 
 	try {
-		const user = await User.findById(targetId).select('-password');
+		const user = await User.findById(targetUserId).select('-password');
 
 		if (!user) {
 			res.status(404).json({ message: 'User not found' });

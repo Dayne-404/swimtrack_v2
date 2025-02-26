@@ -9,17 +9,17 @@ export const createGroup = async (
 	next: NextFunction
 ): Promise<any> => {
 	const userId = req.user?._id; //Id of the user making the request
-	const targetId = req.params.userId; //Id that is passed through params
+	const { targetUserId } = req.params; //Id that is passed through params
 	const { name, worksheets } = req.body;
 
-	if (targetId && (userId !== targetId || req.user?.role !== 'admin')) {
+	if (targetUserId && (userId !== targetUserId || req.user?.role !== 'admin')) {
 		res.status(403).json({ message: 'You are not authorized to create a group for this user' });
 		return;
 	}
 
 	try {
 		const group = await Group.create({
-			user: targetId ? targetId : userId,
+			user: targetUserId ? targetUserId : userId,
 			name: name,
 			worksheets: worksheets,
 		});
@@ -32,10 +32,10 @@ export const createGroup = async (
 
 export const getGroups = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
 	const userId = req.user?._id;
-	const targetId = req.params.userId;
+	const { targetUserId } = req.params;
 	const { limit = 20, skip = 0, sort = '-createdAt', search = '' } = req.query;
 
-	let filterQuery: any = targetId ? { user: targetId } : { user: userId };
+	let filterQuery: any = targetUserId ? { user: targetUserId } : { user: userId };
 
 	if (search) {
 		filterQuery = {
@@ -85,7 +85,7 @@ export const getWorksheetsByGroupId = async (
 
 //TODO Make sure that all the worksheets belong to the user
 //UPDATE Maybe not.. I make sure that a user can only EDIT their own worksheets
-export const addWorksheetToGroups = async (
+export const addWorksheetsToGroups = async (
 	req: Request,
 	res: Response,
 	next: NextFunction

@@ -15,10 +15,10 @@ const app: Application = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/authenticate', authenticationRoute);
-app.use('/api/worksheets', authenticateToken, worksheetRoute);
-app.use('/api/users', authenticateToken, userRoute);
-app.use('/api/groups', authenticateToken, groupRoute);
+app.use('/api/authenticate', authenticationRoute, errorHandler);
+app.use('/api/worksheets', authenticateToken, worksheetRoute, errorHandler);
+app.use('/api/users', authenticateToken, userRoute, errorHandler);
+app.use('/api/groups', authenticateToken, groupRoute, errorHandler);
 
 app.use(errorHandler);
 
