@@ -3,17 +3,17 @@ import { addWorksheetsToGroups, createGroup, deleteGroupById, getGroups, getWork
 
 const router = express.Router();
 
-//Get Groups
-router.get('/:groupId/worksheets', getWorksheetsByGroupId);
-router.get('/user/:taretUserId', getGroups);
-router.get('/', getGroups);
+//Create Group
+router.post('/', createGroup);
+router.post('/user/:targetUserId', createGroup);
 
 //Update Group
 router.put('/:groupId/worksheets', addWorksheetsToGroups);
 
-//Create Group
-router.post('/', createGroup);
-router.post('/user/:targetUserId', createGroup);
+//Get Groups
+router.get('/', getGroups);
+router.get('/:groupId/worksheets', getWorksheetsByGroupId);
+router.get('/user/:taretUserId', getGroups);
 
 //Delete Group && Remove Worksheets from Group
 router.delete('/:groupId/worksheets', removeWorksheetsFromGroup);
