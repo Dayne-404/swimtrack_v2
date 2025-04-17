@@ -9,8 +9,7 @@ export const getWorksheets = async (
 	res: Response,
 	next: NextFunction
 ): Promise<any> => {
-	const { limit = 20, skip = 0, sort = [], ...filters } = req.query;
-	const isSpecific = 'specific' in req.query;
+	const { limit = 20, skip = 0, sort = [], isSpecific = 'specific', ...filters } = req.query;
 
 	try {
 		const filterQuery =
