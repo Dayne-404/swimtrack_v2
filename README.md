@@ -1,4 +1,4 @@
-# Swimtrack
+# Swimtrack_v2
 
 SwimTrack is a full-stack web application designed to digitize and streamline the process of managing swimming progress worksheets. At many workplaces, like mine, hundreds of paper worksheets are stored away in filing cabinets. When someone requests progress updates, it requires a time-consuming search through these physical records.
 
