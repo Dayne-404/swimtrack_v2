@@ -81,6 +81,8 @@ export const logout = async (req: Request, res: Response, next: NextFunction): P
 };
 
 export const authenticateToken = (req: Request, res: Response, next: NextFunction): any => {
+	console.log(req.headers);
+	
 	const authHeader = req.headers['authorization'];
 	const accessToken = authHeader && authHeader.split(' ')[1];
 

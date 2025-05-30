@@ -26,7 +26,7 @@ export const getWorksheets = async (
 			.sort(sortQuery as { [key: string]: 1 | -1 })
 			.skip(parseInt(skip as string))
 			.limit(parseInt(limit as string))
-			.populate('user', '_id firstName lastName');
+			.populate('user', '_id firstName lastName avatarColor');
 
 		const totalCount = await Worksheet.countDocuments(filterQuery);
 
@@ -59,7 +59,7 @@ export const getWorksheetById = async (
 	const { worksheetId } = req.params;
 
 	try {
-		const worksheet = await Worksheet.findById(worksheetId).populate('user', '_id firstName lastName');
+		const worksheet = await Worksheet.findById(worksheetId).populate('user', '_id firstName lastName avatarColor');
 		if (!worksheet) {
 			res.status(404).json({ message: 'Worksheet not found' });
 			return;

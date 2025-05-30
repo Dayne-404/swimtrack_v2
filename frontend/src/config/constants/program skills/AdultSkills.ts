@@ -1,0 +1,73 @@
+const ADULT_1_SKILLS: string[] = [
+	'Enter and exit shallow water',
+	'Jump into deep water, return and exit',
+	'Sideways entry wearing PFD',
+	'Tread water 30 sec. wearing PFD',
+	'Hold breath underwater 5-10 sec.',
+	'Submerge and exhale 5-10 times',
+	'Open eyes underwater',
+	'Recover object from bottom in chest-deep water',
+	'Wearing PFD, jump into deep water, tread 30 sec. and swim/kick on back 5-10 m',
+	'Float on front',
+	'Float on back',
+	'Roll laterally front to back and back to front',
+	'Glide on front 3-5 m',
+	'Glide on back 3-5 m',
+	'Glide on side 3-5 m',
+	'Flutter kick on front 10-15 m',
+	'Flutter kick on back 10-15 m',
+	'Flutter kick on side 10-15 m',
+	'Whip kick in vertical position with PFD 15-30 sec.',
+	'Front crawl or back crawl 10-15 m',
+	'Interval training: 4 x 9-12 m flutter kick with 10-15 sec. rests',
+	'Water smart messages',
+];
+
+const ADULT_2_SKILLS: string[] = [
+	'Standing dive into deep water',
+	'Forward roll entry into deep water with PFD',
+	'Forward roll entry into deep water without PFD',
+	'Tuck jump (cannonball) into deep water',
+	'Tread water 1-2 min.',
+	'Handstand in shallow water',
+	'Front somersault (in water)',
+	'Swim underwater 5-10 m',
+	'Canadian Swim to Survive Standard: Roll entry into deep water, tread 1 min. and swim 50 m',
+	'Flutter kick on back 5 m; reverse direction and flutter kick on front 5 m',
+	'Flutter kick on front 5 m; reverse direction and flutter kick on back 5 m',
+	'Whip kick on back 10-15 m',
+	'Whip kick on front 10-15 m',
+	'Breaststroke arms drill 10-15 m',
+	'Front crawl 25-50 m',
+	'Back crawl 25-50 m',
+	'Interval training: 4x25 m flutter kick with 15-20 sec. rests',
+	'Interval training: 4x25 m front or back crawl with 15-20 sec. rests',
+	'Sprint front crawl 25 m',
+	'Water smart messages',
+];
+
+const ADULT_3_SKILLS: string[] = [
+	'Shallow dive into deep water',
+	'Stride entry into deep water',
+	'Compact jump into deep water',
+	'Legs-only surface support 30-60 sec.',
+	'Back somersault (in water)',
+	'Swim underwater 5-10 m to recover object',
+	'Eggbeater kick on back or scissor kick on side 10-15 m',
+	'Breaststroke 25-50 m',
+	'Front crawl 50-100 m',
+	'Back crawl 50-100 m',
+	'Head-up front crawl 10-15 m',
+	'Interval training: 4 x 50 m front or back crawl or breaststroke with 30 sec. rests',
+	'Sprint (25-50 m) front crawl, back crawl, or breaststroke',
+	'Workout 300m',
+	'Water smart messages',
+];
+
+const ADULT_SKILLS = {
+	ADULT_1: ADULT_1_SKILLS,
+	ADULT_2: ADULT_2_SKILLS,
+	ADULT_3: ADULT_3_SKILLS,
+};
+
+export default ADULT_SKILLS;

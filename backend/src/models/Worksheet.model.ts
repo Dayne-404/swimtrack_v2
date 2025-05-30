@@ -25,7 +25,7 @@ const WorksheetSchema: Schema<WorksheetDocument> = new Schema(
 		level: {
 			type: Number,
 			min: 0,
-			max: 20,
+			max: 21,
 			required: [true, 'Level is required'],
 		},
 		year: {

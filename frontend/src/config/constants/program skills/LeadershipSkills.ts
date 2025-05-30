@@ -1,0 +1,70 @@
+const ROOKIE_SKILLS: string[] = [
+	'Head-up front crawl or breaststroke - 25 m',
+	'Scull in ready position - 30 sec.',
+	'Carry object (2.3 kg) - 15 m',
+	'Surface dives, foot-first & head-first',
+	'Lifesaving kick - 25 m',
+	'Inflate clothing / use as buoyant assist',
+	'Obstacle swim - 25 m',
+	'Front crawl - 50 m',
+	'Back crawl - 50 m',
+	'Breaststroke - 50 m',
+	'Fitness training: 350 m (3 times)',
+	'Swim 100 m in 3 min.',
+	'Assess conscious victim',
+	'Contacting EMS',
+	'Care for external bleeding',
+	'Look & see',
+	'Victim simulation',
+	'Victim recognition',
+	'Rescue drill: throw aid to target - 30 sec.',
+];
+
+const RANGER_SKILLS: string[] = [
+	'Somersault sequence, forward & backward',
+	'Stride entry & swim head-up - 25 m Ready position',
+	'Eggbeater kick on back - 25 m',
+	'Support object (2.3kg) - 1 min.',
+	'Search & recover object',
+	'Remove conscious victim',
+	'Front crawl - 75 m',
+	'Back crawl - 75 m',
+	'Breaststroke - 75 m',
+	'Lifesaving medley - 100 m (3 times)',
+	'Swim 200 m in 6 min.',
+	'Assess unconscious, breathing victim',
+	'Care for victim in shock',
+	'Obstructed airway - conscious victim',
+	'Victim sumulation',
+	'Victim recognition',
+	'Victim avoidance',
+	'Rescue with buoyant aid - 20 m',
+];
+
+const STAR_SKILLS: string[] = [
+	'Entries with aids',
+	'Head-up swim & scull in ready position',
+	'Defence methods - front, side & rear',
+	'eggbeater kick - travell, change direction & height',
+	'Carry object (4.5 kg) - 25 m',
+	'Remove unconscious victim',
+	'Search to recover object',
+	'Turn & support victim face-up shallow water',
+	'Front crawl - 100 m',
+	'Back crawl - 100 m',
+	'Breaststroke - 100 m',
+	'Fitness training: 600 m (3 times)',
+	'Swim 300 m in 9 min.',
+	'Care for bone or joint injury',
+	'Care for respiratory emergency',
+	'Locate & describe submerged object',
+	'Rescue with towing aid - 20 m',
+];
+
+const LEADERSHIP_SKILLS = {
+	ROOKIE: ROOKIE_SKILLS,
+	RANGER: RANGER_SKILLS,
+	STAR: STAR_SKILLS,
+};
+
+export default LEADERSHIP_SKILLS;
