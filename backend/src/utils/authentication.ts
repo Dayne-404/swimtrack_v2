@@ -85,6 +85,6 @@ export const isAdmin = async (req: Request, res: Response, next: NextFunction) =
 			res.status(403).json({ message: 'Forbidden: Admins only' });
 		}
 	} catch (error) {
-		res.status(500).json({ message: 'Internal server error' });
+		next(error);
 	}
 };

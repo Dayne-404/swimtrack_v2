@@ -8,9 +8,9 @@ Endpoints for handing authentication.
 
 | Endpoint | Method | Description | Test Status | Route |
 |----------|--------|-------------|-------------|-------|
-| /auth/login | POST | Log in | [] | <http://localhost:3000/api/auth/login> |
-| /auth/logout | POST | Log out | [] | <http://localhost:3000/api/auth/logout> |
-| /auth/refresh | POST | Refresh token | [] | <http://localhost:3000/api/auth/refresh> |
+| /auth/login | POST | Log in | [ x ] | <http://localhost:3000/api/auth/login> | 
+| /auth/logout | POST | Log out | [ x ] | <http://localhost:3000/api/auth/logout> |
+| /auth/refresh | POST | Refresh token | [ x ] | <http://localhost:3000/api/auth/refresh> |
 
 ## User Routes
 

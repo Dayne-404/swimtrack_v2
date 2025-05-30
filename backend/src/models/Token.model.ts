@@ -21,7 +21,9 @@ const TokenSchema: Schema<TokenDocument> = new Schema({
 	},
 	refreshToken: {
 		type: String,
+		unique: true,
 		required: true,
+		index: true,
 	},
 	expiresAt: {
 		type: Date,

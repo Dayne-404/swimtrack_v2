@@ -9,20 +9,22 @@ import {
 } from '../utils/authentication';
 import Token from '../models/Token.model';
 
-export const login = async (req: Request, res: Response): Promise<void> => {
+export const login = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
 	const { email, password } = req.body;
+
+	if(!email || !password) {
+		return res.status(400).json({ message: 'Email and password are required' });
+	}
 
 	try {
 		const user = await User.findOne({ email });
 		if (!user) {
-			res.status(404).json({ message: 'User not found' });
-			return;
+			return res.status(404).json({ message: 'User with email address does not exist' });
 		}
 
 		const isMatch = await argon2.verify(user.password, password);
 		if (!isMatch) {
-			res.status(400).json({ message: 'Incorrect password' });
-			return;
+			return res.status(400).json({ message: 'Incorrect password' });
 		}
 
 		const { _id, role } = user;
@@ -31,32 +33,22 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
 		res.status(200).json({ accessToken: accessToken, refreshToken: refreshToken });
 	} catch (error) {
-		if (error instanceof Error) {
-			console.error(error.message);
-			res.status(500).json({ message: error.message });
-		} else {
-			console.error('An unknown error occurred');
-			res.status(500).json({ message: 'An unknown error occurred' });
-		}
+		next(error);
 	}
 };
 
-export const refreshAccessToken = async (req: Request, res: Response): Promise<void> => {
-	console.log('\nUser refreshing token');
-
+export const refreshAccessToken = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
 	const { refreshToken } = req.body;
 
 	if (!refreshToken) {
-		res.status(401).json({ message: 'Refresh token required' });
-		return;
+		return res.status(401).json({ message: 'Refresh token required' });
 	}
 
 	try {
 		const storedToken = await Token.findOne({ refreshToken });
 
 		if (!storedToken) {
-			res.status(403).json({ message: 'Invalid refresh token' });
-			return;
+			return res.status(403).json({ message: 'Invalid refresh token' });
 		}
 
 		validateRefreshToken(storedToken.refreshToken);
@@ -64,45 +56,36 @@ export const refreshAccessToken = async (req: Request, res: Response): Promise<v
 		const newAccessToken = generateAccessToken({ _id: userId.toString(), role });
 		res.status(200).json({ accessToken: newAccessToken });
 	} catch (error) {
-		if (error instanceof Error) {
-			console.error(error.message);
-			res.status(500).json({ message: error.message });
-		} else {
-			console.error('An unknown error occurred');
-			res.status(500).json({ message: 'An unknown error occurred' });
-		}
+		next(error);
 	}
 };
 
-export const logout = async (req: Request, res: Response): Promise<void> => {
+export const logout = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
 	const { refreshToken } = req.body;
 
 	if (!refreshToken) {
-		res.status(400).json({ message: 'Refresh token is required' });
-		return;
+		return res.status(400).json({ message: 'Refresh token is required' });
 	}
 
 	try {
-		await Token.deleteOne({ refreshToken });
+		const deletedToken = await Token.findOneAndDelete({ refreshToken });
+
+		if(!deletedToken) {
+			return res.status(403).json({ message: 'Token not found' });
+		}
+		
 		res.status(200).json({ message: 'Logged out successfully' });
 	} catch (error) {
-		if (error instanceof Error) {
-			console.error(error.message);
-			res.status(500).json({ message: error.message });
-		} else {
-			console.error('An unknown error occurred');
-			res.status(500).json({ message: 'An unknown error occurred' });
-		}
+		next(error);
 	}
 };
 
-export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
+export const authenticateToken = (req: Request, res: Response, next: NextFunction): any => {
 	const authHeader = req.headers['authorization'];
 	const accessToken = authHeader && authHeader.split(' ')[1];
 
 	if (!accessToken) {
-		res.status(401).json({ message: 'Access token required' });
-		return;
+		return res.status(401).json({ message: 'Access token required' });
 	}
 
 	try {
@@ -110,12 +93,6 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
 		req.user = { _id: decoded.userId, role: decoded.role };
 		next();
 	} catch (error) {
-		if (error instanceof Error) {
-			console.error(error.message);
-			res.status(403).json({ message: error.message });
-		} else {
-			console.error('An unknown error occurred');
-			res.status(500).json({ message: 'An unknown error occurred' });
-		}
+		next(error);
 	}
 };

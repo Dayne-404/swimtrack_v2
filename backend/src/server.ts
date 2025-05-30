@@ -12,8 +12,8 @@ if(!MONGO_URI) {
 mongoose
 	.connect(MONGO_URI)
 	.then(() => {
-		console.log('Connected to Database');
-		app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+		console.log('\nConnected to Database');
+		app.listen(PORT, () => console.log(`Server running on port ${PORT}\n`));
 	})
 	.catch((err) => {
 		console.error('Database connection error:', err);

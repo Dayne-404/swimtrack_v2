@@ -4,7 +4,7 @@ import { createUser, getUserById, searchForUser, updateUser } from '../controlle
 
 const router = express.Router();
 
-//TODO get rid of isAdmin?
+//Only admins can create new users
 router.post('/', isAdmin, createUser);
 
 router.put('/:targetUserId', updateUser);
