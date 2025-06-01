@@ -1,11 +1,11 @@
 import { ThemeProvider } from '@emotion/react';
 import theme from './styles/theme';
-import { Typography } from '@mui/material';
+import { LoginPage } from './pages/LoginPage';
 
 function App() {
 	return (
 		<ThemeProvider theme={theme}>
-      <Typography>Hello World!</Typography>
+			<LoginPage />
 		</ThemeProvider>
 	);
 }
