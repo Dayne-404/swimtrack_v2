@@ -24,23 +24,32 @@ if (!REFRESH_TOKEN_SECRET) {
 
 export const generateAccessToken = (user: {
 	_id: Types.ObjectId | string;
+	firstName: string;
+	lastName?: string;
+	avatarColor: string;
 	role: string;
 }): string => {
-	return jwt.sign({ userId: user._id.toString(), role: user.role }, ACCESS_TOKEN_SECRET, {
-		expiresIn: '10d', //TODO: Change to 10 minutes
-	});
+	return jwt.sign(
+		{
+			userId: user._id.toString(),
+			firstName: user.firstName,
+			lastName: user.lastName,
+			avatarColor: user.avatarColor,
+			role: user.role,
+		},
+		ACCESS_TOKEN_SECRET,
+		{
+			expiresIn: '10d', //TODO: Change to 10 minutes
+		}
+	);
 };
 
-export const generateRefreshToken = async (user: {
-	_id: Types.ObjectId | string;
-	role: string;
-}): Promise<string> => {
-	const refreshToken = jwt.sign({ userId: user._id.toString() }, REFRESH_TOKEN_SECRET, {
+export const generateRefreshToken = async (userId: Types.ObjectId | string): Promise<string> => {
+	const refreshToken = jwt.sign({ userId: userId.toString() }, REFRESH_TOKEN_SECRET, {
 		expiresIn: '7d',
 	});
 	await Token.create({
-		userId: user._id,
-		role: user.role,
+		userId,
 		refreshToken,
 		expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 	});

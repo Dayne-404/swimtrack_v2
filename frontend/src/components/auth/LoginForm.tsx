@@ -13,6 +13,16 @@ type Props = {
 	onSubmit: () => Promise<void>;
 };
 
+const stackStyle = {
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)', 
+		width: '80%',
+		px: 2,
+		pt: 3,
+};
+
 const LoginForm = ({
 	userCredentials,
 	errors,
@@ -21,7 +31,7 @@ const LoginForm = ({
 	onSubmit,
 }: Props) => {
 	return (
-		<Stack sx={{ px: 2, pt: 3, width: '80%', margin: '0 auto' }}>
+		<Stack sx={stackStyle}>
                 <LoginTextField
                     value={userCredentials.email}
                     error={errors.email}

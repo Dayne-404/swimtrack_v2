@@ -10,13 +10,7 @@ export interface TokenDocument extends Document {
 const TokenSchema: Schema<TokenDocument> = new Schema({
 	userId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Instructor',
-		required: true,
-	},
-	role: {
-		type: String,
-		enum: ['admin', 'supervisor', 'instructor'],
-		default: 'instructor',
+		ref: 'Users',
 		required: true,
 	},
 	refreshToken: {

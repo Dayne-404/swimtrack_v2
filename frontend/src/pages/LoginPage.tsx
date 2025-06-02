@@ -4,6 +4,7 @@ import { colors } from '@mui/material';
 import { login } from '../utils/authorization';
 import LoginForm from '../components/auth/LoginForm';
 import Title from '../components/misc/Title';
+import { decodeJWT } from '../utils/decodeJWT';
 
 export const LoginPage = () => {
 	const { userCredentials, errors, loading, handleChange, validateCredentials, setLoading } =
@@ -20,10 +21,13 @@ export const LoginPage = () => {
 			localStorage.setItem('accessToken', data.accessToken);
             //Might want to store as http cookie down the line
             localStorage.setItem('refreshToken', data.refreshToken);
+
+			decodeJWT(data?.accessToken);
 			// navigate('/');
 		} catch (error) {
 			console.error(error);
 		} finally {
+			
 			setLoading(false);
 		}
 	};

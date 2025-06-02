@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import User from '../models/User.model';
+import User, { UserDocument } from '../models/User.model';
 import argon2 from 'argon2';
 import {
 	generateAccessToken,
@@ -12,7 +12,7 @@ import Token from '../models/Token.model';
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
 	const { email, password } = req.body;
 
-	if(!email || !password) {
+	if (!email || !password) {
 		return res.status(400).json({ message: 'Email and password are required' });
 	}
 
@@ -27,9 +27,15 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 			return res.status(400).json({ message: 'Incorrect password' });
 		}
 
-		const { _id, role } = user;
-		const accessToken = generateAccessToken({ _id, role });
-		const refreshToken = await generateRefreshToken({ _id, role });
+		const { _id, firstName, lastName, avatarColor, role } = user;
+		const accessToken = generateAccessToken({
+			_id: _id.toString(),
+			firstName,
+			lastName,
+			avatarColor,
+			role,
+		});
+		const refreshToken = await generateRefreshToken(_id);
 
 		res.status(200).json({ accessToken: accessToken, refreshToken: refreshToken });
 	} catch (error) {
@@ -37,7 +43,11 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 	}
 };
 
-export const refreshAccessToken = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+export const refreshAccessToken = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<any> => {
 	const { refreshToken } = req.body;
 
 	if (!refreshToken) {
@@ -45,15 +55,23 @@ export const refreshAccessToken = async (req: Request, res: Response, next: Next
 	}
 
 	try {
-		const storedToken = await Token.findOne({ refreshToken });
+		const storedToken = await Token.findOne({ refreshToken }).populate<{
+			userId: UserDocument;
+		}>('userId', '_id firstName lastName avatarColor role');
 
 		if (!storedToken) {
 			return res.status(403).json({ message: 'Invalid refresh token' });
 		}
 
-		validateRefreshToken(storedToken.refreshToken);
-		const { userId, role } = storedToken;
-		const newAccessToken = generateAccessToken({ _id: userId.toString(), role });
+		const { _id, firstName, lastName, avatarColor, role } = storedToken.userId;
+
+		const newAccessToken = generateAccessToken({
+			_id: _id.toString(),
+			firstName,
+			lastName,
+			avatarColor,
+			role,
+		});
 		res.status(200).json({ accessToken: newAccessToken });
 	} catch (error) {
 		next(error);
@@ -70,10 +88,10 @@ export const logout = async (req: Request, res: Response, next: NextFunction): P
 	try {
 		const deletedToken = await Token.findOneAndDelete({ refreshToken });
 
-		if(!deletedToken) {
+		if (!deletedToken) {
 			return res.status(403).json({ message: 'Token not found' });
 		}
-		
+
 		res.status(200).json({ message: 'Logged out successfully' });
 	} catch (error) {
 		next(error);
@@ -82,7 +100,7 @@ export const logout = async (req: Request, res: Response, next: NextFunction): P
 
 export const authenticateToken = (req: Request, res: Response, next: NextFunction): any => {
 	console.log(req.headers);
-	
+
 	const authHeader = req.headers['authorization'];
 	const accessToken = authHeader && authHeader.split(' ')[1];
 
