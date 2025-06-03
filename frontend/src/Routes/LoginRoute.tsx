@@ -25,9 +25,9 @@ export const LoginPage = () => {
 
 		setLoading(true);
 		try {
-			const data = await login(userCredentials) as { accessToken: string, refreshToken: string };
+			const data = await login(userCredentials) as { accessToken: string };
 			
-			if (!data || !data.accessToken || !data.refreshToken) {
+			if ( !data || !data.accessToken ) {
 				throw new Error('Invalid response from login');
 			}
 
@@ -37,9 +37,9 @@ export const LoginPage = () => {
 				throw new Error('Invalid user data');
 			}
 
-			localStorage.setItem('refreshToken', data.refreshToken);
 			setAccessToken(data.accessToken);
 			setUser(userData);
+			
 			navigate('/dashboard');
 		} catch (error) {
 			console.error(error);

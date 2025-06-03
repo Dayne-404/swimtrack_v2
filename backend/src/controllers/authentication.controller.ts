@@ -8,6 +8,7 @@ import {
 	validateAccessToken,
 } from '../utils/authentication';
 import Token from '../models/Token.model';
+import { verify } from 'crypto';
 
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
 	const { email, password } = req.body;
@@ -28,6 +29,7 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 		}
 
 		const { _id, firstName, lastName, avatarColor, role } = user;
+
 		const accessToken = generateAccessToken({
 			_id: _id.toString(),
 			firstName,
@@ -37,7 +39,14 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 		});
 		const refreshToken = await generateRefreshToken(_id);
 
-		res.status(200).json({ accessToken: accessToken, refreshToken: refreshToken });
+		res.cookie('refreshToken', refreshToken, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+			sameSite: 'strict',
+			maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+		});
+
+		res.status(200).json({ accessToken });
 	} catch (error) {
 		next(error);
 	}
@@ -48,22 +57,24 @@ export const refreshAccessToken = async (
 	res: Response,
 	next: NextFunction
 ): Promise<any> => {
-	const { refreshToken } = req.body;
+	const refreshToken = req.cookies.refreshToken;
 
 	if (!refreshToken) {
-		return res.status(401).json({ message: 'Refresh token required' });
+		return res.status(401).json({ message: 'No refresh token' });
 	}
 
 	try {
-		const storedToken = await Token.findOne({ refreshToken }).populate<{
-			userId: UserDocument;
-		}>('userId', '_id firstName lastName avatarColor role');
+		const payload = validateRefreshToken(refreshToken);
 
-		if (!storedToken) {
+		// payload may be string or JwtPayload, so check type and extract userId
+		const userId = typeof payload === 'string' ? payload : payload.userId;
+
+		const user = await User.findById(userId);
+		if (!user) {
 			return res.status(403).json({ message: 'Invalid refresh token' });
 		}
 
-		const { _id, firstName, lastName, avatarColor, role } = storedToken.userId;
+		const { _id, firstName, lastName, avatarColor, role } = user;
 
 		const newAccessToken = generateAccessToken({
 			_id: _id.toString(),
@@ -79,18 +90,12 @@ export const refreshAccessToken = async (
 };
 
 export const logout = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-	const { refreshToken } = req.body;
-
-	if (!refreshToken) {
-		return res.status(400).json({ message: 'Refresh token is required' });
-	}
-
 	try {
-		const deletedToken = await Token.findOneAndDelete({ refreshToken });
-
-		if (!deletedToken) {
-			return res.status(403).json({ message: 'Token not found' });
-		}
+		res.clearCookie('refreshToken', {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+			sameSite: 'strict',
+		});
 
 		res.status(200).json({ message: 'Logged out successfully' });
 	} catch (error) {

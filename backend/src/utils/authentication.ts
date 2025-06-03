@@ -62,7 +62,8 @@ export const validateAccessToken = (token: string): DecodedToken => {
 };
 
 export const validateRefreshToken = (token: string) => {
-	jwt.verify(token, REFRESH_TOKEN_SECRET);
+	const decoded = jwt.verify(token, REFRESH_TOKEN_SECRET);
+	return decoded;
 };
 
 export const isAuthorized = (
