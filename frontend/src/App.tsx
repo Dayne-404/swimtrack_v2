@@ -1,12 +1,33 @@
 import { ThemeProvider } from '@emotion/react';
 import theme from './styles/theme';
-import { LoginPage } from './pages/LoginPage';
+import { LoginPage } from './Routes/LoginRoute';
+import { AuthProvider } from './contexts/AuthProvider';
+import { UserProvider } from './contexts/UserProvider';
+import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import { ProtectedRoute } from './Routes/ProtectedRoute';
+import { DashboardRoute } from './Routes/DashboardRoute';
 
 function App() {
 	return (
-		<ThemeProvider theme={theme}>
-			<LoginPage />
-		</ThemeProvider>
+		<AuthProvider>
+			<UserProvider>
+				<ThemeProvider theme={theme}>
+					<BrowserRouter>
+						<Routes>
+							<Route path="/login" element={<LoginPage />} />
+							<Route
+								path="/dashboard"
+								element={
+									<ProtectedRoute>
+										<DashboardRoute />
+									</ProtectedRoute>
+								}
+							/>
+						</Routes>
+					</BrowserRouter>
+				</ThemeProvider>
+			</UserProvider>
+		</AuthProvider>
 	);
 }
 

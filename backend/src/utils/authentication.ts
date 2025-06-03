@@ -39,7 +39,7 @@ export const generateAccessToken = (user: {
 		},
 		ACCESS_TOKEN_SECRET,
 		{
-			expiresIn: '10d', //TODO: Change to 10 minutes
+			expiresIn: '1m', //TODO: Change to 10 minutes
 		}
 	);
 };

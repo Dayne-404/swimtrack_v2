@@ -6,11 +6,19 @@ import LoginForm from '../components/auth/LoginForm';
 import Title from '../components/misc/Title';
 import { decodeJWT } from '../utils/decodeJWT';
 
+import { useAuth } from '../contexts/AuthContext';
+import { useUser } from '../contexts/UserContext';
+
+import { useNavigate } from 'react-router-dom';
+
 export const LoginPage = () => {
 	const { userCredentials, errors, loading, handleChange, validateCredentials, setLoading } =
 		useLoginForm();
 
-	// const navigate = useNavigate();
+	const { setUser } = useUser();
+	const { setAccessToken } = useAuth();
+
+	const navigate = useNavigate();
 
 	const handleSubmit = async () => {
 		if (!validateCredentials()) return;
@@ -18,16 +26,24 @@ export const LoginPage = () => {
 		setLoading(true);
 		try {
 			const data = await login(userCredentials) as { accessToken: string, refreshToken: string };
-			localStorage.setItem('accessToken', data.accessToken);
-            //Might want to store as http cookie down the line
-            localStorage.setItem('refreshToken', data.refreshToken);
+			
+			if (!data || !data.accessToken || !data.refreshToken) {
+				throw new Error('Invalid response from login');
+			}
 
-			decodeJWT(data?.accessToken);
-			// navigate('/');
+			const userData: User | null = decodeJWT(data?.accessToken);
+
+			if (!userData) {
+				throw new Error('Invalid user data');
+			}
+
+			localStorage.setItem('refreshToken', data.refreshToken);
+			setAccessToken(data.accessToken);
+			setUser(userData);
+			navigate('/dashboard');
 		} catch (error) {
 			console.error(error);
 		} finally {
-			
 			setLoading(false);
 		}
 	};
