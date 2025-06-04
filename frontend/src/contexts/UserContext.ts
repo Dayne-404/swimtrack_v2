@@ -1,25 +1,15 @@
-import { useContext } from 'react';
-
-// UserProvider.ts
-import { createContext } from 'react';
+import { useContext, createContext } from 'react';
 interface UserContextType {
-    user: User;
-    setUser: (newUser: User) => void;
+	user: User | null;
+	setUser: (newUser: User | null) => void;
 }
 
-// Default context value (optional)
-export const defaultUser = { _id: '', firstName: '', lastName: '', avatarColor: '', role: '' };
-
-export const UserContext = createContext<UserContextType>({
-    user: defaultUser,
-    setUser: () => {},
-});
-
+export const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const useUser = (): UserContextType => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
-  }
-  return context;
+	const context = useContext(UserContext);
+	if (!context) {
+		throw new Error('useUser must be used within a UserProvider');
+	}
+	return context;
 };

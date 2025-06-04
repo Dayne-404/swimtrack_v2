@@ -9,8 +9,8 @@ import { DashboardRoute } from './Routes/DashboardRoute';
 
 function App() {
 	return (
-		<AuthProvider>
-			<UserProvider>
+		<UserProvider>
+			<AuthProvider>
 				<ThemeProvider theme={theme}>
 					<BrowserRouter>
 						<Routes>
@@ -26,8 +26,8 @@ function App() {
 						</Routes>
 					</BrowserRouter>
 				</ThemeProvider>
-			</UserProvider>
-		</AuthProvider>
+			</AuthProvider>
+		</UserProvider>
 	);
 }
 

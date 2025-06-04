@@ -24,17 +24,11 @@ if (!REFRESH_TOKEN_SECRET) {
 
 export const generateAccessToken = (user: {
 	_id: Types.ObjectId | string;
-	firstName: string;
-	lastName?: string;
-	avatarColor: string;
 	role: string;
 }): string => {
 	return jwt.sign(
 		{
 			userId: user._id.toString(),
-			firstName: user.firstName,
-			lastName: user.lastName,
-			avatarColor: user.avatarColor,
 			role: user.role,
 		},
 		ACCESS_TOKEN_SECRET,

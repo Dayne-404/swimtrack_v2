@@ -32,11 +32,9 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 
 		const accessToken = generateAccessToken({
 			_id: _id.toString(),
-			firstName,
-			lastName,
-			avatarColor,
 			role,
 		});
+
 		const refreshToken = await generateRefreshToken(_id);
 
 		res.cookie('refreshToken', refreshToken, {
@@ -46,7 +44,10 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 			maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 		});
 
-		res.status(200).json({ accessToken });
+		res.status(200).json({
+			accessToken,
+			user: { firstName, lastName, avatarColor },
+		});
 	} catch (error) {
 		next(error);
 	}
@@ -66,7 +67,6 @@ export const refreshAccessToken = async (
 	try {
 		const payload = validateRefreshToken(refreshToken);
 
-		// payload may be string or JwtPayload, so check type and extract userId
 		const userId = typeof payload === 'string' ? payload : payload.userId;
 
 		const user = await User.findById(userId);
@@ -78,12 +78,13 @@ export const refreshAccessToken = async (
 
 		const newAccessToken = generateAccessToken({
 			_id: _id.toString(),
-			firstName,
-			lastName,
-			avatarColor,
 			role,
 		});
-		res.status(200).json({ accessToken: newAccessToken });
+
+		res.status(200).json({
+			accessToken: newAccessToken,
+			user: { firstName, lastName, avatarColor },
+		});
 	} catch (error) {
 		next(error);
 	}

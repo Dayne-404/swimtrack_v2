@@ -1,17 +1,9 @@
-import { useState, useCallback } from "react";
-import type { ReactNode } from "react";
-import { defaultUser, UserContext } from "./UserContext";
+import { useState } from 'react';
+import type { ReactNode } from 'react';
+import { UserContext } from './UserContext';
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUserState] = useState<User>(defaultUser);
+	const [user, setUser] = useState<User | null>(null);
 
-    const setUser = useCallback((newUser: User) => {
-        setUserState(newUser);
-    }, []);
-
-    return (
-        <UserContext.Provider value={{ user, setUser }}>
-            {children}
-        </UserContext.Provider>
-    );
+	return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
 };
