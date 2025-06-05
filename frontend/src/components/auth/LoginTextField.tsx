@@ -4,7 +4,7 @@ import EmailIcon from '@mui/icons-material/Email';
 
 type Props = {
 	value: string;
-	error: string;
+	error: { email: string; login: boolean };
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	disabled?: boolean;
 };
@@ -16,8 +16,8 @@ const LoginTextField = ({ value, error, onChange, disabled }: Props) => {
 			name="email"
 			value={value}
 			onChange={onChange}
-			error={!!error}
-			helperText={error || ' '}
+			error={!!error.email || error.login}
+			helperText={error.email || ' '}
 			disabled={disabled}
 			slotProps={{
 				input: {
@@ -29,7 +29,7 @@ const LoginTextField = ({ value, error, onChange, disabled }: Props) => {
 				},
 			}}
 			fullWidth
-			margin="dense"
+			margin="none"
 		/>
 	);
 };

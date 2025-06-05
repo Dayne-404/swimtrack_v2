@@ -6,12 +6,12 @@ declare global {
         firstName: string;
         lastName?: string;
         avatarColor: string;
+        role: Roles;
     }
     
     export interface PrivateUserData extends User {
         email: string;
         password?: string;
-        role: Roles;
         active: boolean;
         createdAt: string;
         updatedAt: string;

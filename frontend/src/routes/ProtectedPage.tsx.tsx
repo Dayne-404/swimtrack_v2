@@ -4,11 +4,17 @@ import { useUser } from "../contexts/UserContext";
 import type { ReactNode } from "react";
 
 export const ProtectedRoute = ({ children }: { children: ReactNode }) => {
-    const { accessToken } = useAuth();
+    const { accessToken, loading } = useAuth();
     const { user } = useUser();
+    
+    if (loading) {
+        console.log("Loading user data...");
+        return null;
+    }
 
     if (!accessToken || !user) {
         console.error("Access token or user data is missing.");
+        console.log("Redirecting to login page...");
         return <Navigate to="/login" replace />;
     }
 

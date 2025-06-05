@@ -23,7 +23,7 @@
     "noUncheckedSideEffectImports": true,
 
     /* Add custom type definitions  */
-    "typeRoots": ["./src/config/types"]
+    "typeRoots": ["src/common/types"]
   },
   "include": ["src"]
 }
