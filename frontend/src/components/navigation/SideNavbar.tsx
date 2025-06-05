@@ -1,7 +1,10 @@
 import { Drawer, Box, List, useTheme } from '@mui/material';
 import UserProfileQuickAccess from './ProfileQuickAccess';
-
 import SideNavbarItem from './SideNavbarItem';
+
+import { LARGE_SIDE_WIDTH, SMALL_SIDE_WIDTH } from '../../common/constants/navigationSize';
+import { SIDE_NAV_ROUTES } from '../../routes/sideNavRoutes';
+import { sideNavDrawerStyle, sideNavStyle } from '../../styles/navigationStyle';
 
 interface Props {
 	open: boolean;
@@ -9,22 +12,9 @@ interface Props {
 	onDrawerToggle: () => void;
 }
 
-const DRAWER_SX = {
-	flexShrink: 0,
-};
-
-const DRAWER_PAPER_SX = {
-	height: '100vh',
-	display: 'flex',
-	justifyContent: 'space-between',
-	boxSizing: 'border-box',
-};
-
-import { LARGE_SIDE_WIDTH, SMALL_SIDE_WIDTH } from '../../common/constants/navigationSize';
-import { SIDE_NAV_ROUTES } from '../../routes/sideNavRoutes';
-
-export const SideNavbar = ({ open, onDrawerToggle, isMediumOrBelow }: Props) => {
+const SideNavbar = ({ open, onDrawerToggle, isMediumOrBelow }: Props) => {
 	const theme = useTheme();
+	const drawerWidth = isMediumOrBelow ? SMALL_SIDE_WIDTH : LARGE_SIDE_WIDTH;
 
 	return (
 		<Drawer
@@ -32,12 +22,12 @@ export const SideNavbar = ({ open, onDrawerToggle, isMediumOrBelow }: Props) => 
 			open={isMediumOrBelow ? open : true}
 			onClose={isMediumOrBelow ? onDrawerToggle : undefined}
 			sx={{
-				width: isMediumOrBelow ? SMALL_SIDE_WIDTH : LARGE_SIDE_WIDTH,
-				...DRAWER_SX,
-				['& .MuiDrawer-paper']: {
-					width: isMediumOrBelow ? SMALL_SIDE_WIDTH : LARGE_SIDE_WIDTH,
+				width: drawerWidth,
+				...sideNavStyle,
+				'& .MuiDrawer-paper': {
+					width: drawerWidth,
 					pt: theme.spacing(10),
-					...DRAWER_PAPER_SX,
+					...sideNavDrawerStyle,
 				},
 			}}
 		>
@@ -48,7 +38,6 @@ export const SideNavbar = ({ open, onDrawerToggle, isMediumOrBelow }: Props) => 
 					))}
 				</List>
 			</Box>
-
 			<UserProfileQuickAccess />
 		</Drawer>
 	);

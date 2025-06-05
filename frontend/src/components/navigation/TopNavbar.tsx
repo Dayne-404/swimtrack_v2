@@ -10,37 +10,23 @@ import {
 	Typography,
 	useTheme,
 } from '@mui/material';
+import { appBarStyle, toolbarStyle, textStyle } from '../../styles/navigationStyle';
+import LogoutButton from '../buttons/LogoutButton';
+import { NAVBAR_HEIGHT } from '../../common/constants/navigationSize';
 
-interface NavbarProps {
+interface Props {
 	isMediumOrBelow: boolean;
-	height: number;
 	onDrawerToggle: () => void;
 }
 
-const APP_BAR_SX = {
-	backgroundColor: 'white',
-	color: 'black',
-	boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.2)',
-};
-
-const TOOLBAR_SX = {
-	display: 'flex',
-	justifyContent: 'space-between',
-	position: 'relative',
-	height: '100%',
-};
-
-const TYPOGRAPHY_SX = {
-	fontWeight: 700,
-	textAlign: 'center',
-};
-
-const Navbar = ({ isMediumOrBelow, height, onDrawerToggle }: NavbarProps) => {
+const Navbar = ({ isMediumOrBelow, onDrawerToggle }: Props) => {
 	const theme = useTheme();
 
 	return (
-		<AppBar sx={{ ...APP_BAR_SX, height: height + 'px', zIndex: theme.zIndex.drawer + 1 }}>
-			<Toolbar sx={TOOLBAR_SX}>
+		<AppBar
+			sx={{ ...appBarStyle, height: NAVBAR_HEIGHT + 'px', zIndex: theme.zIndex.drawer + 1 }}
+		>
+			<Toolbar sx={toolbarStyle}>
 				{isMediumOrBelow && (
 					<IconButton color="inherit" aria-label="open drawer" onClick={onDrawerToggle}>
 						<MenuIcon />
@@ -60,7 +46,7 @@ const Navbar = ({ isMediumOrBelow, height, onDrawerToggle }: NavbarProps) => {
 							variant="h4"
 							component="div"
 							sx={{
-								...TYPOGRAPHY_SX,
+								...textStyle,
 								fontSize: isMediumOrBelow ? '1.25rem' : '1.75rem',
 							}}
 						>
@@ -69,7 +55,7 @@ const Navbar = ({ isMediumOrBelow, height, onDrawerToggle }: NavbarProps) => {
 					</ButtonBase>
 				</Stack>
 				<Stack direction="row" spacing={isMediumOrBelow ? 0 : 2}>
-					{/* <LogoutButton /> */}
+					<LogoutButton />
 					<IconButton color="inherit" aria-label="notifications">
 						<NotificationsIcon />
 					</IconButton>

@@ -3,12 +3,10 @@ import TopNavbar from './TopNavbar';
 import SideNavbar from './SideNavbar';
 import theme from '../../styles/theme';
 
-import { NAVBAR_HEIGHT } from '../../common/constants/navigationSize';
-
 import { useMediaQuery } from '@mui/material';
 
 const Navigation = () => {
-	const [drawerOpen, setDrawerOpen] = useState(false);
+	const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 	const isMediumOrBelow = useMediaQuery(theme.breakpoints.down('md'));
 
 	const handleDrawerToggle = () => {
@@ -25,7 +23,6 @@ const Navigation = () => {
 		<>
 			<TopNavbar
 				isMediumOrBelow={isMediumOrBelow}
-				height={NAVBAR_HEIGHT}
 				onDrawerToggle={handleDrawerToggle}
 			/>
 			<SideNavbar

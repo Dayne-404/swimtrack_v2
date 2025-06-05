@@ -23,7 +23,11 @@ const UserAvatar = ({ firstName, lastName, avatarColor, linkToProfile = false }:
 
 	if (linkToProfile) {
 		return (
-			<ButtonBase disableRipple onClick={() => navigate('/settings')}>
+			<ButtonBase
+				disableRipple
+				aria-label="Go to settings"
+				onClick={() => navigate('/settings')}
+			>
 				{avatar}
 			</ButtonBase>
 		);

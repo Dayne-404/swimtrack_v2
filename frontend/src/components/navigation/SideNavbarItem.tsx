@@ -1,49 +1,27 @@
-import {
-	ListItem,
-	ListItemButton,
-	ListItemIcon,
-	ListItemText,
-	useTheme,
-} from '@mui/material';
+import { ListItem, ListItemButton, ListItemIcon, ListItemText, useTheme } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { itemTextStyle } from '../../styles/navigationStyle';
 
-type SideNavItemProps = {
+interface SideNavItemProps {
 	icon: React.ReactNode;
 	label: string;
 	to: string;
-};
+}
 
 const SideNavItem = ({ label, icon, to }: SideNavItemProps) => {
 	const theme = useTheme();
 	const navigate = useNavigate();
-	const location = useLocation();
+	const { pathname } = useLocation();
+	const isSelected = pathname === to;
 
-	const itemButtonStyle = {
-		color: location.pathname === to ? theme.palette.primary.main : 'black',
-	};
-
-	const itemIconStyle = {
-		color: location.pathname === to ? theme.palette.primary.main : 'black',
-	};
-
-	const itemTextStyle = {
-		typography: {
-			xs: 'body2',
-			sm: 'body1',
-			md: 'h6',
-		},
+	const activeStyle = {
+		color: isSelected ? theme.palette.primary.main : 'black',
 	};
 
 	return (
 		<ListItem disablePadding>
-			<ListItemButton
-				onClick={() => navigate(to)}
-				selected={location.pathname === to}
-				sx={itemButtonStyle}
-			>
-				<ListItemIcon sx={itemIconStyle}>
-					{icon}
-				</ListItemIcon>
+			<ListItemButton onClick={() => navigate(to)} selected={isSelected} sx={activeStyle}>
+				<ListItemIcon sx={activeStyle}>{icon}</ListItemIcon>
 				<ListItemText primary={label} sx={itemTextStyle} />
 			</ListItemButton>
 		</ListItem>
