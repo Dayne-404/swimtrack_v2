@@ -1,42 +1,29 @@
-import {
-	Drawer,
-	Box,
-	List,
-	useTheme,
-} from '@mui/material';
-import UserProfileQuickAccess from './UserProfileQuickAccess';
+import { Drawer, Box, List, useTheme } from '@mui/material';
+import UserProfileQuickAccess from './ProfileQuickAccess';
 
-// import SideNavItem from './SideNavItem';
-// import ProfileCard from '../cards/ProfileCard';
+import SideNavbarItem from './SideNavbarItem';
 
-interface SideNavbarProps {
+interface Props {
 	open: boolean;
-	smallWidth: number;
-	largeWidth: number;
-	routes: object;
 	isMediumOrBelow: boolean;
 	onDrawerToggle: () => void;
-};
+}
 
 const DRAWER_SX = {
 	flexShrink: 0,
-}
+};
 
 const DRAWER_PAPER_SX = {
 	height: '100vh',
 	display: 'flex',
 	justifyContent: 'space-between',
 	boxSizing: 'border-box',
-}
+};
 
-export const SideNavbar = ({
-	open,
-	smallWidth,
-	largeWidth,
-	onDrawerToggle,
-	isMediumOrBelow,
-	routes,
-}: SideNavbarProps) => {
+import { LARGE_SIDE_WIDTH, SMALL_SIDE_WIDTH } from '../../common/constants/navigationSize';
+import { SIDE_NAV_ROUTES } from '../../routes/sideNavRoutes';
+
+export const SideNavbar = ({ open, onDrawerToggle, isMediumOrBelow }: Props) => {
 	const theme = useTheme();
 
 	return (
@@ -45,10 +32,10 @@ export const SideNavbar = ({
 			open={isMediumOrBelow ? open : true}
 			onClose={isMediumOrBelow ? onDrawerToggle : undefined}
 			sx={{
-				width: isMediumOrBelow ? smallWidth : largeWidth,
+				width: isMediumOrBelow ? SMALL_SIDE_WIDTH : LARGE_SIDE_WIDTH,
 				...DRAWER_SX,
 				['& .MuiDrawer-paper']: {
-					width: isMediumOrBelow ? smallWidth : largeWidth,
+					width: isMediumOrBelow ? SMALL_SIDE_WIDTH : LARGE_SIDE_WIDTH,
 					pt: theme.spacing(10),
 					...DRAWER_PAPER_SX,
 				},
@@ -56,17 +43,12 @@ export const SideNavbar = ({
 		>
 			<Box p={1} textAlign="center">
 				<List>
-					{Object.entries(routes).map(([key, {icon, to}]) => (
-						<SideNavItem
-							key={key}
-							label={key}
-							icon={icon}
-							to={to}
-						/>
+					{Object.entries(SIDE_NAV_ROUTES).map(([key, { icon, to }]) => (
+						<SideNavbarItem key={key} label={key} icon={icon} to={to} />
 					))}
 				</List>
 			</Box>
-			
+
 			<UserProfileQuickAccess />
 		</Drawer>
 	);

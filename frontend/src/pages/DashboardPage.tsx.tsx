@@ -1,6 +1,8 @@
 import { useUser } from '../contexts/UserContext';
+import LogoutButton from '../components/buttons/LogoutButton';
+import UserAvatar from '../components/misc/UserAvatar';
 
-export const DashboardRoute = () => {
+export const DashboardPage = () => {
 	const { user } = useUser();
 
 	return (
@@ -14,6 +16,8 @@ export const DashboardRoute = () => {
 					<p>LastName: {user.lastName}</p>
                     <p>_id: {user._id}</p>
                     <p>Role: {user.role}</p>
+					<LogoutButton />
+					<UserAvatar />
 				</div>
 			) : (
 				<p>No user information available.</p>

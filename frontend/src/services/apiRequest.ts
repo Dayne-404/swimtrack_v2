@@ -1,5 +1,5 @@
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
-import { getToken } from './getToken';
+import { getToken } from '../utils/getToken';
 interface Props {
 	endpoint: string;
 	method?: string;

@@ -3,7 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useUser } from "../contexts/UserContext";
 import type { ReactNode } from "react";
 
-export const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+export const ProtectedPage = ({ children }: { children: ReactNode }) => {
     const { accessToken, loading } = useAuth();
     const { user } = useUser();
     

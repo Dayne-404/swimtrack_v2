@@ -59,10 +59,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		}
 	};
 
-	const logout = () => {
+	const logout = async (): Promise<boolean> => {
 		console.log('Logging out...');
+		try {
+			await apiRequest({
+				method: 'POST',
+				endpoint: '/auth/logout',
+			});
+
+			console.log('Logout successful');
+		} catch (error) {
+			console.error('Logout failed:', error);
+			return false;
+		}
+		
 		setAccessToken(null);
 		setUser(null);
+		return true;
 	};
 
 	useLayoutEffect(() => {

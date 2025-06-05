@@ -31,14 +31,14 @@ export const LoginPage = () => {
 
 		setFormLoading(false);
 		if (success) {
-			navigate('/dashboard');
+			navigate('/');
 		}
 	};
 
 	useEffect(() => {
 		if (!authLoading && accessToken && user) {
 			console.log('User is already logged in, redirecting to dashboard');
-			navigate('/dashboard');
+			navigate('/');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);

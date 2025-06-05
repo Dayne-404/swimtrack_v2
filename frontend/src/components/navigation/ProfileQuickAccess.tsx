@@ -1,5 +1,4 @@
 import {
-	Avatar,
 	Stack,
 	IconButton,
 	ButtonBase,
@@ -9,10 +8,14 @@ import {
 import type { SxProps, Theme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { useUser } from '../../contexts/UserContext';
+import UserAvatar from '../misc/UserAvatar';
 
 const UserProfileQuickAccess = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();
+
+	const { user } = useUser();
 
 	const buttonBaseStyle: SxProps<Theme> = {
 		display: 'flex',
@@ -44,10 +47,10 @@ const UserProfileQuickAccess = () => {
 				sx={buttonBaseStyle}
 				onClick={() => navigate('/profile')}
 			>
-				<Avatar>DD</Avatar>
+				<UserAvatar />
 				<Stack>
 					<Typography variant="subtitle1" sx={nameTextStyle}>
-						Dayne
+						{user?.firstName}
 					</Typography>
 					<Typography variant="body2" sx={profileTextStyle}>
 						View profile
