@@ -20,12 +20,12 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 	try {
 		const user = await User.findOne({ email });
 		if (!user) {
-			return res.status(404).json({ message: 'User with email address does not exist' });
+			return res.status(404).json({ message: 'Incorrect email / password' });
 		}
 
 		const isMatch = await argon2.verify(user.password, password);
 		if (!isMatch) {
-			return res.status(400).json({ message: 'Incorrect password' });
+			return res.status(400).json({ message: 'Incorrect email / password' });
 		}
 
 		const { _id, firstName, lastName, avatarColor, role } = user;

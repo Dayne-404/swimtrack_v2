@@ -3,6 +3,9 @@ import { createContext, useContext } from 'react';
 interface AuthContextType {
 	accessToken: string | null;
 	setAccessToken: (token: string | null) => void;
+	login: (email: string, password: string) => Promise<boolean>;
+	logout: () => void;
+	loginError: string;
 	loading: boolean;
 }
 

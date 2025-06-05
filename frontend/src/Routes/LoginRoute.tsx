@@ -1,52 +1,49 @@
 import { useLoginForm } from '../hooks/useLoginForm';
 import { Paper, Box } from '@mui/material';
 import { colors } from '@mui/material';
-import { login } from '../utils/authorization';
 import LoginForm from '../components/auth/LoginForm';
 import Title from '../components/misc/Title';
-import { decodeJWT } from '../utils/decodeJWT';
 
 import { useAuth } from '../contexts/AuthContext';
-import { useUser } from '../contexts/UserContext';
 
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useUser } from '../contexts/UserContext';
 
 export const LoginPage = () => {
-	const { userCredentials, errors, loading, handleChange, validateCredentials, setLoading } =
-		useLoginForm();
+	const {
+		userCredentials,
+		errors,
+		loading: formLoading,
+		setLoading: setFormLoading,
+		handleChange,
+		validateCredentials,
+	} = useLoginForm();
 
-	const { setUser } = useUser();
-	const { setAccessToken } = useAuth();
+	const { login, loading: authLoading, loginError, accessToken } = useAuth();
+	const { user } = useUser();
 
 	const navigate = useNavigate();
 
 	const handleSubmit = async () => {
 		if (!validateCredentials()) return;
 
-		setLoading(true);
-		try {
-			const data = await login(userCredentials) as { accessToken: string };
-			
-			if ( !data || !data.accessToken ) {
-				throw new Error('Invalid response from login');
-			}
+		setFormLoading(true);
+		const success = await login(userCredentials.email, userCredentials.password);
 
-			const userData: User | null = decodeJWT(data?.accessToken);
-
-			if (!userData) {
-				throw new Error('Invalid user data');
-			}
-
-			setAccessToken(data.accessToken);
-			setUser(userData);
-			
+		setFormLoading(false);
+		if (success) {
 			navigate('/dashboard');
-		} catch (error) {
-			console.error(error);
-		} finally {
-			setLoading(false);
 		}
 	};
+
+	useEffect(() => {
+		if (!authLoading && accessToken && user) {
+			console.log('User is already logged in, redirecting to dashboard');
+			navigate('/dashboard');
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const loginContainerStyle = {
 		position: 'relative',
@@ -78,16 +75,20 @@ export const LoginPage = () => {
 		background: `linear-gradient(135deg, ${colors.lightBlue[800]}, ${colors.lightBlue[300]})`,
 	};
 
+	if ((authLoading && !formLoading) || accessToken || user) {
+		return null;
+	}
+
 	return (
 		<Box sx={backgroundStyle}>
 			<Paper sx={loginContainerStyle}>
 				<Title />
 				<LoginForm
 					userCredentials={userCredentials}
-					loading={loading}
+					loading={formLoading}
 					onChange={handleChange}
 					onSubmit={handleSubmit}
-					errors={errors}
+					errors={{ ...errors, login: loginError }}
 				/>
 			</Paper>
 		</Box>

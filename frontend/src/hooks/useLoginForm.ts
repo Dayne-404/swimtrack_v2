@@ -30,10 +30,10 @@ export const useLoginForm = () => {
     return {
 		userCredentials,
 		setUserCredentials,
-		errors,
-		setErrors,
 		loading,
 		setLoading,
+		errors,
+		setErrors,
 		handleChange,
 		validateCredentials
 	};
