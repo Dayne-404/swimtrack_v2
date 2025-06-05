@@ -1,11 +1,11 @@
 import { ThemeProvider } from '@emotion/react';
 import theme from './styles/theme';
-import { LoginPage } from './Routes/LoginRoute';
+import { LoginPage } from './routes/LoginPage';
 import { AuthProvider } from './providers/AuthProvider';
 import { UserProvider } from './providers/UserProvider';
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
-import { ProtectedRoute } from './Routes/ProtectedRoute';
-import { DashboardRoute } from './Routes/DashboardRoute';
+import { ProtectedRoute } from './routes/ProtectedPage.tsx.tsx';
+import { DashboardRoute } from './routes/DashboardPage.tsx';
 
 function App() {
 	return (

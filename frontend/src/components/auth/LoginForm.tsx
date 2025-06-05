@@ -4,6 +4,7 @@ import LoginTextField from './LoginTextField';
 import PasswordField from './PasswordField';
 import RememberMeCheckbox from './RememberMeCheckbox';
 import LoadingButton from '../buttons/LoadingButton';
+import { stackStyle } from '../../styles/loginStyle';
 
 type Props = {
 	userCredentials: { email: string; password: string };
@@ -11,16 +12,6 @@ type Props = {
 	loading: boolean;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onSubmit: () => Promise<void>;
-};
-
-const stackStyle = {
-	position: 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	width: '80%',
-	px: 2,
-	pt: 3,
 };
 
 const LoginForm = ({ userCredentials, errors, loading, onChange, onSubmit }: Props) => {
