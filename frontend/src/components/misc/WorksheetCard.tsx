@@ -49,11 +49,11 @@ const WorksheetCard = ({
 					transition: 'background-color 0.3s',
 				}}
 			>
-				<Box p={2}>
+				<Box p={2} >
 					<Typography variant="h6">{programName}</Typography>
 					<Divider />
 					{showInstructor && (
-						<Typography variant="body1">Instructor: {instructorName}</Typography>
+						<Typography variant="body1">{instructorName}</Typography>
 					)}
 					<Typography variant="body1">
 						{sessionLabel} {year}

@@ -24,7 +24,6 @@ const WorksheetGrid = ({
 	loading = false,
 	selectable,
 	gridSpace = 3,
-	alignItems,
 }: Props) => {
 	const handleSelectWorksheet = (worksheetId: string) => {
 		if (!selectable) return;
@@ -49,10 +48,10 @@ const WorksheetGrid = ({
 	}
 
 	return (
-		<Box width="100%" alignItems={alignItems && alignItems} display="flex">
+		<Box>
 			<Grid container>
 				{worksheets.map((worksheet) => (
-					<Grid size={{ xs: 12, sm: 6, md: gridSpace }} spacing={0.5} key={worksheet._id}>
+					<Grid size={{ xs: 12, sm: 4, md: gridSpace }} p={0.5} key={worksheet._id}>
 						<WorksheetCard
 							worksheet={worksheet}
 							showInstructor={showInstructor}
