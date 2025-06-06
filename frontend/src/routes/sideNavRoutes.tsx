@@ -7,6 +7,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 import { DashboardPage } from '../pages/DashboardPage.tsx.tsx';
+import FinderPage from '../pages/FinderPage.tsx';
 
 export const SIDE_NAV_ROUTES = {
 	Dashboard: { icon: <SpeedIcon />, to: '/', element: <DashboardPage /> },
@@ -17,7 +18,7 @@ export const SIDE_NAV_ROUTES = {
 		element: <DashboardPage />,
 	},
 	Create: { icon: <EditIcon />, to: '/create', element: <DashboardPage /> },
-	Finder: { icon: <SearchIcon />, to: '/finder', element: <DashboardPage /> },
+	Finder: { icon: <SearchIcon />, to: '/finder', element: <FinderPage /> },
 	Programs: {
 		icon: <ScubaDivingIcon />,
 		to: '/programs',

@@ -1,12 +1,11 @@
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
-import { getToken } from '../utils/getToken';
+
 interface Props {
 	endpoint: string;
 	method?: string;
 	params?: URLSearchParams;
 	body?: string;
-	isTokenRequired?: boolean;
-	retry?: boolean;
+	accessToken?: string;
 }
 
 export const apiRequest = async ({
@@ -14,11 +13,8 @@ export const apiRequest = async ({
 	method = 'GET',
 	params,
 	body,
-	isTokenRequired = true,
+	accessToken = ''
 }: Props): Promise<unknown> => {
-	const accessToken = isTokenRequired ? getToken() : null;
-
-
 	let uri = `${API_BASE_URL}/api${endpoint}`;
 	if (params) uri += `?${params.toString()}`;
 
