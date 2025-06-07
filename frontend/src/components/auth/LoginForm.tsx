@@ -3,7 +3,7 @@ import { Button, Stack, Box } from '@mui/material';
 import LoginTextField from './LoginTextField';
 import PasswordField from './PasswordField';
 import RememberMeCheckbox from './RememberMeCheckbox';
-import LoadingButton from '../buttons/LoadingButton';
+import LoadingButton from '../inputs/buttons/LoadingButton';
 import { stackStyle } from '../../styles/loginStyle';
 
 type Props = {

@@ -1,13 +1,10 @@
-import WorksheetGrid from '../components/misc/WorksheetGrid';
 import { useState, useEffect } from 'react';
 import { fetchWorksheets } from '../services/apiWorksheet';
 import { useAuth } from '../contexts/AuthContext';
 import { Stack } from '@mui/material';
 import ContentHeader from '../components/misc/ContentHeader';
-import { WorksheetGridHeader } from '../components/misc/WorksheetGridHeader';
-
-const LIMIT: number = 12;
-const SKIP: number = 0;
+import ViewWorksheets from '../components/worksheets/ViewWorksheets';
+import { FilterProvider } from '../providers/FilterProvider';
 
 const FinderPage = () => {
 	const [loading, setLoading] = useState<boolean>(true);
@@ -15,6 +12,9 @@ const FinderPage = () => {
 	const [totalWorksheets, setTotalWorksheets] = useState<number>(0);
 
 	const { accessToken } = useAuth();
+
+	const LIMIT: number = 12;
+	const SKIP: number = 0;
 
 	useEffect(() => {
 		const loadWorksheets = async () => {
@@ -49,11 +49,13 @@ const FinderPage = () => {
 	}, []);
 
 	return (
-		<Stack spacing={1} width='100%'>
-			<ContentHeader title="Finder" /> 
-			<WorksheetGridHeader />
+		<Stack spacing={1} width="100%">
+			<ContentHeader title="Finder" />
+			<FilterProvider>
+				<ViewWorksheets />
+			</FilterProvider>
 		</Stack>
-	)
+	);
 };
 
 export default FinderPage;

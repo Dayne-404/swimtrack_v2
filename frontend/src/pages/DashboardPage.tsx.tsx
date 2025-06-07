@@ -1,5 +1,5 @@
 import { useUser } from '../contexts/UserContext';
-import LogoutButton from '../components/buttons/LogoutButton';
+import LogoutButton from '../components/inputs/buttons/LogoutButton';
 import UserAvatar from '../components/misc/UserAvatar';
 
 export const DashboardPage = () => {

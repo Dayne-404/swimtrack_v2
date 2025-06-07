@@ -11,7 +11,7 @@ import {
 	useTheme,
 } from '@mui/material';
 import { appBarStyle, toolbarStyle, textStyle } from '../../styles/navigationStyle';
-import LogoutButton from '../buttons/LogoutButton';
+import LogoutButton from '../inputs/buttons/LogoutButton';
 import { NAVBAR_HEIGHT } from '../../common/constants/navigationSize';
 
 interface Props {

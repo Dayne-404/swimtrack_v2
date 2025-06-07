@@ -103,3 +103,5 @@ export const PROGRAMS: ProgramCategory[] = [
 		skills: ADULT_SKILLS.ADULT_3,
 	},
 ];
+
+export const PROGRAM_NAMES = PROGRAMS.map((program) => program.name);

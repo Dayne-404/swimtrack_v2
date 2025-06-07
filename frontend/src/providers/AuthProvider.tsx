@@ -39,7 +39,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 				method: 'POST',
 				endpoint: '/auth/login',
 				body: JSON.stringify({ email, password }),
-				isTokenRequired: false,
 			});
 
 			const data = res as { accessToken: string; user: User };
@@ -85,7 +84,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 				const res = await apiRequest({
 					endpoint: '/auth/refresh',
 					method: 'POST',
-					isTokenRequired: false,
 				});
 
 				const data = res as { accessToken: string; user: User };

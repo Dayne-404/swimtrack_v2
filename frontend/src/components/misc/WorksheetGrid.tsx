@@ -4,7 +4,7 @@ import LoadingSpinner from './LoadingSpinner';
 
 interface Props {
 	worksheets?: Worksheet[];
-	showInstructor?: boolean;
+	showUser?: boolean;
 	showUpdatedAt?: boolean;
 	loading?: boolean;
 	BottomButton?: React.ReactElement;
@@ -19,7 +19,7 @@ interface Props {
 
 const WorksheetGrid = ({
 	worksheets = [],
-	showInstructor = false,
+	showUser = false,
 	showUpdatedAt = false,
 	loading = false,
 	selectable,
@@ -54,7 +54,7 @@ const WorksheetGrid = ({
 					<Grid size={{ xs: 12, sm: 4, md: gridSpace }} p={0.5} key={worksheet._id}>
 						<WorksheetCard
 							worksheet={worksheet}
-							showInstructor={showInstructor}
+							showInstructor={showUser}
 							showUpdatedAt={showUpdatedAt}
 							selected={selectable?.selected.includes(worksheet._id)}
 							onClick={
