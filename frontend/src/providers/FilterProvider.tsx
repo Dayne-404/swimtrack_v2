@@ -1,15 +1,14 @@
 import { useState } from 'react';
-import type { WorksheetFilters } from '../common/constants/worksheetData';
 import type { ReactNode } from 'react';
 import { FilterContext } from '../contexts/FilterContext';
 
 const DEFAULT_FILTERS: WorksheetFilters = {
-	programs: [],
-	years: [],
-	sessions: [],
-	days: [],
-	times: [],
-	locations: [],
+	level: [],
+	year: [],
+	session: [],
+	day: [],
+	time: [],
+	location: [],
 };
 
 export const FilterProvider = ({ children }: { children: ReactNode }) => {

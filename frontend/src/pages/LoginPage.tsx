@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Paper } from '@mui/material';
 import LoginForm from '../components/auth/LoginForm';
-import Title from '../components/misc/Title';
+import Title from '../components/common/Title';
 import { backgroundStyle, containerStyle } from '../styles/loginStyle';
 
 import { useAuth } from '../contexts/AuthContext';

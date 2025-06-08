@@ -1,8 +1,9 @@
 import { Stack } from '@mui/material';
-import { WorksheetGridHeader } from '../misc/WorksheetGridHeader';
-import WorksheetGrid from '../misc/WorksheetGrid';
+import { WorksheetGridHeader } from './WorksheetGridHeader';
+import WorksheetGrid from './WorksheetGrid';
 import { useState } from 'react';
 import FilterModal from '../modals/FilterModal';
+import SortModal from '../modals/SortModal';
 
 interface Props {
 	worksheets?: Worksheet[];
@@ -12,7 +13,7 @@ interface Props {
 	showUpdatedAt?: boolean;
 }
 
-const ViewWorksheets = ({ worksheets = [], totalWorksheets, loading = false, showUser }: Props) => {
+const WorksheetList = ({ worksheets = [], totalWorksheets, loading = false, showUser }: Props) => {
 	const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
 	const [sortModalOpen, setSortModalOpen] = useState<boolean>(false);
 
@@ -25,9 +26,17 @@ const ViewWorksheets = ({ worksheets = [], totalWorksheets, loading = false, sho
 		setFilterModalOpen(false)
 	}
 
+	const handleSortClose = () => {
+		//Build sort Query
+		//Get the worksheets
+
+		setSortModalOpen(false)
+	}
+
 	return (
 		<Stack spacing={1} width="100%">
             <FilterModal isOpen={filterModalOpen} handleClose={handleFilterClose}/>
+			<SortModal isOpen={sortModalOpen} handleClose={handleSortClose} />
 			<WorksheetGridHeader
 				setFilterModalOpen={setFilterModalOpen}
 				setSortModalOpen={setSortModalOpen}
@@ -37,4 +46,4 @@ const ViewWorksheets = ({ worksheets = [], totalWorksheets, loading = false, sho
 	);
 };
 
-export default ViewWorksheets;
+export default WorksheetList;

@@ -1,9 +1,14 @@
 import { Typography } from "@mui/material";
 import BasicModal from "./BasicModal";
 
-const SortModal = () => {
+interface Props {
+	isOpen?: boolean;
+	handleClose?: () => void;
+}
+
+const SortModal = ({isOpen, handleClose}: Props) => {
   return (
-    <BasicModal>
+    <BasicModal title='Sorting' isOpen={isOpen} handleClose={handleClose}>
         <Typography>Hello World</Typography>
     </BasicModal>
   );

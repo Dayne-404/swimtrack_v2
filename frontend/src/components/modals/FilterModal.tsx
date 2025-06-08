@@ -3,7 +3,7 @@ import BasicModal from './BasicModal';
 import FilterSelect from '../inputs/select/FilterSelect';
 import FilterTextField from '../inputs/textField/FilterTextField';
 import { WORKSHEET_DATA } from '../../common/constants/worksheetData';
-import ActiveFilters from '../misc/ActiveFilters';
+import ActiveFilters from '../worksheets/ActiveFilters';
 import { validateYear, validateTime } from '../../utils/validation';
 
 interface Props {
@@ -13,35 +13,35 @@ interface Props {
 
 const FilterModal = ({ isOpen, handleClose }: Props) => {
 	return (
-		<BasicModal isOpen={isOpen} handleClose={handleClose}>
+		<BasicModal title='Filters' isOpen={isOpen} handleClose={handleClose}>
 			<Stack mt={3} mb={3} spacing={2}>
 				<FilterSelect
 					placeholder="Programs"
-					field="programs"
-					items={WORKSHEET_DATA.programs}
+					field="level"
+					items={WORKSHEET_DATA.level}
 				/>
 				<Stack direction="row" spacing={1}>
 					<FilterSelect
 						placeholder="Session"
-						field="sessions"
-						items={WORKSHEET_DATA.sessions}
+						field="session"
+						items={WORKSHEET_DATA.session}
 					/>
-					<FilterSelect placeholder="Days" field="days" items={WORKSHEET_DATA.days} />
+					<FilterSelect placeholder="Days" field="day" items={WORKSHEET_DATA.day} />
 				</Stack>
 				<Stack direction="row" spacing={1}>
 					<FilterTextField
 						placeholder="Years"
-						field="years"
+						field="year"
 						validation={{ text: 'Time must be in format XXXX', method: validateYear }}
 					/>
 					<FilterSelect
 						placeholder="Location"
-						field="locations"
-						items={WORKSHEET_DATA.locations}
+						field="location"
+						items={WORKSHEET_DATA.location}
 					/>
 					<FilterTextField
 						placeholder="Times"
-						field="times"
+						field="time"
 						validation={{ text: 'Time must be in format XX:XX', method: validateTime }}
 					/>
 				</Stack>

@@ -30,6 +30,17 @@ declare global {
 		location: number | null;
 		students: Student[];
 	}
+
+	type WorksheetSelectableKeys = 'level' | 'session' | 'day' | 'location';
+	type WorksheetTypeableKeys = 'time' | 'year'
+
+	export type WorksheetSelectableData = {
+		[K in WorksheetSelectableKeys]: string[];
+	};
+
+	export type WorksheetFilters =
+		{ [K in WorksheetSelectableKeys]: number[] } &
+		{ [K in WorksheetTypeableKeys]: string[] };
 }
 
 export {};

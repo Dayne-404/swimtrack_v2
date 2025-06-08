@@ -1,7 +1,6 @@
 import { TextField, useTheme } from '@mui/material';
 import { useState } from 'react';
 import { useFilter } from '../../../contexts/FilterContext';
-import type { WorksheetFilters } from '../../../common/constants/worksheetData';
 
 interface Props {
 	placeholder: string;
@@ -32,6 +31,7 @@ const FilterTextField = ({
 			return;
 		}
 
+		console.log(field, value);
 		setError('');
 		updateFilter(field, value);
 		setValue('');

@@ -1,5 +1,4 @@
 import { createContext, useContext } from 'react';
-import type { WorksheetFilters } from '../common/constants/worksheetData';
 
 // Create the context type
 interface FilterContextType {

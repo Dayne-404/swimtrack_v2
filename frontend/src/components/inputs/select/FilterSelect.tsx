@@ -1,6 +1,5 @@
 import { Select, MenuItem, useTheme } from '@mui/material';
 import { useFilter } from '../../../contexts/FilterContext';
-import type { WorksheetFilters } from '../../../common/constants/worksheetData';
 
 interface Props {
 	field: keyof WorksheetFilters;

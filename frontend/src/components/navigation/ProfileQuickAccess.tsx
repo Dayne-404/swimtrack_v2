@@ -2,7 +2,7 @@ import { Stack, IconButton, ButtonBase, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useUser } from '../../contexts/UserContext';
-import UserAvatar from '../misc/UserAvatar';
+import UserAvatar from '../common/UserAvatar';
 
 import { buttonBaseStyle, nameTextStyle, profileTextStyle } from '../../styles/navigationStyle';
 

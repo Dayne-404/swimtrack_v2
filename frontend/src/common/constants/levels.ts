@@ -1,11 +1,11 @@
-import ADULT_SKILLS from './program skills/AdultSkills';
-import LEADERSHIP_SKILLS from './program skills/LeadershipSkills';
-import PARENT_AND_TOT_SKILLS from './program skills/ParentAndTotSkills';
-import PRESCHOOL_SKILLS from './program skills/PreschoolSkills';
-import SWIMMER_SKILLS from './program skills/SwimmerSkills';
-import TEEN_SKILLS from './program skills/TeenSkills';
+import ADULT_SKILLS from './levelSkills/AdultSkills';
+import LEADERSHIP_SKILLS from './levelSkills/LeadershipSkills';
+import PARENT_AND_TOT_SKILLS from './levelSkills/ParentAndTotSkills';
+import PRESCHOOL_SKILLS from './levelSkills/PreschoolSkills';
+import SWIMMER_SKILLS from './levelSkills/SwimmerSkills';
+import TEEN_SKILLS from './levelSkills/TeenSkills';
 
-export interface ProgramCategory {
+export interface LevelCategory {
 	name: string;
 	skills: string[];
 }
@@ -13,7 +13,7 @@ export interface ProgramCategory {
 //Order is important here. If this ever changes, the database will need to be updated.
 // The order of the programs in the database is used to determine the program level for a user.
 
-export const PROGRAMS: ProgramCategory[] = [
+export const LEVELS: LevelCategory[] = [
 	{
 		name: 'Parent and Tot 1',
 		skills: PARENT_AND_TOT_SKILLS.PARENT_AND_TOT_1,
@@ -104,4 +104,4 @@ export const PROGRAMS: ProgramCategory[] = [
 	},
 ];
 
-export const PROGRAM_NAMES = PROGRAMS.map((program) => program.name);
+export const LEVEL_NAMES = LEVELS.map((level) => level.name);

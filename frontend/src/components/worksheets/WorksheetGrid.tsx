@@ -1,6 +1,6 @@
 import { Box, Grid, Typography } from '@mui/material';
 import WorksheetCard from './WorksheetCard';
-import LoadingSpinner from './LoadingSpinner';
+import LoadingSpinner from '../common/LoadingSpinner';
 
 interface Props {
 	worksheets?: Worksheet[];

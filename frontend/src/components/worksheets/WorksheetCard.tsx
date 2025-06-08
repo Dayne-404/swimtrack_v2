@@ -1,7 +1,7 @@
 import { Paper, Box, Typography, ButtonBase, Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import formatDate from '../../utils/formatDate';
-import { PROGRAMS } from '../../common/constants/programs';
+import { LEVELS } from '../../common/constants/levels';
 import { WORKSHEET_DATA } from '../../common/constants/worksheetData';
 
 interface Props {
@@ -26,10 +26,10 @@ const WorksheetCard = ({
 	const { _id, level, session, year, location, day, time, createdAt, updatedAt, user } =
 		worksheet;
 
-	const programName = PROGRAMS[level]?.name || 'Unknown Program';
-	const sessionLabel = WORKSHEET_DATA.sessions[session];
-	const locationLabel = WORKSHEET_DATA.locations[location];
-	const dayLabel = WORKSHEET_DATA.days[day];
+	const levelLabel = LEVELS[level]?.name || 'Unknown Level';
+	const sessionLabel = WORKSHEET_DATA.session[session];
+	const locationLabel = WORKSHEET_DATA.location[location];
+	const dayLabel = WORKSHEET_DATA.day[day];
 	const instructorName = `${user.firstName} ${user.lastName?.[0] ?? ''}`;
 
 	const handleClick = () => navigate(_id);
@@ -39,7 +39,7 @@ const WorksheetCard = ({
 			sx={{ width: '100%', textAlign: 'left' }}
 			onClick={onClick ? onClick : handleClick}
 			disabled={disabled}
-			aria-label={`View worksheet for ${programName}`}
+			aria-label={`View worksheet for ${levelLabel}`}
 		>
 			<Paper
 				elevation={2}
@@ -50,7 +50,7 @@ const WorksheetCard = ({
 				}}
 			>
 				<Box p={2} >
-					<Typography variant="h6">{programName}</Typography>
+					<Typography variant="h6">{levelLabel}</Typography>
 					<Divider />
 					{showInstructor && (
 						<Typography variant="body1">{instructorName}</Typography>

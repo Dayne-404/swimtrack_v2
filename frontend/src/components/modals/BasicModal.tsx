@@ -3,12 +3,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import type { ReactNode } from 'react';
 
 interface Props {
+	title: string;
 	isOpen?: boolean;
 	handleClose?: () => void;
 	children: ReactNode;
 }
 
-const BasicModal = ({ isOpen = false, handleClose, children }: Props) => {
+const BasicModal = ({ title, isOpen = false, handleClose, children }: Props) => {
   return (
 		<Modal open={isOpen} onClose={handleClose}>
 			<Paper
@@ -26,7 +27,7 @@ const BasicModal = ({ isOpen = false, handleClose, children }: Props) => {
 				}}
 			>
 				<Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
-					<Typography variant="h5">Filters</Typography>
+					<Typography variant="h5">{title}</Typography>
 					<IconButton onClick={handleClose}>
 						<CloseIcon />
 					</IconButton>

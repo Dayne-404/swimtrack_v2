@@ -1,6 +1,6 @@
 import { useUser } from '../contexts/UserContext';
 import LogoutButton from '../components/inputs/buttons/LogoutButton';
-import UserAvatar from '../components/misc/UserAvatar';
+import UserAvatar from '../components/common/UserAvatar';
 
 export const DashboardPage = () => {
 	const { user } = useUser();
