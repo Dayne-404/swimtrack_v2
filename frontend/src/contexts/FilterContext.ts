@@ -1,19 +1,14 @@
 import { createContext, useContext } from 'react';
-
-export interface WorksheetFilters {
-	level: number[];
-	year: string[];
-	session: number[];
-	day: number[];
-	time: string[];
-	location: number[];
-}
+import type { WorksheetFilters } from '../common/constants/worksheetData';
 
 // Create the context type
 interface FilterContextType {
 	filters: WorksheetFilters;
 	updateFilter: (field: keyof WorksheetFilters, value: string | number) => void;
-	clearFilter: () => void;
+	clearFilter: (filter?: {
+		field: keyof WorksheetFilters,
+		value: (number | string) | (number[] | string[])
+	}) => void;
 }
 
 // Create the context

@@ -1,6 +1,6 @@
 import { Typography, ButtonBase, Stack, Chip } from '@mui/material';
 import { useFilter } from '../../contexts/FilterContext';
-import WORKSHEET_DATA from '../../common/constants/worksheetData';
+import { WORKSHEET_DATA } from '../../common/constants/worksheetData';
 
 const ActiveFilters = () => {
 	const { filters, clearFilter } = useFilter();
@@ -11,7 +11,7 @@ const ActiveFilters = () => {
 				<Typography variant="h6" fontWeight="400">
 					Active Filters
 				</Typography>
-				<ButtonBase onClick={clearFilter} disableRipple>
+				<ButtonBase onClick={() => clearFilter()} disableRipple>
 					<Typography variant="body2" fontWeight="400" color="primary">
 						Clear Filters
 					</Typography>
@@ -20,28 +20,34 @@ const ActiveFilters = () => {
 
 			<Stack direction="row" spacing={1} flexWrap="wrap">
 				{Object.entries(filters).map(([key, values]) =>
-					values.map((value: number | string, index: number) => {
-						let label: string = '';
+					values.length > 0
+						? values.map((value: number | string, index: number) => {
+								let label = '';
 
-						if (key === 'level' && typeof value === 'number') {
-							label = WORKSHEET_DATA.programs[value].name;
-						} else if (typeof value === 'number') {
-							const tempLabel =
-								WORKSHEET_DATA[key as keyof typeof WORKSHEET_DATA][value]; //TODO FIX THIS JANK SHIT
+								if (typeof value === 'number') {
+									label =
+										WORKSHEET_DATA[key as keyof typeof WORKSHEET_DATA]?.[
+											value
+										] ?? value.toString();
+								} else {
+									label = value;
+								}
 
-							if (typeof tempLabel === 'string') label = tempLabel;
-						} else {
-							label = value as string;
-						}
-
-						return (
-							<Chip
-								key={`${key}-${value}-${index}`}
-								color="primary"
-								label={label}
-							/>
-						);
-					})
+								return (
+									<Chip
+										key={`${key}-${index}-${value}`}
+										onDelete={() =>
+											clearFilter({
+												field: key as keyof typeof WORKSHEET_DATA,
+												value: value,
+											})
+										}
+										label={label}
+										color="primary"
+									/>
+								);
+						  })
+						: null
 				)}
 			</Stack>
 		</>

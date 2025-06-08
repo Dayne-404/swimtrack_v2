@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import type { WorksheetFilters } from '../contexts/FilterContext';
+import type { WorksheetFilters } from '../common/constants/worksheetData';
 import type { ReactNode } from 'react';
 import { FilterContext } from '../contexts/FilterContext';
 
 const DEFAULT_FILTERS: WorksheetFilters = {
-	level: [],
-	year: [],
-	session: [],
-	day: [],
-	time: [],
-	location: [],
+	programs: [],
+	years: [],
+	sessions: [],
+	days: [],
+	times: [],
+	locations: [],
 };
 
 export const FilterProvider = ({ children }: { children: ReactNode }) => {
@@ -27,8 +27,26 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
 		});
 	};
 
-	const clearFilter = () => {
-		setFilters(DEFAULT_FILTERS);
+	const clearFilter = (filter?: {
+		field: keyof WorksheetFilters;
+		value: string | number | (string | number)[];
+	}) => {
+		if (!filter) {
+			setFilters(DEFAULT_FILTERS);
+			return;
+		}
+
+		const { field, value } = filter;
+
+		setFilters((prev) => {
+			const currentValues = prev[field] as (string | number)[];
+			const valuesToRemove = Array.isArray(value) ? value : [value];
+
+			return {
+				...prev,
+				[field]: currentValues.filter((item) => !valuesToRemove.includes(item)),
+			};
+		});
 	};
 
 	return (

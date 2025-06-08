@@ -1,12 +1,12 @@
 import { TextField, useTheme } from '@mui/material';
 import { useState } from 'react';
 import { useFilter } from '../../../contexts/FilterContext';
-import type { WorksheetFilters } from '../../../contexts/FilterContext';
+import type { WorksheetFilters } from '../../../common/constants/worksheetData';
 
 interface Props {
 	placeholder: string;
 	field: keyof WorksheetFilters;
-	validation?: { text: string; method: (value: string) => string };
+	validation?: { text: string; method: (value: string) => boolean };
 	submitKey?: string;
 	size?: 'medium' | 'small';
 }
@@ -29,9 +29,12 @@ const FilterTextField = ({
 
 		if (validation?.method && !validation.method(value)) {
 			setError(validation.text);
+			return;
 		}
 
+		setError('');
 		updateFilter(field, value);
+		setValue('');
 	};
 
 	return (

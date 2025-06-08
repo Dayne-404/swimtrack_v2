@@ -2,7 +2,7 @@ import { Paper, Box, Typography, ButtonBase, Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import formatDate from '../../utils/formatDate';
 import { PROGRAMS } from '../../common/constants/programs';
-import WORKSHEET_DATA from '../../common/constants/worksheetData';
+import { WORKSHEET_DATA } from '../../common/constants/worksheetData';
 
 interface Props {
 	worksheet: Worksheet;

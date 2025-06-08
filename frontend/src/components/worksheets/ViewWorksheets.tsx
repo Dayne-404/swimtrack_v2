@@ -18,9 +18,16 @@ const ViewWorksheets = ({ worksheets = [], totalWorksheets, loading = false, sho
 
 	if (!totalWorksheets) totalWorksheets = worksheets.length;
 
+	const handleFilterClose = () => {
+		//Build filter Query.
+		//Get the worksheets
+		
+		setFilterModalOpen(false)
+	}
+
 	return (
 		<Stack spacing={1} width="100%">
-            <FilterModal isOpen={filterModalOpen} />
+            <FilterModal isOpen={filterModalOpen} handleClose={handleFilterClose}/>
 			<WorksheetGridHeader
 				setFilterModalOpen={setFilterModalOpen}
 				setSortModalOpen={setSortModalOpen}
