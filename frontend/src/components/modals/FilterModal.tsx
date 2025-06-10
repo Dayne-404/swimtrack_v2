@@ -4,7 +4,7 @@ import FilterSelect from '../inputs/select/FilterSelect';
 import FilterTextField from '../inputs/textField/FilterTextField';
 import { WORKSHEET_DATA } from '../../common/constants/worksheetData';
 import ActiveFilters from '../worksheets/ActiveFilters';
-import { validateYear, validateTime } from '../../utils/validation';
+import { validateYear, validateTime } from '../../common/utils/validation';
 
 interface Props {
 	isOpen?: boolean;

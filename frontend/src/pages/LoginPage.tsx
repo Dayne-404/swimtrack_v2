@@ -7,7 +7,7 @@ import { backgroundStyle, containerStyle } from '../styles/loginStyle';
 
 import { useAuth } from '../contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
-import { useLoginForm } from '../hooks/useLoginForm';
+import { useLoginForm } from '../common/hooks/useLoginForm';
 
 export const LoginPage = () => {
 	const {

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { fetchWorksheets } from '../services/apiWorksheet';
+import { fetchWorksheets } from '../common/services/apiWorksheet';
 import { useAuth } from '../contexts/AuthContext';
 import { Stack } from '@mui/material';
 import ContentHeader from '../components/common/ContentHeader';
 import WorksheetList from '../components/worksheets/WorksheetList';
 import { FilterProvider } from '../providers/FilterProvider';
+import { SortingProvider } from '../providers/SortProvider';
 
 const FinderPage = () => {
 	const [loading, setLoading] = useState<boolean>(true);
@@ -52,7 +53,9 @@ const FinderPage = () => {
 		<Stack spacing={1} width="100%">
 			<ContentHeader title="Finder" />
 			<FilterProvider>
-				<WorksheetList />
+				<SortingProvider>
+					<WorksheetList />
+				</SortingProvider>
 			</FilterProvider>
 		</Stack>
 	);

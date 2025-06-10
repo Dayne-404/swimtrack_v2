@@ -2,7 +2,7 @@ import { useLayoutEffect, useCallback, useState } from 'react';
 import type { ReactNode } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
-import { apiRequest } from '../services/apiRequest';
+import { apiRequest } from '../common/services/apiRequest';
 import { jwtDecode } from 'jwt-decode';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {

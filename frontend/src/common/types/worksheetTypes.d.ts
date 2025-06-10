@@ -34,6 +34,8 @@ declare global {
 	type WorksheetSelectableKeys = 'level' | 'session' | 'day' | 'location';
 	type WorksheetTypeableKeys = 'time' | 'year'
 
+	type WorksheetSortableKeys = 'level' | 'session' | 'day' | 'time' | 'year' | 'createdAt' | 'updatedAt'
+
 	export type WorksheetSelectableData = {
 		[K in WorksheetSelectableKeys]: string[];
 	};
@@ -41,6 +43,8 @@ declare global {
 	export type WorksheetFilters =
 		{ [K in WorksheetSelectableKeys]: number[] } &
 		{ [K in WorksheetTypeableKeys]: string[] };
+
+	export type WorksheetSortFields = { [K in WorksheetSortableKeys]: 0 | 1 | 2 };
 }
 
 export {};
