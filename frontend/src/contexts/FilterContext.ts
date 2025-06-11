@@ -4,6 +4,7 @@ import { createContext, useContext } from 'react';
 interface FilterContextType {
 	filters: WorksheetFilters;
 	updateFilter: (field: keyof WorksheetFilters, value: string | number) => void;
+	buildFilterQuery: () => URLSearchParams
 	clearFilter: (filter?: {
 		field: keyof WorksheetFilters,
 		value: (number | string) | (number[] | string[])

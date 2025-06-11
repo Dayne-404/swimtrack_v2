@@ -5,12 +5,26 @@ import { useSort } from '../../contexts/SortContext';
 import { SORT_LABELS_BY_FIELD } from '../../common/constants/sortingLabels';
 
 interface Props {
-	isOpen?: boolean;
-	handleClose?: () => void;
+	isOpen: boolean;
+	setOpen: (value: boolean) => void;
+	params: URLSearchParams
+	setParams: (value: URLSearchParams) => void;
 }
 
-const SortModal = ({ isOpen, handleClose }: Props) => {
-	const { sorting } = useSort();
+const SortModal = ({ isOpen, setOpen, params, setParams }: Props) => {
+	const { sorting, buildSortQuery } = useSort();
+
+	const handleClose = () => {
+		const newParams = buildSortQuery();
+
+		if (!params || !setParams || params.toString() === newParams.toString()) {
+			setOpen(false);
+			return;
+		} 
+
+		setParams(newParams);
+		setOpen(false);
+	};
 
 	return (
 		<BasicModal title="Sorting" isOpen={isOpen} handleClose={handleClose}>

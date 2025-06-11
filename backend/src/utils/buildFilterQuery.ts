@@ -13,7 +13,7 @@ import WorksheetFilterFields, { NUMERIC_FIELDS } from '../config/worksheetFilter
  */
 const buildFiltersQuery = (
 	filters: WorksheetFilterFields,
-	userId: string | undefined = undefined,
+	userId: string | undefined = undefined
 ): WorksheetFilterFields => {
 	const query: WorksheetFilterFields = {};
 
@@ -26,7 +26,7 @@ const buildFiltersQuery = (
 
 			valuesArray = valuesArray.map((val) => {
 				if (NUMERIC_FIELDS.has(key) && typeof val === 'string' && !isNaN(Number(val))) {
-					return Number(val); 
+					return Number(val);
 				}
 				return val;
 			});
@@ -35,6 +35,10 @@ const buildFiltersQuery = (
 			query[key] = { $in: valuesArray } as any;
 		}
 	});
+
+	if (userId) {
+		query.user = userId;
+	}
 
 	return query;
 };

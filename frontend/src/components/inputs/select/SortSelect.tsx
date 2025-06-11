@@ -19,12 +19,13 @@ const SortSelect = ({ size = 'medium', field, labels }: Props) => {
 				value={sorting[field]}
 				onChange={(e) => updateSorting(field, e.target.value)}
 				label={capitalize(field)}
+				renderValue={(value) => (value === 0 ? '' : labels[value as 1 | 2])}
 			>
-				{([0, 1, 2] as const).map((value) => (
-					<MenuItem key={value} value={value}>
-						{labels[value]}
-					</MenuItem>
-				))}
+				<MenuItem value={0}>
+					<em>{labels[0]}</em>
+				</MenuItem>
+				<MenuItem value={1}>{labels[1]}</MenuItem>
+				<MenuItem value={2}>{labels[2]}</MenuItem>
 			</Select>
 		</FormControl>
 	);

@@ -4,6 +4,7 @@ import { createContext, useContext } from 'react';
 interface SortingContextType {
     sorting: WorksheetSortFields;
     updateSorting: (field: keyof WorksheetSortFields, value: 0 | 1 | 2) => void;
+    buildSortQuery: () => URLSearchParams;
     clearSorting: () => void;
 }
 

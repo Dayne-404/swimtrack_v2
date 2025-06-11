@@ -1,15 +1,8 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { FilterContext } from '../contexts/FilterContext';
+import { DEFAULT_FILTERS } from '../common/constants/defaultFilters';
 
-const DEFAULT_FILTERS: WorksheetFilters = {
-	level: [],
-	year: [],
-	session: [],
-	day: [],
-	time: [],
-	location: [],
-};
 
 export const FilterProvider = ({ children }: { children: ReactNode }) => {
 	const [filters, setFilters] = useState<WorksheetFilters>(DEFAULT_FILTERS);
@@ -48,8 +41,21 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
 		});
 	};
 
+	const buildFilterQuery = (): URLSearchParams => {
+		const params = new URLSearchParams();
+
+		for (const key in filters) {
+			const values = filters[key as keyof WorksheetFilters];
+			values.forEach((val) => {
+				params.append(key, val.toString());
+			});
+		}
+
+		return params;
+	};
+
 	return (
-		<FilterContext.Provider value={{ filters, updateFilter, clearFilter }}>
+		<FilterContext.Provider value={{ filters, updateFilter, buildFilterQuery, clearFilter }}>
 			{children}
 		</FilterContext.Provider>
 	);

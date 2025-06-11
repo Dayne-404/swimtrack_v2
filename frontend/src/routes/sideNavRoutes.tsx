@@ -8,10 +8,11 @@ import SettingsIcon from '@mui/icons-material/Settings';
 
 import { DashboardPage } from '../pages/DashboardPage.tsx.tsx';
 import FinderPage from '../pages/FinderPage.tsx';
+import LibraryPage from '../pages/LibraryPage.tsx';
 
 export const SIDE_NAV_ROUTES = {
 	Dashboard: { icon: <SpeedIcon />, to: '/', element: <DashboardPage /> },
-	Library: { icon: <FolderIcon />, to: '/library', element: <DashboardPage /> },
+	Library: { icon: <FolderIcon />, to: '/library', element: <LibraryPage /> },
 	Groups: {
 		icon: <FolderSpecialIcon />,
 		to: '/groups',
