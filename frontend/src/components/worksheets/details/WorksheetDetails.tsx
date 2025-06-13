@@ -1,10 +1,11 @@
 import { Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { fetchWorksheet } from '../../../common/services/apiWorksheet';
 import { useAuth } from '../../../contexts/AuthContext';
 import WorksheetToolbar from './WorksheetToolbar';
 import WorksheetDetailsHeader from './WorksheetDetailsHeader';
+import WorksheetDetailsFooter from './WorksheetDetailsFooter';
 
 interface Props {
 	propWorksheetId?: string;
@@ -12,42 +13,66 @@ interface Props {
 
 const WorksheetDetails = ({ propWorksheetId }: Props) => {
 	const { paramWorksheetId } = useParams();
-	const worksheetId: string | null = propWorksheetId ?? paramWorksheetId ?? null;
 	const { accessToken } = useAuth();
-	const [worksheet, setWorksheet] = useState<Worksheet | null>(null);
-	const [originalWorksheet, setOriginalWorksheet] = useState<Worksheet | null>(worksheet);
+
+	const worksheetId = useMemo(
+		() => propWorksheetId ?? paramWorksheetId ?? null,
+		[propWorksheetId, paramWorksheetId]
+	);
+
+	const [editableWorksheet, setEditableWorksheet] = useState<Worksheet | null>(null);
+	const initialWorksheetRef = useRef<Worksheet | null>(null);
+
+	const [editing, setEditing] = useState<boolean>(false);
 
 	useEffect(() => {
-		const getWorksheet = async () => {
-			if (!accessToken || !worksheetId) return;
+		if (!accessToken || !worksheetId) return;
 
+		const getWorksheet = async () => {
 			try {
-				if (!worksheetId) return;
-				const data: Worksheet = await fetchWorksheet(worksheetId as string, accessToken);
-				console.log('Fetched worksheet:', data);
-				
-				setWorksheet(data);
-				setOriginalWorksheet(data);
+				const worksheet: Worksheet = await fetchWorksheet(worksheetId, accessToken);
+
+				setEditableWorksheet(worksheet);
+				initialWorksheetRef.current = worksheet;
 			} catch (error) {
 				console.log('Failed to fetch worksheet', error);
 			}
 		};
 
 		getWorksheet();
+	}, [worksheetId, accessToken]);
 
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [worksheetId]);
+	const resetWorksheet = () => {
+		if (initialWorksheetRef.current) {
+			setEditableWorksheet(initialWorksheetRef.current);
+		}
+	};
 
 	return (
 		<Stack width="100%" spacing={1.5}>
-			<WorksheetToolbar worksheet={worksheet} />
+			<WorksheetToolbar
+				worksheet={editableWorksheet}
+				editState={{
+					isEditing: editing,
+					setEditing: setEditing,
+					onCancelEdit: resetWorksheet,
+				}}
+			/>
 
-			{!worksheet ? (
+			{!editableWorksheet ? (
 				<Stack width="100%" height="100%" justifyContent="center" alignItems="center">
 					Loading...
 				</Stack>
 			) : (
-				<WorksheetDetailsHeader worksheet={worksheet} setWorksheet={setWorksheet} />
+				<>
+					<WorksheetDetailsHeader
+						worksheet={editableWorksheet}
+						setWorksheet={setEditableWorksheet}
+						disabled={!editing}
+					/>
+
+					<WorksheetDetailsFooter disabled={!editing} />
+				</>
 			)}
 		</Stack>
 	);

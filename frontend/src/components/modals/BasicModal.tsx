@@ -1,15 +1,16 @@
 import { Modal, Paper, Typography, IconButton, Divider, Stack } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import type { ReactNode } from 'react';
-
 interface Props {
 	title: string;
 	isOpen?: boolean;
 	handleClose?: () => void;
 	children: ReactNode;
+	width?: string;
+	height?: string;
 }
 
-const BasicModal = ({ title, isOpen = false, handleClose, children }: Props) => {
+const BasicModal = ({ title, isOpen = false, handleClose, width, height, children }: Props) => {
   return (
 		<Modal open={isOpen} onClose={handleClose}>
 			<Paper
@@ -21,8 +22,8 @@ const BasicModal = ({ title, isOpen = false, handleClose, children }: Props) => 
 					top: '50%',
 					left: '50%',
 					transform: 'translate(-50%, -50%)',
-					width: '95%',
-					height: '90vh',
+					width: width || '95%',
+					height: height || '90vh',
 					overflow: 'auto',
 				}}
 			>

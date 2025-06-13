@@ -16,15 +16,21 @@ interface Props {
 
 const DeleteModal = ({
 	open,
-    setOpen,
-    children,
+	setOpen,
+	children,
 	title = 'Are you sure you want to delete?',
 	loading = false,
 	onCancel,
 	handleDelete,
 }: Props) => {
 	return (
-		<BasicModal isOpen={open} handleClose={() => setOpen(false)} title={title}>
+		<BasicModal
+			isOpen={open}
+			handleClose={() => setOpen(false)}
+			height="auto"
+			width="35%"
+			title={title}
+		>
 			<Stack pt={2} spacing={2}>
 				{children}
 				<Stack direction="row" spacing={2}>
