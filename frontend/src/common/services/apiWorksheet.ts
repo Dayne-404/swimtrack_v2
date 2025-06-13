@@ -1,7 +1,6 @@
 import { apiRequest } from './apiRequest';
 
 interface fetchWorksheetsProps {
-	instructorId?: string;
 	limit?: number;
 	skip?: number;
 	filter?: URLSearchParams;
@@ -44,3 +43,11 @@ export const fetchWorksheets = async ({
 		accessToken: accessToken,
 	});
 };
+
+export const fetchWorksheet = async (worksheetId: string, accessToken: string): Promise<Worksheet> => { 
+	const res = await apiRequest({
+		endpoint: `/worksheets/${worksheetId}`,
+		accessToken: accessToken,
+	}) as { worksheet: Worksheet };
+	return res.worksheet;
+}
