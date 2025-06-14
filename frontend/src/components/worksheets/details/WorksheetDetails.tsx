@@ -6,6 +6,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import WorksheetToolbar from './WorksheetToolbar';
 import WorksheetDetailsHeader from './WorksheetDetailsHeader';
 import WorksheetDetailsFooter from './WorksheetDetailsFooter';
+import WorksheetBody from './WorksheetBody';
 
 interface Props {
 	propWorksheetId?: string;
@@ -70,7 +71,11 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 						setWorksheet={setEditableWorksheet}
 						disabled={!editing}
 					/>
-
+					<WorksheetBody
+						worksheet={editableWorksheet}
+						setHeader={setEditableWorksheet}
+						errors={{}} // TODO: Add error handling
+						disabled={!editing}/>
 					<WorksheetDetailsFooter disabled={!editing} />
 				</>
 			)}

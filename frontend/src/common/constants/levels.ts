@@ -71,15 +71,15 @@ export const LEVELS: LevelCategory[] = [
 		skills: SWIMMER_SKILLS.SWIMMER_6,
 	},
 	{
-		name: 'Rookie',
+		name: 'Rookie Patrol',
 		skills: LEADERSHIP_SKILLS.ROOKIE,
 	},
 	{
-		name: 'Ranger',
+		name: 'Ranger Patrol',
 		skills: LEADERSHIP_SKILLS.RANGER,
 	},
 	{
-		name: 'Star',
+		name: 'Star Patrol',
 		skills: LEADERSHIP_SKILLS.STAR,
 	},
 	{
