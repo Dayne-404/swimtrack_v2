@@ -1,6 +1,7 @@
 import { Stack, TextField, Grid, Divider } from '@mui/material';
 import WorksheetSelect from '../../inputs/select/WorksheetSelect';
 import { WORKSHEET_DATA } from '../../../common/constants/worksheetData';
+import { LEVELS } from '../../../common/constants/levels';
 
 interface Props {
 	worksheet: Worksheet;
@@ -14,13 +15,29 @@ const WorksheetDetailsHeader = ({ worksheet, setWorksheet, disabled = true }: Pr
 	const handleChange = (event: string | number, field: keyof Worksheet) => {
 		setWorksheet((prevWorksheet) => {
 			if (!prevWorksheet) return prevWorksheet;
-			return {
+
+			let updatedWorksheet = {
 				...prevWorksheet,
 				[field]: event,
 			};
+
+			if (field === 'level' && typeof event === 'number') {
+				const newSkills = LEVELS[event].skills;
+
+				updatedWorksheet = {
+					...updatedWorksheet,
+					students: prevWorksheet.students.map((student) => ({
+						...student,
+						skills: Array(newSkills.length).fill(false),
+						passed: false,
+					})),
+				};
+			}
+
+			return updatedWorksheet;
 		});
 	};
-
+	
 	return (
 		<Stack>
 			<Stack direction="row" spacing={1}>

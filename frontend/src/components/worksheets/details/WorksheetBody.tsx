@@ -4,18 +4,11 @@ import WorksheetTableHead from './WorksheetTable/WorksheetTableHead';
 import WorksheetTableBody from './WorksheetTable/WorksheetTableBody';
 interface Props {
 	worksheet: Worksheet;
-	students: Student[] | null;
-	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>;
+	setWorksheet: React.Dispatch<React.SetStateAction<Worksheet | null>>;
 	disabled?: boolean;
 }
 
-const WorksheetBody = ({ worksheet, students, setStudents, disabled }: Props) => {
-	if (!students) {
-		return (
-			<Box sx={{ width: '100%', textAlign: 'center', padding: 2 }}>Loading students...</Box> //TODO change this
-		);
-	}
-
+const WorksheetBody = ({ worksheet, setWorksheet, disabled }: Props) => {
 	const skills = LEVELS[worksheet.level].skills;
 
 	return (
@@ -24,9 +17,9 @@ const WorksheetBody = ({ worksheet, students, setStudents, disabled }: Props) =>
 				<Table>
 					<WorksheetTableHead skills={skills} />
 					<WorksheetTableBody
-						students={students}
+						students={worksheet.students}
+						setWorksheet={setWorksheet}
 						skills={skills}
-						setStudents={setStudents}
 						disabled={disabled}
 					/>
 				</Table>

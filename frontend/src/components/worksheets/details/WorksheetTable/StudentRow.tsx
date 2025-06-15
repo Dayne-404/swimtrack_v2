@@ -6,56 +6,56 @@ interface Props {
 	student: Student;
 	index: number;
 	skills: string[];
-	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>;
+	setWorksheet: React.Dispatch<React.SetStateAction<Worksheet | null>>;
 	disabled?: boolean;
 }
 
 const handleNameChange = (
 	index: number,
 	newName: string,
-	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>
+	setWorksheet: React.Dispatch<React.SetStateAction<Worksheet | null>>
 ) => {
-	setStudents((prev) => {
-		if (!prev) return null;
-		const updated = [...prev];
-		updated[index] = { ...updated[index], name: newName };
-		return updated;
+	setWorksheet((prev) => {
+		if (!prev) return prev;
+		const updatedStudents = [...prev.students];
+		updatedStudents[index] = { ...updatedStudents[index], name: newName };
+		return { ...prev, students: updatedStudents };
 	});
 };
 
 const handleSkillChange = (
 	studentIndex: number,
 	skillIndex: number,
-	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>
+	setWorksheet: React.Dispatch<React.SetStateAction<Worksheet | null>>
 ) => {
-	setStudents((prev) => {
-		if (!prev) return null;
-		const updated = [...prev];
-		const student = { ...updated[studentIndex] };
+	setWorksheet((prev) => {
+		if (!prev) return prev;
+		const updatedStudents = [...prev.students];
+		const student = { ...updatedStudents[studentIndex] };
 		const skills = [...student.skills];
 		skills[skillIndex] = !skills[skillIndex];
 		const passed = skills.every(Boolean);
-		updated[studentIndex] = { ...student, skills, passed };
-		return updated;
+		updatedStudents[studentIndex] = { ...student, skills, passed };
+		return { ...prev, students: updatedStudents };
 	});
 };
 
 const handlePassedChange = (
 	studentIndex: number,
-	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>
+	setWorksheet: React.Dispatch<React.SetStateAction<Worksheet | null>>
 ) => {
-	setStudents((prev) => {
-		if (!prev) return null;
-		const updated = [...prev];
-		const student = { ...updated[studentIndex] };
+	setWorksheet((prev) => {
+		if (!prev) return prev;
+		const updatedStudents = [...prev.students];
+		const student = { ...updatedStudents[studentIndex] };
 		const passed = !student.passed;
 		const skills = passed ? Array(student.skills.length).fill(true) : student.skills;
-		updated[studentIndex] = { ...student, passed, skills };
-		return updated;
+		updatedStudents[studentIndex] = { ...student, passed, skills };
+		return { ...prev, students: updatedStudents };
 	});
 };
 
-const StudentRow = ({ student, index, skills, setStudents, disabled }: Props) => (
+const StudentRow = ({ student, index, skills, setWorksheet, disabled }: Props) => (
 	<TableRow key={student._id ?? `row-${index}`}>
 		<TableCell sx={{ position: 'relative', minWidth: `${SKILL_TEXT_BOX_WIDTH}px` }}>
 			<TextField
@@ -63,7 +63,7 @@ const StudentRow = ({ student, index, skills, setStudents, disabled }: Props) =>
 				variant="standard"
 				placeholder="Name"
 				value={student.name}
-				onChange={(e) => handleNameChange(index, e.target.value, setStudents)}
+				onChange={(e) => handleNameChange(index, e.target.value, setWorksheet)}
 				slotProps={{
 					input: {
 						startAdornment: (
@@ -77,13 +77,13 @@ const StudentRow = ({ student, index, skills, setStudents, disabled }: Props) =>
 			<SkillCheckbox
 				key={`skill-${skillIndex}`}
 				checked={student.skills[skillIndex]}
-				onChange={() => handleSkillChange(index, skillIndex, setStudents)}
+				onChange={() => handleSkillChange(index, skillIndex, setWorksheet)}
 				disabled={disabled}
 			/>
 		))}
 		<SkillCheckbox
 			checked={student.passed}
-			onChange={() => handlePassedChange(index, setStudents)}
+			onChange={() => handlePassedChange(index, setWorksheet)}
 			disabled={disabled}
 		/>
 	</TableRow>

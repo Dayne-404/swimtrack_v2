@@ -4,11 +4,11 @@ import StudentRow from './StudentRow';
 interface Props {
 	students: Student[];
 	skills: string[];
-	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>;
+	setWorksheet: React.Dispatch<React.SetStateAction<Worksheet | null>>;
 	disabled?: boolean;
 }
 
-const WorksheetTableBody = ({ students, skills, setStudents, disabled }: Props) => (
+const WorksheetTableBody = ({ students, skills, setWorksheet, disabled }: Props) => (
 	<TableBody>
 		{students.map((student, index) => (
 			<StudentRow
@@ -16,7 +16,7 @@ const WorksheetTableBody = ({ students, skills, setStudents, disabled }: Props) 
 				student={student}
 				index={index}
 				skills={skills}
-				setStudents={setStudents}
+				setWorksheet={setWorksheet}
 				disabled={disabled}
 			/>
 		))}
