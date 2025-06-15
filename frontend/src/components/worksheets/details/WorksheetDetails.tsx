@@ -7,6 +7,7 @@ import WorksheetToolbar from './WorksheetToolbar';
 import WorksheetDetailsHeader from './WorksheetDetailsHeader';
 import WorksheetDetailsFooter from './WorksheetDetailsFooter';
 import WorksheetBody from './WorksheetBody';
+import { LEVELS } from '../../../common/constants/levels';
 
 interface Props {
 	propWorksheetId?: string;
@@ -22,9 +23,10 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 	);
 
 	const [editableWorksheet, setEditableWorksheet] = useState<Worksheet | null>(null);
+	const [editableStudents, setEditableStudents] = useState<Student[] | null>(null);
 	const initialWorksheetRef = useRef<Worksheet | null>(null);
 
-	const [editing, setEditing] = useState<boolean>(false);
+	const [editing, setEditing] = useState<boolean>(true);
 
 	useEffect(() => {
 		if (!accessToken || !worksheetId) return;
@@ -33,7 +35,24 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 			try {
 				const worksheet: Worksheet = await fetchWorksheet(worksheetId, accessToken);
 
+				//TODO This is a temporary fix to ensure all students have the correct number of skills.
+				//It should be removed when all worksheets are updated to have the correct skills.
+				if (
+					worksheet.students.length === 0 ||
+					worksheet.students.some(
+						(s) => s.skills.length !== LEVELS[worksheet.level].skills.length
+					)
+				) {
+					const skillCount = LEVELS[worksheet.level].skills.length;
+
+					worksheet.students = worksheet.students.map((student) => ({
+						...student,
+						skills: Array(skillCount).fill(false),
+					}));
+				}
+
 				setEditableWorksheet(worksheet);
+				setEditableStudents(worksheet.students);
 				initialWorksheetRef.current = worksheet;
 			} catch (error) {
 				console.log('Failed to fetch worksheet', error);
@@ -46,6 +65,7 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 	const resetWorksheet = () => {
 		if (initialWorksheetRef.current) {
 			setEditableWorksheet(initialWorksheetRef.current);
+			setEditableStudents(initialWorksheetRef.current.students);
 		}
 	};
 
@@ -73,9 +93,10 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 					/>
 					<WorksheetBody
 						worksheet={editableWorksheet}
-						setHeader={setEditableWorksheet}
-						errors={{}} // TODO: Add error handling
-						disabled={!editing}/>
+						students={editableStudents}
+						setStudents={setEditableStudents}
+						disabled={!editing}
+					/>
 					<WorksheetDetailsFooter disabled={!editing} />
 				</>
 			)}
