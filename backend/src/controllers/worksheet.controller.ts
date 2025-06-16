@@ -94,6 +94,7 @@ export const updateWorksheet = async (
 		}
 
 		const updatedWorksheet = await Worksheet.findByIdAndUpdate(worksheetId, req.body, { new: true });
+
 		res.status(200).json(updatedWorksheet);
 	} catch (error) {
 		next(error);
