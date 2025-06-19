@@ -10,6 +10,7 @@ import Navigation from './components/navigation/Navigation.tsx';
 import { Box } from '@mui/material';
 import ContentContainer from './components/layout/ContentContainer.tsx';
 import { MainStyle } from './styles/appStyle.ts';
+import { AlertProvider } from './providers/AlertProvider.tsx';
 
 function App() {
 	return (
@@ -17,6 +18,7 @@ function App() {
 			<AuthProvider>
 				<ThemeProvider theme={theme}>
 					<Router>
+						<AlertProvider>
 						<Routes>
 							<Route path="/login" element={<LoginPage />} />
 							{Object.values(ALL_ROUTES).map((route, index) => (
@@ -36,6 +38,7 @@ function App() {
 								/>
 							))}
 						</Routes>
+						</AlertProvider>
 					</Router>
 				</ThemeProvider>
 			</AuthProvider>

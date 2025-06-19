@@ -8,6 +8,7 @@ import WorksheetDetailsHeader from './WorksheetDetailsHeader';
 import WorksheetDetailsFooter from './WorksheetDetailsFooter';
 import WorksheetBody from './WorksheetBody';
 import { LEVELS } from '../../../common/constants/levels';
+import { useAlert } from '../../../contexts/AlertContext';
 
 interface Props {
 	propWorksheetId?: string;
@@ -32,6 +33,7 @@ const resetStudentsSkillsArray = (worksheet: Worksheet): Worksheet => {
 const WorksheetDetails = ({ propWorksheetId }: Props) => {
 	const { paramWorksheetId } = useParams();
 	const { accessToken } = useAuth();
+	const { showAlert } = useAlert();
 
 	const worksheetId = useMemo(
 		() => propWorksheetId ?? paramWorksheetId ?? null,
@@ -75,11 +77,33 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 			setEditableWorksheet(updatedWorksheet);
 			initialWorksheetRef.current = updatedWorksheet;
 			setEditing(false);
+			showAlert('Worksheet saved successfully!');
 		} catch (error) {
 			console.error('Failed to save worksheet edits:', error);
+			showAlert('Failed to save worksheet edits', 'error');
 		} finally {
 			setLoading(false);
 		}
+	};
+
+	const addStudent = () => {
+		if (!editableWorksheet) return;
+
+		const skillCount = LEVELS[editableWorksheet.level].skills.length;
+
+		const newStudent: Student = {
+			name: '',
+			skills: Array(skillCount).fill(false),
+			passed: false,
+		};
+
+		setEditableWorksheet((prev) => {
+			if (!prev) return prev;
+			return {
+				...prev,
+				students: [...prev.students, newStudent],
+			};
+		});
 	};
 
 	const resetWorksheet = () => {
@@ -113,12 +137,13 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 					<WorksheetBody
 						worksheet={editableWorksheet}
 						setWorksheet={setEditableWorksheet}
-						disabled={!editing || loading}
+						isEditing={editing}
 					/>
 					<WorksheetDetailsFooter
 						loading={loading}
+						onAddStudent={addStudent}
 						onSave={saveEdits}
-						isEditing={editing}
+						disabled={!editing}
 					/>
 				</>
 			)}

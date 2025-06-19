@@ -1,6 +1,6 @@
 declare global {
 	export interface Student {
-		_id: string;
+		_id?: string;
 		name: string;
 		skills: boolean[];
 		passed: boolean;
@@ -32,17 +32,24 @@ declare global {
 	}
 
 	type WorksheetSelectableKeys = 'level' | 'session' | 'day' | 'location';
-	type WorksheetTypeableKeys = 'time' | 'year'
+	type WorksheetTypeableKeys = 'time' | 'year';
 
-	type WorksheetSortableKeys = 'level' | 'session' | 'day' | 'time' | 'year' | 'createdAt' | 'updatedAt'
+	type WorksheetSortableKeys =
+		| 'level'
+		| 'session'
+		| 'day'
+		| 'time'
+		| 'year'
+		| 'createdAt'
+		| 'updatedAt';
 
 	export type WorksheetSelectableData = {
 		[K in WorksheetSelectableKeys]: string[];
 	};
 
-	export type WorksheetFilters =
-		{ [K in WorksheetSelectableKeys]: number[] } &
-		{ [K in WorksheetTypeableKeys]: string[] };
+	export type WorksheetFilters = { [K in WorksheetSelectableKeys]: number[] } & {
+		[K in WorksheetTypeableKeys]: string[];
+	};
 
 	export type WorksheetSortFields = { [K in WorksheetSortableKeys]: 0 | 1 | 2 };
 }

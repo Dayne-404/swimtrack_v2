@@ -1,7 +1,7 @@
 import { Box, Table, TableContainer } from '@mui/material';
 import { LEVELS } from '../../../common/constants/levels';
-import WorksheetTableHead from './WorksheetTable/WorksheetTableHead';
-import WorksheetTableBody from './WorksheetTable/WorksheetTableBody';
+import WorksheetTableHead from './table/WorksheetTableHead';
+import WorksheetTableBody from './table/WorksheetTableBody';
 interface Props {
 	worksheet: Worksheet;
 	setWorksheet: React.Dispatch<React.SetStateAction<Worksheet | null>>;
