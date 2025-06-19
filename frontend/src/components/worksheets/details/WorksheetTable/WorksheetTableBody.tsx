@@ -5,10 +5,10 @@ interface Props {
 	students: Student[];
 	skills: string[];
 	setWorksheet: React.Dispatch<React.SetStateAction<Worksheet | null>>;
-	disabled?: boolean;
+	isEditing?: boolean;
 }
 
-const WorksheetTableBody = ({ students, skills, setWorksheet, disabled }: Props) => (
+const WorksheetTableBody = ({ students, skills, setWorksheet, isEditing }: Props) => (
 	<TableBody>
 		{students.map((student, index) => (
 			<StudentRow
@@ -17,7 +17,7 @@ const WorksheetTableBody = ({ students, skills, setWorksheet, disabled }: Props)
 				index={index}
 				skills={skills}
 				setWorksheet={setWorksheet}
-				disabled={disabled}
+				isEditing={students.length > 1 && isEditing}
 			/>
 		))}
 	</TableBody>

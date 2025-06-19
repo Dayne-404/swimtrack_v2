@@ -95,7 +95,7 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 					<WorksheetBody
 						worksheet={editableWorksheet}
 						setWorksheet={setEditableWorksheet}
-						disabled={!editing}
+						isEditing={editing}
 					/>
 					<WorksheetDetailsFooter disabled={!editing} />
 				</>
