@@ -6,7 +6,7 @@ interface fetchWorksheetsProps {
 	filter?: URLSearchParams;
 	sort?: URLSearchParams;
 	specific?: boolean;
-    accessToken: string
+	accessToken: string;
 }
 
 export const fetchWorksheets = async ({
@@ -15,10 +15,10 @@ export const fetchWorksheets = async ({
 	limit,
 	skip,
 	specific = false,
-    accessToken
+	accessToken,
 }: fetchWorksheetsProps) => {
 	const params = new URLSearchParams();
-	
+
 	if (filter) {
 		for (const [key, value] of filter.entries()) {
 			params.append(key, value);
@@ -44,10 +44,27 @@ export const fetchWorksheets = async ({
 	});
 };
 
-export const fetchWorksheet = async (worksheetId: string, accessToken: string): Promise<Worksheet> => { 
-	const res = await apiRequest({
+export const fetchWorksheet = async (
+	worksheetId: string,
+	accessToken: string
+): Promise<Worksheet> => {
+	const res = (await apiRequest({
 		endpoint: `/worksheets/${worksheetId}`,
 		accessToken: accessToken,
-	}) as { worksheet: Worksheet };
+	})) as { worksheet: Worksheet };
 	return res.worksheet;
-}
+};
+
+export const updateWorksheet = async (
+	worksheet: Worksheet,
+	accessToken: string
+): Promise<Worksheet> => {
+	const res = await apiRequest({
+		endpoint: `/worksheets/${worksheet._id}`,
+		method: 'PUT',
+		body: JSON.stringify(worksheet),
+		accessToken: accessToken,
+	});
+	console.log(res);
+	return res as Worksheet;
+};

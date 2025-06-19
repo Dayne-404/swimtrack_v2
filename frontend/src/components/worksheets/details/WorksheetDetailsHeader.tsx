@@ -13,20 +13,21 @@ const GRID_SIZE = { xs: 6, md: 3 };
 
 const WorksheetDetailsHeader = ({ worksheet, setWorksheet, disabled = true }: Props) => {
 	const handleChange = (event: string | number, field: keyof Worksheet) => {
-		setWorksheet((prevWorksheet) => {
-			if (!prevWorksheet) return prevWorksheet;
+		const value = field === 'year' && event ? Number(event) : event;
 
-			let updatedWorksheet = {
-				...prevWorksheet,
-				[field]: event,
+		setWorksheet((prev) => {
+			if (!prev || prev[field] === value) return prev;
+
+			let updated = {
+				...prev,
+				[field]: value,
 			};
 
 			if (field === 'level' && typeof event === 'number') {
 				const newSkills = LEVELS[event].skills;
-
-				updatedWorksheet = {
-					...updatedWorksheet,
-					students: prevWorksheet.students.map((student) => ({
+				updated = {
+					...updated,
+					students: prev.students.map((student) => ({
 						...student,
 						skills: Array(newSkills.length).fill(false),
 						passed: false,
@@ -34,10 +35,10 @@ const WorksheetDetailsHeader = ({ worksheet, setWorksheet, disabled = true }: Pr
 				};
 			}
 
-			return updatedWorksheet;
+			return updated;
 		});
 	};
-	
+
 	return (
 		<Stack>
 			<Stack direction="row" spacing={1}>
@@ -94,7 +95,7 @@ const WorksheetDetailsHeader = ({ worksheet, setWorksheet, disabled = true }: Pr
 						disabled={disabled}
 						fullWidth
 						label="Year"
-						type="number"
+						onChange={(e) => handleChange(e.target.value, 'year')}
 						value={worksheet.year}
 						helperText={' '}
 					/>
@@ -114,6 +115,7 @@ const WorksheetDetailsHeader = ({ worksheet, setWorksheet, disabled = true }: Pr
 						disabled={disabled}
 						fullWidth
 						label="Time"
+						onChange={(e) => handleChange(e.target.value, 'time')}
 						value={worksheet.time || ''}
 						helperText={' '}
 					/>

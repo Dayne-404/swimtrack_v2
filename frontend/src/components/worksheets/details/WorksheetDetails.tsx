@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState, useMemo, useRef } from 'react';
-import { fetchWorksheet } from '../../../common/services/apiWorksheet';
+import { fetchWorksheet, updateWorksheet } from '../../../common/services/apiWorksheet';
 import { useAuth } from '../../../contexts/AuthContext';
 import WorksheetToolbar from './WorksheetToolbar';
 import WorksheetDetailsHeader from './WorksheetDetailsHeader';
@@ -41,7 +41,8 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 	const [editableWorksheet, setEditableWorksheet] = useState<Worksheet | null>(null);
 	const initialWorksheetRef = useRef<Worksheet | null>(null);
 
-	const [editing, setEditing] = useState<boolean>(true);
+	const [editing, setEditing] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!accessToken || !worksheetId) return;
@@ -64,6 +65,23 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 		getWorksheet();
 	}, [worksheetId, accessToken]);
 
+	const saveEdits = async () => {
+		if (!editableWorksheet || !accessToken) return;
+
+		try {
+			setLoading(true);
+			const updatedWorksheet = await updateWorksheet(editableWorksheet, accessToken);
+			console.log('updatedWorksheet:', updatedWorksheet);
+			setEditableWorksheet(updatedWorksheet);
+			initialWorksheetRef.current = updatedWorksheet;
+			setEditing(false);
+		} catch (error) {
+			console.error('Failed to save worksheet edits:', error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	const resetWorksheet = () => {
 		if (initialWorksheetRef.current) {
 			setEditableWorksheet(initialWorksheetRef.current);
@@ -83,21 +101,25 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 
 			{!editableWorksheet ? (
 				<Stack width="100%" height="100%" justifyContent="center" alignItems="center">
-					Loading...
+					Getting worksheet details...
 				</Stack>
 			) : (
 				<>
 					<WorksheetDetailsHeader
 						worksheet={editableWorksheet}
 						setWorksheet={setEditableWorksheet}
-						disabled={!editing}
+						disabled={!editing || loading}
 					/>
 					<WorksheetBody
 						worksheet={editableWorksheet}
 						setWorksheet={setEditableWorksheet}
+						disabled={!editing || loading}
+					/>
+					<WorksheetDetailsFooter
+						loading={loading}
+						onSave={saveEdits}
 						isEditing={editing}
 					/>
-					<WorksheetDetailsFooter disabled={!editing} />
 				</>
 			)}
 		</Stack>

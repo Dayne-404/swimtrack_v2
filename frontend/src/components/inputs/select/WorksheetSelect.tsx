@@ -1,9 +1,10 @@
 import { TextField, MenuItem } from '@mui/material';
+import React from 'react';
 
 interface Props {
-    label: string;
-	field: WorksheetSelectableKeys
-    size?: 'medium' | 'small';
+	label: string;
+	field: WorksheetSelectableKeys;
+	size?: 'medium' | 'small';
 	selected: number;
 	placeholder?: string;
 	items?: string[];
@@ -24,28 +25,26 @@ const SelectMenuProps = {
 	},
 };
 
-const WorksheetSelect = ({
+const WorksheetSelectComponent = ({
 	label,
 	field,
-    size = 'medium',
+	size = 'medium',
 	items = [],
 	selected,
 	handleChange = () => {},
 	disabled = true,
 }: Props) => {
 	return (
-		
-
-        <TextField
+		<TextField
 			select
-            size={size}
+			size={size}
 			label={label}
 			value={selected}
 			onChange={(e) => handleChange(e.target.value, field)}
 			helperText={' '}
 			disabled={disabled}
 			fullWidth
-            slotProps={{select: SelectMenuProps }}
+			slotProps={{ select: SelectMenuProps }}
 		>
 			{items.map((item, index) => (
 				<MenuItem key={`${item}-${index}`} value={index} disabled={index === selected}>
@@ -55,5 +54,7 @@ const WorksheetSelect = ({
 		</TextField>
 	);
 };
+
+const WorksheetSelect = React.memo(WorksheetSelectComponent);
 
 export default WorksheetSelect;
