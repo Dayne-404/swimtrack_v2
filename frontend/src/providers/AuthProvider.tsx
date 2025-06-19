@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 			console.error('Logout failed:', error);
 			return false;
 		}
-		
+
 		setAccessToken(null);
 		setUser(null);
 		return true;

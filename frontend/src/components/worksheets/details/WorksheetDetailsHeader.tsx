@@ -45,7 +45,7 @@ const WorksheetDetailsHeader = ({ worksheet, setWorksheet, disabled = true }: Pr
 				<TextField
 					disabled
 					label="Instructor"
-					defaultValue={worksheet.user.firstName + ' ' + worksheet.user.lastName}
+					defaultValue={worksheet.user.firstName + ' ' + (worksheet.user.lastName ?? ' ')}
 					slotProps={{ input: { readOnly: true } }}
 					helperText=" "
 					sx={{ width: '150%' }}
