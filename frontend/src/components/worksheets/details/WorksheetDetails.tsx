@@ -41,10 +41,20 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 		[propWorksheetId, paramWorksheetId]
 	);
 
-	const [editableWorksheet, setEditableWorksheet] = useState<Worksheet | null>(null);
-	const initialWorksheetRef = useRef<Worksheet | null>(null);
+	const [userMeta, setUserMeta] = useState<User | null>(null);
+	const [worksheetMeta, setWorksheetMeta] = useState<WorksheetFormData>({
+		level: 0,
+		session: 0,
+		day: 0,
+		location: 0,
+		time: '',
+		year: '',
+	});
+	const [students, setStudents] = useState<Student[] | null>(null);
 
-	const [editing, setEditing] = useState<boolean>(false);
+	const initalRef = useRef<Worksheet | null>(null);
+
+	const [editing, setEditing] = useState<boolean>(true);
 	const [loading, setLoading] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -60,29 +70,54 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 				//TODO It should be removed when all worksheets are updated to have the correct skills.
 				const formattedWorksheet = resetStudentsSkillsArray(worksheet.worksheet);
 
-				setEditableWorksheet(formattedWorksheet);
-				initialWorksheetRef.current = formattedWorksheet;
+				setUserMeta(formattedWorksheet.user);
+				setWorksheetMeta({
+					level: formattedWorksheet.level,
+					session: formattedWorksheet.session,
+					day: formattedWorksheet.day,
+					location: formattedWorksheet.location,
+					time: formattedWorksheet.time,
+					year: String(formattedWorksheet.year),
+				});
+				setStudents(formattedWorksheet.students);
+
+				initalRef.current = formattedWorksheet;
 			} catch (error) {
 				console.log('Failed to fetch worksheet', error);
 			}
 		};
 
 		getWorksheet();
-	}, [worksheetId, accessToken, apiRequest]); //TODO look at dependencies... I dont think apiRequest ever has to be in the array
+		//TODO fix api request
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [worksheetId, accessToken]); //TODO look at dependencies... I dont think apiRequest ever has to be in the array
 
 	const saveEdits = async () => {
-		if (!editableWorksheet) return;
+		if (!worksheetMeta) return;
 
 		try {
 			setLoading(true);
 			const updatedWorksheet: Worksheet = (await apiRequest({
-				endpoint: `/worksheets/${editableWorksheet._id}`,
+				endpoint: `/worksheets/${worksheetId}`,
 				method: 'PUT',
-				body: JSON.stringify(editableWorksheet),
+				body: JSON.stringify({
+					user: userMeta?._id, //TODO fix this
+					...worksheetMeta, //TODO create a function to verify fields and then make sure they are the correct types before sending
+					students,
+				}),
 			})) as Worksheet;
-			console.log('updatedWorksheet:', updatedWorksheet);
-			setEditableWorksheet(updatedWorksheet);
-			initialWorksheetRef.current = updatedWorksheet;
+
+			setUserMeta(updatedWorksheet.user);
+			setWorksheetMeta({
+				level: updatedWorksheet.level,
+				session: updatedWorksheet.session,
+				day: updatedWorksheet.day,
+				location: updatedWorksheet.location,
+				time: updatedWorksheet.time,
+				year: String(updatedWorksheet.year),
+			});
+			setStudents(updatedWorksheet.students);
+			initalRef.current = updatedWorksheet;
 			setEditing(false);
 			showAlert('Worksheet saved successfully!');
 		} catch (error) {
@@ -94,9 +129,9 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 	};
 
 	const addStudent = () => {
-		if (!editableWorksheet) return;
+		if (!worksheetMeta) return;
 
-		const skillCount = LEVELS[editableWorksheet.level].skills.length;
+		const skillCount = LEVELS[worksheetMeta.level].skills.length;
 
 		const newStudent: Student = {
 			name: '',
@@ -104,25 +139,30 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 			passed: false,
 		};
 
-		setEditableWorksheet((prev) => {
-			if (!prev) return prev;
-			return {
-				...prev,
-				students: [...prev.students, newStudent],
-			};
+		setStudents((prev) => {
+			return prev ? [...prev, newStudent] : [newStudent];
 		});
 	};
 
 	const resetWorksheet = () => {
-		if (initialWorksheetRef.current) {
-			setEditableWorksheet(initialWorksheetRef.current);
+		if (initalRef.current) {
+			setUserMeta(initalRef.current.user);
+			setWorksheetMeta({
+				level: initalRef.current.level,
+				session: initalRef.current.session,
+				day: initalRef.current.day,
+				location: initalRef.current.location,
+				time: initalRef.current.time,
+				year: String(initalRef.current.year),
+			});
+			setStudents(initalRef.current.students);
 		}
 	};
 
 	return (
 		<Stack width="100%" spacing={1.5}>
 			<WorksheetToolbar
-				worksheet={editableWorksheet}
+				worksheet={initalRef.current}
 				editState={{
 					isEditing: editing,
 					setEditing: setEditing,
@@ -130,20 +170,24 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 				}}
 			/>
 
-			{!editableWorksheet ? (
+			{!worksheetMeta || !userMeta ? (
 				<Stack width="100%" height="100%" justifyContent="center" alignItems="center">
 					Getting worksheet details...
 				</Stack>
 			) : (
 				<>
 					<WorksheetDetailsHeader
-						worksheet={editableWorksheet}
-						setWorksheet={setEditableWorksheet}
+						worksheetForm={worksheetMeta}
+						setWorksheetForm={setWorksheetMeta}
+						worksheetUser={userMeta}
+						setWorksheetUser={setUserMeta}
+						setStudents={setStudents}
 						disabled={!editing || loading}
 					/>
 					<WorksheetBody
-						worksheet={editableWorksheet}
-						setWorksheet={setEditableWorksheet}
+						level={worksheetMeta.level}
+						students={students}
+						setStudents={setStudents}
 						isEditing={editing}
 					/>
 					<WorksheetDetailsFooter

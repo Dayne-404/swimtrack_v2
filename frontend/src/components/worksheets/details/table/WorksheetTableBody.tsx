@@ -4,11 +4,11 @@ import StudentRow from './StudentRow';
 interface Props {
 	students: Student[];
 	skills: string[];
-	setWorksheet: React.Dispatch<React.SetStateAction<Worksheet | null>>;
+	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>;
 	isEditing?: boolean;
 }
 
-const WorksheetTableBody = ({ students, skills, setWorksheet, isEditing }: Props) => (
+const WorksheetTableBody = ({ students, skills, setStudents, isEditing }: Props) => (
 	<TableBody>
 		{students.map((student, index) => (
 			<StudentRow
@@ -16,8 +16,8 @@ const WorksheetTableBody = ({ students, skills, setWorksheet, isEditing }: Props
 				student={student}
 				index={index}
 				skills={skills}
-				setWorksheet={setWorksheet}
-				isEditing={students.length > 1 && isEditing}
+				setStudents={setStudents}
+				isEditing={isEditing}
 			/>
 		))}
 	</TableBody>

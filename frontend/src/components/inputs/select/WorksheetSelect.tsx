@@ -9,7 +9,7 @@ interface Props {
 	placeholder?: string;
 	items?: string[];
 	disabled?: boolean;
-	handleChange?: (event: string | number, field: keyof Worksheet) => void;
+	handleChange?: (value: number, field: keyof WorksheetFormData) => void;
 }
 
 const ITEM_HEIGHT = 48;
@@ -40,7 +40,7 @@ const WorksheetSelectComponent = ({
 			size={size}
 			label={label}
 			value={selected}
-			onChange={(e) => handleChange(e.target.value, field)}
+			onChange={(e) => handleChange(Number(e.target.value), field)}
 			helperText={' '}
 			disabled={disabled}
 			fullWidth

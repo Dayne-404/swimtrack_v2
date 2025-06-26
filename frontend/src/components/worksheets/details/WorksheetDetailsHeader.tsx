@@ -4,38 +4,54 @@ import { WORKSHEET_DATA } from '../../../common/constants/worksheetData';
 import { LEVELS } from '../../../common/constants/levels';
 
 interface Props {
-	worksheet: Worksheet;
-	setWorksheet: React.Dispatch<React.SetStateAction<Worksheet | null>>;
+	worksheetUser: User;
+	setWorksheetUser: React.Dispatch<React.SetStateAction<User | null>>;
+	worksheetForm: WorksheetFormData;
+	setWorksheetForm: React.Dispatch<React.SetStateAction<WorksheetFormData>>;
+	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>;
 	disabled?: boolean;
 }
 
 const GRID_SIZE = { xs: 6, md: 3 };
 
-const WorksheetDetailsHeader = ({ worksheet, setWorksheet, disabled = true }: Props) => {
-	const handleChange = (event: string | number, field: keyof Worksheet) => {
-		const value = field === 'year' && event ? Number(event) : event;
-
-		setWorksheet((prev) => {
-			if (!prev || prev[field] === value) return prev;
-
-			let updated = {
+const WorksheetDetailsHeader = ({
+	worksheetUser,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	setWorksheetUser,
+	worksheetForm,
+	setWorksheetForm,
+	setStudents,
+	disabled = true,
+}: Props) => {
+	const handleChange = (value: number | string, field: keyof WorksheetFormData) => {
+		setWorksheetForm((prev) => {
+			return {
 				...prev,
 				[field]: value,
 			};
+		});
+	};
 
-			if (field === 'level' && typeof event === 'number') {
-				const newSkills = LEVELS[event].skills;
-				updated = {
-					...updated,
-					students: prev.students.map((student) => ({
-						...student,
-						skills: Array(newSkills.length).fill(false),
-						passed: false,
-					})),
+	const handleLevelChange = (value: number) => {
+		//TODO add modal are you sure?
+
+		setWorksheetForm((prev) => {
+			return {
+				...prev,
+				level: value,
+			};
+		});
+
+		setStudents((prev) => {
+			if (!prev) return null;
+
+			return prev.map((student) => {
+				return {
+					...student,
+					skills: Array(LEVELS[value].skills.length || 0).fill(false),
+					passed: false,
 				};
-			}
-
-			return updated;
+			});
 		});
 	};
 
@@ -45,7 +61,7 @@ const WorksheetDetailsHeader = ({ worksheet, setWorksheet, disabled = true }: Pr
 				<TextField
 					disabled
 					label="Instructor"
-					defaultValue={worksheet.user.firstName + ' ' + (worksheet.user.lastName ?? ' ')}
+					defaultValue={worksheetUser.firstName + ' ' + (worksheetUser.lastName ?? ' ')}
 					slotProps={{ input: { readOnly: true } }}
 					helperText=" "
 					sx={{ width: '150%' }}
@@ -74,16 +90,16 @@ const WorksheetDetailsHeader = ({ worksheet, setWorksheet, disabled = true }: Pr
 			<Stack direction="row" spacing={1}>
 				<WorksheetSelect
 					label="Level"
-					selected={worksheet.level}
+					selected={worksheetForm.level}
 					field="level"
 					items={WORKSHEET_DATA.level}
-					handleChange={handleChange}
+					handleChange={handleLevelChange}
 					disabled={disabled}
 				/>
 				<WorksheetSelect
 					label="Session"
 					field="session"
-					selected={worksheet.session}
+					selected={worksheetForm.session}
 					items={WORKSHEET_DATA.session}
 					handleChange={handleChange}
 					disabled={disabled}
@@ -96,7 +112,7 @@ const WorksheetDetailsHeader = ({ worksheet, setWorksheet, disabled = true }: Pr
 						fullWidth
 						label="Year"
 						onChange={(e) => handleChange(e.target.value, 'year')}
-						value={worksheet.year}
+						value={worksheetForm.year}
 						helperText={' '}
 					/>
 				</Grid>
@@ -104,7 +120,7 @@ const WorksheetDetailsHeader = ({ worksheet, setWorksheet, disabled = true }: Pr
 					<WorksheetSelect
 						label="Day"
 						field="day"
-						selected={worksheet.day}
+						selected={worksheetForm.day}
 						items={WORKSHEET_DATA.day}
 						handleChange={handleChange}
 						disabled={disabled}
@@ -116,7 +132,7 @@ const WorksheetDetailsHeader = ({ worksheet, setWorksheet, disabled = true }: Pr
 						fullWidth
 						label="Time"
 						onChange={(e) => handleChange(e.target.value, 'time')}
-						value={worksheet.time || ''}
+						value={worksheetForm.time || ''}
 						helperText={' '}
 					/>
 				</Grid>
@@ -125,7 +141,7 @@ const WorksheetDetailsHeader = ({ worksheet, setWorksheet, disabled = true }: Pr
 						label="Location"
 						field="location"
 						handleChange={handleChange}
-						selected={worksheet.location}
+						selected={worksheetForm.location}
 						items={WORKSHEET_DATA.location}
 						disabled={disabled}
 					/>

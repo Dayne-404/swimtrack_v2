@@ -51,6 +51,10 @@ declare global {
 		[K in WorksheetTypeableKeys]: string[];
 	};
 
+	export type WorksheetFormData = { [K in WorksheetSelectableKeys]: number } & {
+		[K in WorksheetTypeableKeys]: string;
+	};
+
 	export type WorksheetSortFields = { [K in WorksheetSortableKeys]: 0 | 1 | 2 };
 }
 
