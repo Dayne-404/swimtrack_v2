@@ -1,16 +1,23 @@
-import { Box, Table, TableContainer } from '@mui/material';
+import {
+	Box,
+	Table,
+	TableContainer,
+} from '@mui/material';
 import { LEVELS } from '../../../common/constants/levels';
 import WorksheetTableHead from './table/WorksheetTableHead';
 import WorksheetTableBody from './table/WorksheetTableBody';
 interface Props {
 	level: number;
-	students: Student[] | null;
-	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>;
+	students: Student[];
+	setStudents: React.Dispatch<React.SetStateAction<Student[]>>;
 	isEditing?: boolean;
+	disabled?: boolean;
 }
 
-const WorksheetBody = ({ level, students, setStudents, isEditing }: Props) => {
+const WorksheetBody = ({ level, students, setStudents, isEditing, disabled }: Props) => {
 	const skills = LEVELS[level].skills;
+
+	console.log('STUDENTS: ', students);
 
 	return (
 		<Box sx={{ width: '100%', overflowX: 'auto' }}>
@@ -20,14 +27,13 @@ const WorksheetBody = ({ level, students, setStudents, isEditing }: Props) => {
 						skills={skills}
 						isEditing={!!students && students.length > 0 && isEditing}
 					/>
-					{students && (
-						<WorksheetTableBody
-							students={students}
-							setStudents={setStudents}
-							skills={skills}
-							isEditing={isEditing}
-						/>
-					)}
+					<WorksheetTableBody
+						students={students}
+						setStudents={setStudents}
+						skills={skills}
+						isEditing={isEditing}
+						disabled={disabled}
+					/>
 				</Table>
 			</TableContainer>
 		</Box>

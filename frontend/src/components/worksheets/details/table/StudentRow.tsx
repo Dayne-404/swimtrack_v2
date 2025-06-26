@@ -7,18 +7,16 @@ interface Props {
 	student: Student;
 	index: number;
 	skills: string[];
-	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>;
+	setStudents: React.Dispatch<React.SetStateAction<Student[]>>;
 	isEditing?: boolean;
 }
 
 const handleNameChange = (
 	index: number,
 	newName: string,
-	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>
+	setStudents: React.Dispatch<React.SetStateAction<Student[]>>
 ) => {
 	setStudents((prev) => {
-		if (!prev) return prev;
-
 		const updated = [...prev];
 		updated[index] = {
 			...updated[index],
@@ -32,10 +30,9 @@ const handleNameChange = (
 const handleSkillChange = (
 	studentIndex: number,
 	skillIndex: number,
-	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>
+	setStudents: React.Dispatch<React.SetStateAction<Student[]>>
 ) => {
 	setStudents((prev) => {
-		if (!prev) return prev;
 		const updatedStudents = [...prev];
 		const student = { ...updatedStudents[studentIndex] };
 		const skills = [...student.skills];
@@ -48,10 +45,9 @@ const handleSkillChange = (
 
 const handlePassedChange = (
 	studentIndex: number,
-	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>
+	setStudents: React.Dispatch<React.SetStateAction<Student[]>>
 ) => {
 	setStudents((prev) => {
-		if (!prev) return prev;
 		const updatedStudents = [...prev];
 		const student = { ...updatedStudents[studentIndex] };
 		const passed = !student.passed;
@@ -63,10 +59,9 @@ const handlePassedChange = (
 
 const handleStudentRemove = (
 	studentIndex: number,
-	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>
+	setStudents: React.Dispatch<React.SetStateAction<Student[]>>
 ) => {
 	setStudents((prev) => {
-		if (!prev) return prev;
 		return prev.filter((_, index) => index !== studentIndex);
 	});
 };

@@ -35,7 +35,16 @@ const WorksheetTableHead = ({ isEditing, skills }: { isEditing?: boolean; skills
 				</TableCell>
 			))}
 			<TableCell sx={SKILL_CELL_SX}>
-				<Box sx={SKILL_TEXT_BOX_SX}>Passed</Box>
+				<Box  sx={{
+						position: 'absolute',
+						bottom: SKILL_TEXT_BOX_BOTTOM,
+						left: '50%',
+						transform: 'translateX(-50%)',
+						textAlign: 'center',
+						whiteSpace: 'nowrap',
+						overflow: 'hidden',
+						textOverflow: 'ellipsis',
+					}}>Passed</Box>
 			</TableCell>
 		</TableRow>
 	</TableHead>

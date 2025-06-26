@@ -7,6 +7,7 @@ export const MainStyle: SxProps = {
 	component: 'main',
 	width: '100%',
 	height: '100vh',
+	overflow: 'auto',
 	boxSizing: 'border-box',
 	padding: {
 		xs: `${NAVBAR_HEIGHT + 16}px 10px 10px 10px`,

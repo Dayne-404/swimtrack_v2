@@ -7,28 +7,12 @@ import WorksheetToolbar from './WorksheetToolbar';
 import WorksheetDetailsHeader from './WorksheetDetailsHeader';
 import WorksheetDetailsFooter from './WorksheetDetailsFooter';
 import WorksheetBody from './WorksheetBody';
-import { LEVELS } from '../../../common/constants/levels';
 import { useAlert } from '../../../contexts/AlertContext';
+import { extractFormData, resetStudentsSkillsArray } from '../../../common/utils/worksheet';
 
 interface Props {
 	propWorksheetId?: string;
 }
-
-const resetStudentsSkillsArray = (worksheet: Worksheet): Worksheet => {
-	if (
-		worksheet.students.length === 0 ||
-		worksheet.students.some((s) => s.skills.length !== LEVELS[worksheet.level].skills.length)
-	) {
-		const skillCount = LEVELS[worksheet.level].skills.length;
-
-		worksheet.students = worksheet.students.map((student) => ({
-			...student,
-			skills: Array(skillCount).fill(false),
-		}));
-	}
-
-	return worksheet;
-};
 
 const WorksheetDetails = ({ propWorksheetId }: Props) => {
 	const { apiRequest } = useApi();
@@ -50,7 +34,7 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 		time: '',
 		year: '',
 	});
-	const [students, setStudents] = useState<Student[] | null>(null);
+	const [students, setStudents] = useState<Student[]>([]);
 
 	const initalRef = useRef<Worksheet | null>(null);
 
@@ -71,14 +55,7 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 				const formattedWorksheet = resetStudentsSkillsArray(worksheet.worksheet);
 
 				setUserMeta(formattedWorksheet.user);
-				setWorksheetMeta({
-					level: formattedWorksheet.level,
-					session: formattedWorksheet.session,
-					day: formattedWorksheet.day,
-					location: formattedWorksheet.location,
-					time: formattedWorksheet.time,
-					year: String(formattedWorksheet.year),
-				});
+				setWorksheetMeta(extractFormData(formattedWorksheet));
 				setStudents(formattedWorksheet.students);
 
 				initalRef.current = formattedWorksheet;
@@ -108,14 +85,7 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 			})) as Worksheet;
 
 			setUserMeta(updatedWorksheet.user);
-			setWorksheetMeta({
-				level: updatedWorksheet.level,
-				session: updatedWorksheet.session,
-				day: updatedWorksheet.day,
-				location: updatedWorksheet.location,
-				time: updatedWorksheet.time,
-				year: String(updatedWorksheet.year),
-			});
+			setWorksheetMeta(extractFormData(updatedWorksheet));
 			setStudents(updatedWorksheet.students);
 			initalRef.current = updatedWorksheet;
 			setEditing(false);
@@ -128,39 +98,18 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 		}
 	};
 
-	const addStudent = () => {
-		if (!worksheetMeta) return;
-
-		const skillCount = LEVELS[worksheetMeta.level].skills.length;
-
-		const newStudent: Student = {
-			name: '',
-			skills: Array(skillCount).fill(false),
-			passed: false,
-		};
-
-		setStudents((prev) => {
-			return prev ? [...prev, newStudent] : [newStudent];
-		});
-	};
+	
 
 	const resetWorksheet = () => {
 		if (initalRef.current) {
 			setUserMeta(initalRef.current.user);
-			setWorksheetMeta({
-				level: initalRef.current.level,
-				session: initalRef.current.session,
-				day: initalRef.current.day,
-				location: initalRef.current.location,
-				time: initalRef.current.time,
-				year: String(initalRef.current.year),
-			});
+			setWorksheetMeta(extractFormData(initalRef.current));
 			setStudents(initalRef.current.students);
 		}
 	};
 
 	return (
-		<Stack width="100%" spacing={1.5}>
+		<Stack width="100%" spacing={1.5} position='relative'>
 			<WorksheetToolbar
 				worksheet={initalRef.current}
 				editState={{
@@ -192,7 +141,6 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 					/>
 					<WorksheetDetailsFooter
 						loading={loading}
-						onAddStudent={addStudent}
 						onSave={saveEdits}
 						disabled={!editing}
 					/>

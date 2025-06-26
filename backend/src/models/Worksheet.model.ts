@@ -60,6 +60,12 @@ const WorksheetSchema: Schema<WorksheetDocument> = new Schema(
 		students: {
 			type: [StudentSchema],
 			default: [],
+			validate: {
+				validator: function (value: StudentDocument[]) {
+					return value.length < 11;
+				},
+				message: 'A worksheet can only have up to 10 students.',
+			}
 		},
 	},
 	{

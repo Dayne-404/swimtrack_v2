@@ -93,7 +93,7 @@ export const updateWorksheet = async (
 			return;
 		}
 
-		const updatedWorksheet = await Worksheet.findByIdAndUpdate(worksheetId, req.body, { new: true });
+		const updatedWorksheet = await Worksheet.findByIdAndUpdate(worksheetId, req.body, { new: true, runValidators: true });
 
 		res.status(200).json(updatedWorksheet);
 	} catch (error) {

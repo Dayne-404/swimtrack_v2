@@ -8,7 +8,7 @@ interface Props {
 	setWorksheetUser: React.Dispatch<React.SetStateAction<User | null>>;
 	worksheetForm: WorksheetFormData;
 	setWorksheetForm: React.Dispatch<React.SetStateAction<WorksheetFormData>>;
-	setStudents: React.Dispatch<React.SetStateAction<Student[] | null>>;
+	setStudents: React.Dispatch<React.SetStateAction<Student[]>>;
 	disabled?: boolean;
 }
 
@@ -43,8 +43,6 @@ const WorksheetDetailsHeader = ({
 		});
 
 		setStudents((prev) => {
-			if (!prev) return null;
-
 			return prev.map((student) => {
 				return {
 					...student,
