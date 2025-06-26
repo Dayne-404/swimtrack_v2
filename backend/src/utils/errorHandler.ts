@@ -1,11 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 
-export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
-    if(err instanceof Error) {
-        console.error(err.message);
-        res.status(500).json({ message: err.message });
-    } else {
-        console.error('An unknown error occurred');
-        res.status(500).json({ message: 'An unknown error occurred' });
-    }
+interface CustomError extends Error {
+	status?: number;
+}
+
+export const errorHandler = (err: CustomError, req: Request, res: Response, next: NextFunction) => {
+	const status = err.status || 500;
+	const message = err.message || 'An unknown error occurred';
+
+	console.error(`[${status}] ${message}`);
+
+	res.status(status).json({ message });
 };

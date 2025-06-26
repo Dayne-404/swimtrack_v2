@@ -2,14 +2,15 @@ import { useLayoutEffect, useCallback, useState } from 'react';
 import type { ReactNode } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
-import { apiRequest } from '../common/services/apiRequest';
 import { jwtDecode } from 'jwt-decode';
+import { apiRequest } from '../common/utils/createApiClient';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [accessToken, setAccessToken] = useState<string | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [loginError, setLoginError] = useState<string>('');
 	const { setUser } = useUser();
+	
 
 	const applyAuthData = useCallback(
 		(data: { accessToken: string; user: User }) => {
@@ -98,7 +99,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		};
 
 		restoreAccessToken();
-	}, [applyAuthData, setUser]);
+	}, [applyAuthData, setUser, apiRequest]);
 
 	return (
 		<AuthContext.Provider

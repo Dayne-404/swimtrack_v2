@@ -7,8 +7,6 @@ import {
 	validateRefreshToken,
 	validateAccessToken,
 } from '../utils/authentication';
-import Token from '../models/Token.model';
-import { verify } from 'crypto';
 
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
 	const { email, password } = req.body;
@@ -117,6 +115,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
 		req.user = { _id: decoded.userId, role: decoded.role };
 		next();
 	} catch (error) {
+		(error as any).status = 403;
 		next(error);
 	}
 };

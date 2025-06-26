@@ -1,8 +1,8 @@
 import { Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState, useMemo, useRef } from 'react';
-import { fetchWorksheet, updateWorksheet } from '../../../common/services/apiWorksheet';
 import { useAuth } from '../../../contexts/AuthContext';
+import { useApi } from '../../../common/hooks/useApi';
 import WorksheetToolbar from './WorksheetToolbar';
 import WorksheetDetailsHeader from './WorksheetDetailsHeader';
 import WorksheetDetailsFooter from './WorksheetDetailsFooter';
@@ -31,6 +31,7 @@ const resetStudentsSkillsArray = (worksheet: Worksheet): Worksheet => {
 };
 
 const WorksheetDetails = ({ propWorksheetId }: Props) => {
+	const { apiRequest } = useApi();
 	const { paramWorksheetId } = useParams();
 	const { accessToken } = useAuth();
 	const { showAlert } = useAlert();
@@ -51,11 +52,13 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 
 		const getWorksheet = async () => {
 			try {
-				const worksheet: Worksheet = await fetchWorksheet(worksheetId, accessToken);
+				const worksheet: { worksheet: Worksheet } = (await apiRequest({
+					endpoint: `/worksheets/${worksheetId}`,
+				})) as { worksheet: Worksheet };
 
 				//TODO This is a temporary fix to ensure all students have the correct number of skills.
 				//TODO It should be removed when all worksheets are updated to have the correct skills.
-				const formattedWorksheet = resetStudentsSkillsArray(worksheet);
+				const formattedWorksheet = resetStudentsSkillsArray(worksheet.worksheet);
 
 				setEditableWorksheet(formattedWorksheet);
 				initialWorksheetRef.current = formattedWorksheet;
@@ -65,14 +68,18 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 		};
 
 		getWorksheet();
-	}, [worksheetId, accessToken]);
+	}, [worksheetId, accessToken, apiRequest]); //TODO look at dependencies... I dont think apiRequest ever has to be in the array
 
 	const saveEdits = async () => {
-		if (!editableWorksheet || !accessToken) return;
+		if (!editableWorksheet) return;
 
 		try {
 			setLoading(true);
-			const updatedWorksheet = await updateWorksheet(editableWorksheet, accessToken);
+			const updatedWorksheet: Worksheet = (await apiRequest({
+				endpoint: `/worksheets/${editableWorksheet._id}`,
+				method: 'PUT',
+				body: JSON.stringify(editableWorksheet),
+			})) as Worksheet;
 			console.log('updatedWorksheet:', updatedWorksheet);
 			setEditableWorksheet(updatedWorksheet);
 			initialWorksheetRef.current = updatedWorksheet;

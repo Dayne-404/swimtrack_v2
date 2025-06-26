@@ -2,8 +2,7 @@ import { Box, Grid, Typography, Pagination } from '@mui/material';
 import WorksheetCard from './WorksheetCard';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
-import { fetchWorksheets } from '../../common/services/apiWorksheet';
+import { useApi } from '../../common/hooks/useApi';
 
 interface Props {
 	params?: { filter: URLSearchParams; sort: URLSearchParams };
@@ -36,7 +35,7 @@ const WorksheetGrid = ({
 	const [loading, setLoading] = useState<boolean>(true);
 	const [skip, setSkip] = useState<number>(DEFAULT_SKIP);
 
-	const { accessToken } = useAuth();
+	const { apiRequest } = useApi();
 
 	useEffect(() => {
 		setSkip(0);
@@ -44,17 +43,17 @@ const WorksheetGrid = ({
 
 	useEffect(() => {
 		const loadWorksheets = async () => {
-			if (!accessToken) return;
-
 			setLoading(true);
 			try {
-				const data = (await fetchWorksheets({
-					limit: DEFAULT_LIMIT,
-					skip: skip,
-					specific: specific,
-					filter: params?.filter,
-					sort: params?.sort,
-					accessToken: accessToken,
+				const data = (await apiRequest({
+					endpoint: '/worksheets',
+					params: {
+						limit: DEFAULT_LIMIT,
+						skip: skip,
+						specific: specific,
+						filters: params?.filter,
+						sorting: params?.sort,
+					},
 				})) as { worksheets: Worksheet[]; totalCount: number };
 
 				setTotalWorksheets(data.totalCount);
