@@ -4,8 +4,8 @@ import { useEffect, useState, useMemo, useRef } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useApi } from '../../../common/hooks/useApi';
 import WorksheetToolbar from './WorksheetToolbar';
-import WorksheetDetailsHeader from './WorksheetDetailsHeader';
-import WorksheetDetailsFooter from './WorksheetDetailsFooter';
+import WorksheetHeader from './WorksheetHeader';
+import WorksheetFooter from './WorksheetFooter';
 import WorksheetBody from './WorksheetBody';
 import { useAlert } from '../../../contexts/AlertContext';
 import { extractFormData, resetStudentsSkillsArray } from '../../../common/utils/worksheet';
@@ -14,7 +14,7 @@ interface Props {
 	propWorksheetId?: string;
 }
 
-const WorksheetDetails = ({ propWorksheetId }: Props) => {
+const WorksheetInspect = ({ propWorksheetId }: Props) => {
 	const { apiRequest } = useApi();
 	const { paramWorksheetId } = useParams();
 	const { accessToken } = useAuth();
@@ -125,7 +125,7 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 				</Stack>
 			) : (
 				<>
-					<WorksheetDetailsHeader
+					<WorksheetHeader
 						worksheetForm={worksheetMeta}
 						setWorksheetForm={setWorksheetMeta}
 						worksheetUser={userMeta}
@@ -139,7 +139,7 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 						setStudents={setStudents}
 						isEditing={editing}
 					/>
-					<WorksheetDetailsFooter
+					<WorksheetFooter
 						loading={loading}
 						onSave={saveEdits}
 						disabled={!editing}
@@ -150,4 +150,4 @@ const WorksheetDetails = ({ propWorksheetId }: Props) => {
 	);
 };
 
-export default WorksheetDetails;
+export default WorksheetInspect;

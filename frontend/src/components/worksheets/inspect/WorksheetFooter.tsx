@@ -8,7 +8,7 @@ interface Props {
 	onSave?: () => void;
 }
 
-const WorksheetDetailsFooter = ({
+const WorksheetFooter = ({
 	loading = false,
 	disabled = false,
 	onSave = () => {},
@@ -29,4 +29,4 @@ const WorksheetDetailsFooter = ({
 	);
 };
 
-export default WorksheetDetailsFooter;
+export default WorksheetFooter;

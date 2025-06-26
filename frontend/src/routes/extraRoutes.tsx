@@ -1,5 +1,5 @@
 import { Dashboard } from "@mui/icons-material";
-import WorksheetDetails from "../components/worksheets/details/WorksheetDetails";
+import WorksheetInspect from "../components/worksheets/inspect/WorksheetInspect";
 
 export const EXTRA_ROUTES = {
 	GroupInspect: { to: '/groups/:groupId', element: <Dashboard /> },
@@ -9,10 +9,10 @@ export const EXTRA_ROUTES = {
 	// },
 	LibraryInspect: {
 		to: '/library/:paramWorksheetId',
-		element: <WorksheetDetails />
+		element: <WorksheetInspect />
 	},
 	FinderInspect: {
 		to: '/finder/:paramWorksheetId',
-		element: <WorksheetDetails />
+		element: <WorksheetInspect />
 	},
 };

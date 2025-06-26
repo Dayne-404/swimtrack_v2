@@ -4,8 +4,8 @@ import {
 	TableContainer,
 } from '@mui/material';
 import { LEVELS } from '../../../common/constants/levels';
-import WorksheetTableHead from './table/WorksheetTableHead';
-import WorksheetTableBody from './table/WorksheetTableBody';
+import StudentTableHeader from './table/StudentTableHeader';
+import StudentTableBody from './table/StudentTableBody';
 interface Props {
 	level: number;
 	students: Student[];
@@ -23,11 +23,11 @@ const WorksheetBody = ({ level, students, setStudents, isEditing, disabled }: Pr
 		<Box sx={{ width: '100%', overflowX: 'auto' }}>
 			<TableContainer sx={{ minWidth: '100%' }}>
 				<Table>
-					<WorksheetTableHead
+					<StudentTableHeader
 						skills={skills}
 						isEditing={!!students && students.length > 0 && isEditing}
 					/>
-					<WorksheetTableBody
+					<StudentTableBody
 						students={students}
 						setStudents={setStudents}
 						skills={skills}

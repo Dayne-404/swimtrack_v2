@@ -6,7 +6,7 @@ import {
 	SKILL_TEXT_BOX_BOTTOM,
 } from '../../../../styles/tableStyle';
 
-const WorksheetTableHead = ({ isEditing, skills }: { isEditing?: boolean; skills: string[] }) => (
+const StudentTableHeader = ({ isEditing, skills }: { isEditing?: boolean; skills: string[] }) => (
 	<TableHead>
 		<TableRow>
 			{isEditing && <TableCell></TableCell>}
@@ -50,4 +50,4 @@ const WorksheetTableHead = ({ isEditing, skills }: { isEditing?: boolean; skills
 	</TableHead>
 );
 
-export default WorksheetTableHead;
+export default StudentTableHeader;

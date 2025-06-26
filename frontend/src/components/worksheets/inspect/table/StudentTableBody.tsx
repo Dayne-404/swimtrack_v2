@@ -10,7 +10,7 @@ interface Props {
 	disabled?: boolean;
 }
 
-const WorksheetTableBody = ({ students, skills, setStudents, isEditing, disabled }: Props) => {
+const StudentTableBody = ({ students, skills, setStudents, isEditing, disabled }: Props) => {
 	const addStudent = () => {
 		const newStudent: Student = {
 			name: '',
@@ -53,4 +53,4 @@ const WorksheetTableBody = ({ students, skills, setStudents, isEditing, disabled
 	);
 };
 
-export default WorksheetTableBody;
+export default StudentTableBody;

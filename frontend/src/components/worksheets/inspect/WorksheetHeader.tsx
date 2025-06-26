@@ -14,7 +14,7 @@ interface Props {
 
 const GRID_SIZE = { xs: 6, md: 3 };
 
-const WorksheetDetailsHeader = ({
+const WorksheetHeader = ({
 	worksheetUser,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	setWorksheetUser,
@@ -150,4 +150,4 @@ const WorksheetDetailsHeader = ({
 	);
 };
 
-export default WorksheetDetailsHeader;
+export default WorksheetHeader;
