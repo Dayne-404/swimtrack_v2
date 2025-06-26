@@ -74,24 +74,26 @@ export const searchForUser = async (
 	let searchQuery = {};
 
 	if (search) {
-		const searchTerms = search
-			.toString()
-			.split(' ')
-			.filter((term) => term.trim() !== '');
+	const searchTerms = search
+		.toString()
+		.split(' ')
+		.filter((term) => term.trim() !== '');
 
-		searchQuery = {
-			$and: searchTerms.map((term) => ({
-				$or: [
-					{ firstName: { $regex: term, $options: 'i' } },
-					{ lastName: { $regex: term, $options: 'i' } },
-					{ email: { $regex: term, $options: 'i' } },
-				],
-			})),
-		};
-	}
+	searchQuery = {
+		$and: searchTerms.map((term) => ({
+			$or: [
+				{ firstName: { $regex: `^${term}`, $options: 'i' } },
+				{ lastName: { $regex: `^${term}`, $options: 'i' } },
+				{ email: { $regex: `^${term}`, $options: 'i' } },
+			],
+		})),
+	};
+}
 
 	try {
-		const users = await User.find(searchQuery).limit(Number(limit)).select('-password');
+		const users = await User.find(searchQuery)
+			.limit(Number(limit))
+			.select('_id firstName lastName avatarColor role');
 		res.status(200).json(users);
 	} catch (error) {
 		next(error);
@@ -106,7 +108,9 @@ export const getUserById = async (
 	const { targetUserId } = req.params;
 
 	try {
-		const user = await User.findById(targetUserId).select('-password');
+		const user = await User.findById(targetUserId).select(
+			'_id firstName lastName avatarColor role'
+		);
 
 		if (!user) {
 			res.status(404).json({ message: 'User not found' });

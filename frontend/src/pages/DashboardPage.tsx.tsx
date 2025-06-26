@@ -1,6 +1,7 @@
 import { useUser } from '../contexts/UserContext';
 import LogoutButton from '../components/inputs/buttons/LogoutButton';
 import UserAvatar from '../components/common/UserAvatar';
+import UserSearch from '../components/inputs/search/UserSearch';
 
 export const DashboardPage = () => {
 	const { user } = useUser();
@@ -16,6 +17,7 @@ export const DashboardPage = () => {
 					<p>LastName: {user.lastName}</p>
                     <p>_id: {user._id}</p>
                     <p>Role: {user.role}</p>
+					<UserSearch handleSelect={() => {}} />
 					<LogoutButton />
 					<UserAvatar />
 				</div>
