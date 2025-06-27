@@ -25,7 +25,7 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 		[propWorksheetId, paramWorksheetId]
 	);
 
-	const [userMeta, setUserMeta] = useState<User | null>(null);
+	const [userMeta, setUserMeta] = useState<User[]>([]);
 	const [worksheetMeta, setWorksheetMeta] = useState<WorksheetFormData>({
 		level: 0,
 		session: 0,
@@ -38,7 +38,7 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 
 	const initalRef = useRef<Worksheet | null>(null);
 
-	const [editing, setEditing] = useState<boolean>(true);
+	const [editing, setEditing] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -54,7 +54,7 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 				//TODO It should be removed when all worksheets are updated to have the correct skills.
 				const formattedWorksheet = resetStudentsSkillsArray(worksheet.worksheet);
 
-				setUserMeta(formattedWorksheet.user);
+				setUserMeta([formattedWorksheet.user]);
 				setWorksheetMeta(extractFormData(formattedWorksheet));
 				setStudents(formattedWorksheet.students);
 
@@ -78,13 +78,13 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 				endpoint: `/worksheets/${worksheetId}`,
 				method: 'PUT',
 				body: JSON.stringify({
-					user: userMeta?._id, //TODO fix this
+					user: userMeta[0]._id, //TODO fix this
 					...worksheetMeta, //TODO create a function to verify fields and then make sure they are the correct types before sending
 					students,
 				}),
 			})) as Worksheet;
 
-			setUserMeta(updatedWorksheet.user);
+			setUserMeta([updatedWorksheet.user]);
 			setWorksheetMeta(extractFormData(updatedWorksheet));
 			setStudents(updatedWorksheet.students);
 			initalRef.current = updatedWorksheet;
@@ -102,7 +102,7 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 
 	const resetWorksheet = () => {
 		if (initalRef.current) {
-			setUserMeta(initalRef.current.user);
+			setUserMeta([initalRef.current.user]);
 			setWorksheetMeta(extractFormData(initalRef.current));
 			setStudents(initalRef.current.students);
 		}

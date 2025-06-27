@@ -61,7 +61,10 @@ export const getWorksheetById = async (
 	const { worksheetId } = req.params;
 
 	try {
-		const worksheet = await Worksheet.findById(worksheetId).populate('user', '_id firstName lastName avatarColor role');
+		const worksheet = await Worksheet.findById(worksheetId).populate(
+			'user',
+			'_id firstName lastName avatarColor role'
+		);
 		if (!worksheet) {
 			res.status(404).json({ message: 'Worksheet not found' });
 			return;
@@ -84,18 +87,29 @@ export const updateWorksheet = async (
 	try {
 		const worksheet = await Worksheet.findById(worksheetId);
 		if (!worksheet) {
-			res.status(404).json({ message: 'Worksheet not found' });
-			return;
+			return res.status(404).json({ message: 'Worksheet not found' });
 		}
 
 		if (!isAuthorized(req, String(worksheet.user))) {
-			res.status(403).json({ message: 'You are not authorized to update this worksheet' });
-			return;
+			return res
+				.status(403)
+				.json({ message: 'You are not authorized to update this worksheet' });
 		}
 
-		const updatedWorksheet = await Worksheet.findByIdAndUpdate(worksheetId, req.body, { new: true, runValidators: true });
+		const requester = req.user; // assuming req.user is populated via middleware
+		const isPrivileged = requester?.role === 'admin' || requester?.role === 'supervisor';
 
-		res.status(200).json(updatedWorksheet);
+		// Prevent changing the user unless privileged
+		if (!isPrivileged && 'user' in req.body) {
+			delete req.body.user;
+		}
+
+		const updatedWorksheet = await Worksheet.findByIdAndUpdate(worksheetId, req.body, {
+			new: true,
+			runValidators: true,
+		}).populate('user', '_id firstName lastName avatarColor role');
+
+		return res.status(200).json(updatedWorksheet);
 	} catch (error) {
 		next(error);
 	}

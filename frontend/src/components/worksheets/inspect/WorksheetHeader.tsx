@@ -2,10 +2,12 @@ import { Stack, TextField, Grid, Divider } from '@mui/material';
 import WorksheetSelect from '../../inputs/select/WorksheetSelect';
 import { WORKSHEET_DATA } from '../../../common/constants/worksheetData';
 import { LEVELS } from '../../../common/constants/levels';
+import UserSearch from '../../inputs/search/UserSearch';
+import { useUser } from '../../../contexts/UserContext';
 
 interface Props {
-	worksheetUser: User;
-	setWorksheetUser: React.Dispatch<React.SetStateAction<User | null>>;
+	worksheetUser: User[];
+	setWorksheetUser: React.Dispatch<React.SetStateAction<User[]>>;
 	worksheetForm: WorksheetFormData;
 	setWorksheetForm: React.Dispatch<React.SetStateAction<WorksheetFormData>>;
 	setStudents: React.Dispatch<React.SetStateAction<Student[]>>;
@@ -16,13 +18,14 @@ const GRID_SIZE = { xs: 6, md: 3 };
 
 const WorksheetHeader = ({
 	worksheetUser,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	setWorksheetUser,
 	worksheetForm,
 	setWorksheetForm,
 	setStudents,
 	disabled = true,
 }: Props) => {
+	const { user } = useUser();
+	
 	const handleChange = (value: number | string, field: keyof WorksheetFormData) => {
 		setWorksheetForm((prev) => {
 			return {
@@ -56,13 +59,20 @@ const WorksheetHeader = ({
 	return (
 		<Stack>
 			<Stack direction="row" spacing={1}>
-				<TextField
+				{/* <TextField
 					disabled
 					label="Instructor"
-					defaultValue={worksheetUser.firstName + ' ' + (worksheetUser.lastName ?? ' ')}
+					defaultValue={worksheetUser[0].firstName + ' ' + (worksheetUser[0].lastName ?? ' ')}
 					slotProps={{ input: { readOnly: true } }}
 					helperText=" "
 					sx={{ width: '150%' }}
+				/> */}
+				<UserSearch
+					label='Instructor'
+					disabled={disabled || (!!user && (user.role === 'instructor'))}
+					selected={worksheetUser}
+					onChange={setWorksheetUser}
+					helperText=' '
 				/>
 
 				{/* TODO come back and fix this */}
