@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		};
 
 		restoreAccessToken();
-	}, [applyAuthData, setUser, apiRequest]);
+	}, [applyAuthData, setUser]);
 
 	return (
 		<AuthContext.Provider

@@ -11,6 +11,7 @@ interface Props {
 	worksheetForm: WorksheetFormData;
 	setWorksheetForm: React.Dispatch<React.SetStateAction<WorksheetFormData>>;
 	setStudents: React.Dispatch<React.SetStateAction<Student[]>>;
+	validationErrors?: WorksheetValidationErrors;
 	disabled?: boolean;
 }
 
@@ -22,10 +23,11 @@ const WorksheetHeader = ({
 	worksheetForm,
 	setWorksheetForm,
 	setStudents,
+	validationErrors,
 	disabled = true,
 }: Props) => {
 	const { user } = useUser();
-	
+
 	const handleChange = (value: number | string, field: keyof WorksheetFormData) => {
 		setWorksheetForm((prev) => {
 			return {
@@ -68,11 +70,11 @@ const WorksheetHeader = ({
 					sx={{ width: '150%' }}
 				/> */}
 				<UserSearch
-					label='Instructor'
-					disabled={disabled || (!!user && (user.role === 'instructor'))}
+					label="Instructor"
+					disabled={disabled || (!!user && user.role === 'instructor')}
 					selected={worksheetUser}
 					onChange={setWorksheetUser}
-					helperText=' '
+					helperText={validationErrors?.user}
 				/>
 
 				{/* TODO come back and fix this */}
@@ -103,6 +105,7 @@ const WorksheetHeader = ({
 					items={WORKSHEET_DATA.level}
 					handleChange={handleLevelChange}
 					disabled={disabled}
+					helperText={validationErrors?.level}
 				/>
 				<WorksheetSelect
 					label="Session"
@@ -111,6 +114,7 @@ const WorksheetHeader = ({
 					items={WORKSHEET_DATA.session}
 					handleChange={handleChange}
 					disabled={disabled}
+					helperText={validationErrors?.session}
 				/>
 			</Stack>
 			<Grid container>
@@ -121,7 +125,8 @@ const WorksheetHeader = ({
 						label="Year"
 						onChange={(e) => handleChange(e.target.value, 'year')}
 						value={worksheetForm.year}
-						helperText={' '}
+						helperText={validationErrors?.year || ' '}
+						error={!!validationErrors?.year || false}
 					/>
 				</Grid>
 				<Grid size={GRID_SIZE} p={0.5}>
@@ -132,6 +137,7 @@ const WorksheetHeader = ({
 						items={WORKSHEET_DATA.day}
 						handleChange={handleChange}
 						disabled={disabled}
+						helperText={validationErrors?.day}
 					/>
 				</Grid>
 				<Grid size={GRID_SIZE} p={0.5}>
@@ -141,7 +147,8 @@ const WorksheetHeader = ({
 						label="Time"
 						onChange={(e) => handleChange(e.target.value, 'time')}
 						value={worksheetForm.time || ''}
-						helperText={' '}
+						helperText={validationErrors?.time || ' '}
+						error={!!validationErrors?.time || false}
 					/>
 				</Grid>
 				<Grid size={GRID_SIZE} p={0.5}>
@@ -152,6 +159,7 @@ const WorksheetHeader = ({
 						selected={worksheetForm.location}
 						items={WORKSHEET_DATA.location}
 						disabled={disabled}
+						helperText={validationErrors?.location}
 					/>
 				</Grid>
 			</Grid>

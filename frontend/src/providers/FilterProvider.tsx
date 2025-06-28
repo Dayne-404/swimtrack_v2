@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { FilterContext } from '../contexts/FilterContext';
 import { DEFAULT_FILTERS } from '../common/constants/defaultFilters';
 
-
 export const FilterProvider = ({ children }: { children: ReactNode }) => {
 	const [filters, setFilters] = useState<WorksheetFilters>(DEFAULT_FILTERS);
 

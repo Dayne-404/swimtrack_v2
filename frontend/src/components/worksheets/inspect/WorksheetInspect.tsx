@@ -8,7 +8,7 @@ import WorksheetHeader from './WorksheetHeader';
 import WorksheetFooter from './WorksheetFooter';
 import WorksheetBody from './WorksheetBody';
 import { useAlert } from '../../../contexts/AlertContext';
-import { extractFormData, resetStudentsSkillsArray } from '../../../common/utils/worksheet';
+import { extractFormData, resetStudentsSkillsArray, validateWorksheet } from '../../../common/utils/worksheet';
 
 interface Props {
 	propWorksheetId?: string;
@@ -26,6 +26,7 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 	);
 
 	const [userMeta, setUserMeta] = useState<User[]>([]);
+	const [validationErrors, setValidationErrors] = useState<WorksheetValidationErrors>({})
 	const [worksheetMeta, setWorksheetMeta] = useState<WorksheetFormData>({
 		level: 0,
 		session: 0,
@@ -70,7 +71,17 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 	}, [worksheetId, accessToken]); //TODO look at dependencies... I dont think apiRequest ever has to be in the array
 
 	const saveEdits = async () => {
-		if (!worksheetMeta) return;
+		if (!worksheetMeta || !worksheetId) return;
+
+		const errors = validateWorksheet(worksheetMeta, userMeta[0]?._id, students);
+		setValidationErrors(errors);
+
+		console.log(errors);
+
+		if(Object.keys(errors).length > 0) {
+			showAlert('Correct the form errors before saving', 'error')
+			return;
+		}
 
 		try {
 			setLoading(true);
@@ -102,6 +113,7 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 
 	const resetWorksheet = () => {
 		if (initalRef.current) {
+			setValidationErrors({});
 			setUserMeta([initalRef.current.user]);
 			setWorksheetMeta(extractFormData(initalRef.current));
 			setStudents(initalRef.current.students);
@@ -132,12 +144,14 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 						setWorksheetUser={setUserMeta}
 						setStudents={setStudents}
 						disabled={!editing || loading}
+						validationErrors={validationErrors}
 					/>
 					<WorksheetBody
 						level={worksheetMeta.level}
 						students={students}
 						setStudents={setStudents}
 						isEditing={editing}
+						validationErrors={validationErrors?.students}
 					/>
 					<WorksheetFooter
 						loading={loading}

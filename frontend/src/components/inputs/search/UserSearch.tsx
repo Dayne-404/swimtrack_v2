@@ -25,7 +25,7 @@ const UserSearch = ({
 	disabled = false,
 	size = 'medium',
 	multiple = false,
-	helperText = '',
+	helperText,
 	selected,
 	onChange,
 }: Props) => {
@@ -109,7 +109,8 @@ const UserSearch = ({
 					label={label}
 					variant="outlined"
 					fullWidth
-					helperText={helperText}
+					helperText={helperText || ' '}
+					error={!!helperText || false}
 					slotProps={{
 						input: {
 							...params.InputProps,

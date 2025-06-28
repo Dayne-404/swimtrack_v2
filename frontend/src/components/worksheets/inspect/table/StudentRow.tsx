@@ -7,6 +7,7 @@ interface Props {
 	student: Student;
 	index: number;
 	skills: string[];
+	validationError?: boolean;
 	setStudents: React.Dispatch<React.SetStateAction<Student[]>>;
 	isEditing?: boolean;
 }
@@ -66,7 +67,7 @@ const handleStudentRemove = (
 	});
 };
 
-const StudentRow = ({ student, index, skills, setStudents, isEditing }: Props) => (
+const StudentRow = ({ student, index, skills, validationError, setStudents, isEditing }: Props) => (
 	<TableRow key={student._id ?? `row-${index}`}>
 		{isEditing && (
 			<TableCell padding="none">
@@ -81,6 +82,7 @@ const StudentRow = ({ student, index, skills, setStudents, isEditing }: Props) =
 				variant="standard"
 				placeholder="Name"
 				value={student.name}
+				error={validationError || false}
 				onChange={(e) => handleNameChange(index, e.target.value, setStudents)}
 				slotProps={{
 					input: {

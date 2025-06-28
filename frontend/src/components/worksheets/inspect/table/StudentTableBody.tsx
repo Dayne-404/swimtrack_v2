@@ -6,11 +6,12 @@ interface Props {
 	students: Student[];
 	skills: string[];
 	setStudents: React.Dispatch<React.SetStateAction<Student[]>>;
+	validationErrors?: boolean[];
 	isEditing?: boolean;
 	disabled?: boolean;
 }
 
-const StudentTableBody = ({ students, skills, setStudents, isEditing, disabled }: Props) => {
+const StudentTableBody = ({ students, skills, setStudents, validationErrors, isEditing, disabled }: Props) => {
 	const addStudent = () => {
 		const newStudent: Student = {
 			name: '',
@@ -31,6 +32,7 @@ const StudentTableBody = ({ students, skills, setStudents, isEditing, disabled }
 					student={student}
 					index={index}
 					skills={skills}
+					validationError={validationErrors?.[index]}
 					setStudents={setStudents}
 					isEditing={isEditing}
 				/>

@@ -56,6 +56,13 @@ declare global {
 	};
 
 	export type WorksheetSortFields = { [K in WorksheetSortableKeys]: 0 | 1 | 2 };
+
+	export type WorksheetValidationErrors = {
+		[key in keyof WorksheetFormData]?: string;
+	} & {
+		user?: string;
+		students?: boolean[];
+	};
 }
 
 export {};

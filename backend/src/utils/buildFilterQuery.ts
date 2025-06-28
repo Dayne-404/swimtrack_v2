@@ -28,6 +28,7 @@ const buildFiltersQuery = (
 				if (NUMERIC_FIELDS.has(key) && typeof val === 'string' && !isNaN(Number(val))) {
 					return Number(val);
 				}
+				
 				return val;
 			});
 

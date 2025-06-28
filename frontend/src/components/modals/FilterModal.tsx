@@ -69,7 +69,7 @@ const FilterModal = ({ isOpen, setOpen, params, setParams }: Props) => {
 					<FilterTextField
 						placeholder="Time"
 						field="time"
-						validation={{ text: 'Time must be in format XX:XX', method: validateTime }}
+						validation={{ text: 'Time must be in format HH:MM AM/PM', method: validateTime }}
 					/>
 				</Stack>
 				<ActiveFilters />

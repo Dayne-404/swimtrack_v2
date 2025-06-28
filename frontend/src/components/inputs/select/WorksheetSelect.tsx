@@ -9,6 +9,7 @@ interface Props {
 	placeholder?: string;
 	items?: string[];
 	disabled?: boolean;
+	helperText?: string;
 	handleChange?: (value: number, field: keyof WorksheetFormData) => void;
 }
 
@@ -32,6 +33,7 @@ const WorksheetSelectComponent = ({
 	items = [],
 	selected,
 	handleChange = () => {},
+	helperText,
 	disabled = true,
 }: Props) => {
 	return (
@@ -41,7 +43,8 @@ const WorksheetSelectComponent = ({
 			label={label}
 			value={selected}
 			onChange={(e) => handleChange(Number(e.target.value), field)}
-			helperText={' '}
+			helperText={helperText || ' '}
+			error={!!helperText || false }
 			disabled={disabled}
 			fullWidth
 			slotProps={{ select: SelectMenuProps }}

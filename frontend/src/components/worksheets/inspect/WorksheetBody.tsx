@@ -10,11 +10,12 @@ interface Props {
 	level: number;
 	students: Student[];
 	setStudents: React.Dispatch<React.SetStateAction<Student[]>>;
+	validationErrors?: boolean[];
 	isEditing?: boolean;
 	disabled?: boolean;
 }
 
-const WorksheetBody = ({ level, students, setStudents, isEditing, disabled }: Props) => {
+const WorksheetBody = ({ level, students, setStudents, validationErrors, isEditing, disabled }: Props) => {
 	const skills = LEVELS[level].skills;
 
 	console.log('STUDENTS: ', students);
@@ -33,6 +34,7 @@ const WorksheetBody = ({ level, students, setStudents, isEditing, disabled }: Pr
 						skills={skills}
 						isEditing={isEditing}
 						disabled={disabled}
+						validationErrors={validationErrors}
 					/>
 				</Table>
 			</TableContainer>
