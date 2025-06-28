@@ -1,13 +1,11 @@
-const validateTime = (time: string): boolean => {
-	if (/^([01]\d|2[0-3]):([0-5]\d)$/.test(time)) return true;
+export const validateStandardTime = (time: string): boolean => {
+	if (/^(\d{1,2}):(\d{2})\s?(AM|PM)$/i.test(time)) return true;
 
 	return false;
 };
 
-const validateYear = (year: string) => {
+export const validateYear = (year: string) => {
 	if (/^\d{4}$/.test(year)) return true;
 
 	return false;
 };
-
-export { validateTime, validateYear };

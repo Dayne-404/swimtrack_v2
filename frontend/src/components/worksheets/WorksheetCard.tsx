@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import formatDate from '../../common/utils/formatDate';
 import { LEVELS } from '../../common/constants/levels';
 import { WORKSHEET_DATA } from '../../common/constants/worksheetData';
+import { toStandardTime } from '../../common/utils/time';
 
 interface Props {
 	worksheet: Worksheet;
@@ -59,7 +60,7 @@ const WorksheetCard = ({
 						{sessionLabel} {year}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						{locationLabel} {dayLabel} {time}
+						{locationLabel} {dayLabel} {toStandardTime(time)}
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
 						Created on: {formatDate(createdAt)}

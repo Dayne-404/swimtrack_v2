@@ -1,5 +1,6 @@
 import { LEVELS } from "../constants/levels";
 import { capitalize } from "./capitalize";
+import { validateStandardTime } from "./validation";
 
 export const resetStudentsSkillsArray = (worksheet: Worksheet): Worksheet => {
     if (
@@ -36,8 +37,7 @@ export const validateWorksheet = (worksheetForm: WorksheetFormData, user: string
 		errors.year = 'Enter a valid 4-digit year';
 	}
 
-    //TODO if (!worksheetMeta.time || !/\d{1,2}:\d{2} ?(AM|PM)/i.test(worksheetMeta.time)) { <-- Change to this when figure out am/pm
-	if (!worksheetForm.time || !/\d{1,2}:\d{2}/i.test(worksheetForm.time)) {
+	if (!worksheetForm.time || validateStandardTime(worksheetForm.time)) {
 		errors.time = 'Time must be in format HH:MM AM/PM';
 	}
 
