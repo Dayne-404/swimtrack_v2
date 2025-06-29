@@ -8,7 +8,12 @@ import WorksheetHeader from './WorksheetHeader';
 import WorksheetFooter from './WorksheetFooter';
 import WorksheetBody from './WorksheetBody';
 import { useAlert } from '../../../contexts/AlertContext';
-import { extractFormData, resetStudentsSkillsArray, validateWorksheet } from '../../../common/utils/worksheet';
+import {
+	extractFormData,
+	resetStudentsSkillsArray,
+	validateWorksheet,
+} from '../../../common/utils/worksheet';
+import { toStandardTime } from '../../../common/utils/time';
 
 interface Props {
 	propWorksheetId?: string;
@@ -26,7 +31,7 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 	);
 
 	const [userMeta, setUserMeta] = useState<User[]>([]);
-	const [validationErrors, setValidationErrors] = useState<WorksheetValidationErrors>({})
+	const [validationErrors, setValidationErrors] = useState<WorksheetValidationErrors>({});
 	const [worksheetMeta, setWorksheetMeta] = useState<WorksheetFormData>({
 		level: 0,
 		session: 0,
@@ -54,6 +59,7 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 				//TODO This is a temporary fix to ensure all students have the correct number of skills.
 				//TODO It should be removed when all worksheets are updated to have the correct skills.
 				const formattedWorksheet = resetStudentsSkillsArray(worksheet.worksheet);
+				formattedWorksheet.time = toStandardTime(formattedWorksheet.time);
 
 				setUserMeta([formattedWorksheet.user]);
 				setWorksheetMeta(extractFormData(formattedWorksheet));
@@ -78,8 +84,8 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 
 		console.log(errors);
 
-		if(Object.keys(errors).length > 0) {
-			showAlert('Correct the form errors before saving', 'error')
+		if (Object.keys(errors).length > 0) {
+			showAlert('Correct the form errors before saving', 'error');
 			return;
 		}
 
@@ -89,11 +95,13 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 				endpoint: `/worksheets/${worksheetId}`,
 				method: 'PUT',
 				body: JSON.stringify({
-					user: userMeta[0]._id, //TODO fix this
-					...worksheetMeta, //TODO create a function to verify fields and then make sure they are the correct types before sending
+					user: userMeta[0]._id,
+					...worksheetMeta,
 					students,
 				}),
 			})) as Worksheet;
+			
+			updatedWorksheet.time = toStandardTime(updatedWorksheet.time);
 
 			setUserMeta([updatedWorksheet.user]);
 			setWorksheetMeta(extractFormData(updatedWorksheet));
@@ -109,8 +117,6 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 		}
 	};
 
-	
-
 	const resetWorksheet = () => {
 		if (initalRef.current) {
 			setValidationErrors({});
@@ -121,7 +127,7 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 	};
 
 	return (
-		<Stack width="100%" spacing={1.5} position='relative'>
+		<Stack width="100%" spacing={1.5} position="relative">
 			<WorksheetToolbar
 				worksheet={initalRef.current}
 				editState={{
@@ -153,11 +159,7 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 						isEditing={editing}
 						validationErrors={validationErrors?.students}
 					/>
-					<WorksheetFooter
-						loading={loading}
-						onSave={saveEdits}
-						disabled={!editing}
-					/>
+					<WorksheetFooter loading={loading} onSave={saveEdits} disabled={!editing} />
 				</>
 			)}
 		</Stack>

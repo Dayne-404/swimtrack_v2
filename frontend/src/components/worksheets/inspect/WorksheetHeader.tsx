@@ -4,7 +4,6 @@ import { WORKSHEET_DATA } from '../../../common/constants/worksheetData';
 import { LEVELS } from '../../../common/constants/levels';
 import UserSearch from '../../inputs/search/UserSearch';
 import { useUser } from '../../../contexts/UserContext';
-import { toStandardTime } from '../../../common/utils/time';
 
 interface Props {
 	worksheetUser: User[];
@@ -125,7 +124,7 @@ const WorksheetHeader = ({
 						fullWidth
 						label="Year"
 						onChange={(e) => handleChange(e.target.value, 'year')}
-						value={toStandardTime(worksheetForm.year)}
+						value={worksheetForm.year}
 						helperText={validationErrors?.year || ' '}
 						error={!!validationErrors?.year || false}
 					/>

@@ -37,8 +37,9 @@ export const validateWorksheet = (worksheetForm: WorksheetFormData, user: string
 		errors.year = 'Enter a valid 4-digit year';
 	}
 
-	if (!worksheetForm.time || validateStandardTime(worksheetForm.time)) {
-		errors.time = 'Time must be in format HH:MM AM/PM';
+	if (!worksheetForm.time || !validateStandardTime(worksheetForm.time)) {
+		console.log(worksheetForm.time);
+        errors.time = 'Time must be in format HH:MM AM/PM';
 	}
 
     const studentNameErrors = students.map((student) =>

@@ -13,8 +13,11 @@ export const toMilitaryTime = (time: string): string => {
 }
 
 export const toStandardTime = (militaryTime: string): string => {
+	console.log('MILITARY TIME', militaryTime);
+	
 	if (!/^[0-2]\d[0-5]\d$/.test(militaryTime)) {
-		throw new Error('Invalid time format. Use HHMM 24-hour format');
+		console.error('Invalid time format. Use HHMM 24-hour format');
+		return '';
 	}
 
 	let hour = parseInt(militaryTime.slice(0, 2), 10);

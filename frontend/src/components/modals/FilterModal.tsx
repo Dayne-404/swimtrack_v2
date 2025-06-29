@@ -4,7 +4,7 @@ import FilterSelect from '../inputs/select/FilterSelect';
 import FilterTextField from '../inputs/textField/FilterTextField';
 import { WORKSHEET_DATA } from '../../common/constants/worksheetData';
 import ActiveFilters from '../worksheets/ActiveFilters';
-import { validateYear, validateTime } from '../../common/utils/validation';
+import { validateYear, validateStandardTime } from '../../common/utils/validation';
 import { useFilter } from '../../contexts/FilterContext';
 import UserSearch from '../inputs/search/UserSearch';
 import { useState } from 'react';
@@ -69,7 +69,7 @@ const FilterModal = ({ isOpen, setOpen, params, setParams }: Props) => {
 					<FilterTextField
 						placeholder="Time"
 						field="time"
-						validation={{ text: 'Time must be in format HH:MM AM/PM', method: validateTime }}
+						validation={{ text: 'Time must be in format HH:MM AM/PM', method: validateStandardTime }}
 					/>
 				</Stack>
 				<ActiveFilters />
