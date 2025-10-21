@@ -16,6 +16,8 @@
 - [ ] Leaving page before saving when changes are made popup
 - [ ] Ensure backend handles data properly
 - [ ] Investigate and improve sorting (time field especially)
+- [ ] Fix Sorting (Highest / Lowest is wrong)
+- [ ] Fix Flickering when students are loading / Add loading state
 
 ### Worksheet Create
 
