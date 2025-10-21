@@ -7,7 +7,6 @@ import ActiveFilters from '../worksheets/ActiveFilters';
 import { validateYear, validateStandardTime } from '../../common/utils/validation';
 import { useFilter } from '../../contexts/FilterContext';
 import UserSearch from '../inputs/search/UserSearch';
-import { useState } from 'react';
 
 interface Props {
 	isOpen: boolean;
@@ -17,15 +16,10 @@ interface Props {
 }
 
 const FilterModal = ({ isOpen, setOpen, params, setParams }: Props) => {
-	const { buildFilterQuery } = useFilter();
-	const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+	const { users, updateUsers, buildFilterQuery } = useFilter();
 
 	const handleClose = () => {
 		const newParams = buildFilterQuery();
-
-		selectedUsers.forEach((user) => {
-			newParams.append('user', user._id);
-		});
 
 		if (params.toString() === newParams.toString()) {
 			setOpen(false);
@@ -40,7 +34,14 @@ const FilterModal = ({ isOpen, setOpen, params, setParams }: Props) => {
 		<BasicModal title="Filters" isOpen={isOpen} handleClose={handleClose}>
 			<Stack mt={3} mb={3} spacing={2}>
 				<Stack direction="row" spacing={1}>
-					<UserSearch label="Instructor" selected={selectedUsers} multiple onChange={setSelectedUsers} />
+					<UserSearch
+						label="Instructor"
+						selected={users}
+						helperText=""
+						multiple
+						showSelectedInside={false}
+						onChange={updateUsers}
+					/>
 					<FilterSelect
 						placeholder="Program"
 						field="level"
@@ -69,7 +70,10 @@ const FilterModal = ({ isOpen, setOpen, params, setParams }: Props) => {
 					<FilterTextField
 						placeholder="Time"
 						field="time"
-						validation={{ text: 'Time must be in format HH:MM AM/PM', method: validateStandardTime }}
+						validation={{
+							text: 'Time must be in format HH:MM AM/PM',
+							method: validateStandardTime,
+						}}
 					/>
 				</Stack>
 				<ActiveFilters />

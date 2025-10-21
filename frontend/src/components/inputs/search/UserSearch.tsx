@@ -17,6 +17,7 @@ interface Props {
 	multiple?: boolean;
 	selected: User[];
 	helperText?: string;
+	showSelectedInside?: boolean;
 	onChange: (users: User[]) => void;
 }
 
@@ -25,8 +26,9 @@ const UserSearch = ({
 	disabled = false,
 	size = 'medium',
 	multiple = false,
-	helperText,
+	helperText = ' ',
 	selected,
+	showSelectedInside = true,
 	onChange,
 }: Props) => {
 	const [searchTerm, setSearchTerm] = useState('');
@@ -36,7 +38,7 @@ const UserSearch = ({
 
 	useEffect(() => {
 		console.log('fetch');
-		
+
 		const fetchUsers = async () => {
 			try {
 				const params = new URLSearchParams({ search: searchTerm });
@@ -103,13 +105,14 @@ const UserSearch = ({
 			onInputChange={(_, newValue) => setSearchTerm(newValue)}
 			onChange={handleChange}
 			forcePopupIcon={false}
+			renderValue={showSelectedInside ? undefined : () => null}
 			renderInput={(params) => (
 				<TextField
 					{...params}
 					label={label}
 					variant="outlined"
 					fullWidth
-					helperText={helperText || ' '}
+					helperText={helperText}
 					error={!!helperText || false}
 					slotProps={{
 						input: {

@@ -5,6 +5,7 @@ import { DEFAULT_FILTERS } from '../common/constants/defaultFilters';
 
 export const FilterProvider = ({ children }: { children: ReactNode }) => {
 	const [filters, setFilters] = useState<WorksheetFilters>(DEFAULT_FILTERS);
+	const [users, setUsers] = useState<User[]>([]);
 
 	const updateFilter = (field: keyof WorksheetFilters, value: string | number) => {
 		setFilters((prev) => {
@@ -16,6 +17,10 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
 				[field]: [...current, value],
 			};
 		});
+	};
+
+	const updateUsers = (newUsers: User[]) => {
+		setUsers(newUsers);
 	};
 
 	const clearFilter = (filter?: {
@@ -40,6 +45,16 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
 		});
 	};
 
+	const clearUsers = (userToRemove?: User | User[]) => {
+		if (!userToRemove) {
+			setUsers([]);
+			return;
+		}
+
+		const usersToRemove = Array.isArray(userToRemove) ? userToRemove : [userToRemove];
+		setUsers((prev) => prev.filter((u) => !usersToRemove.some((r) => r._id === u._id)));
+	};
+
 	const buildFilterQuery = (): URLSearchParams => {
 		const params = new URLSearchParams();
 
@@ -50,11 +65,25 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
 			});
 		}
 
+		users.forEach((user) => {
+			params.append('user', user._id);
+		});
+
 		return params;
 	};
 
 	return (
-		<FilterContext.Provider value={{ filters, updateFilter, buildFilterQuery, clearFilter }}>
+		<FilterContext.Provider
+			value={{
+				filters,
+				users,
+				updateFilter,
+				updateUsers,
+				buildFilterQuery,
+				clearFilter,
+				clearUsers,
+			}}
+		>
 			{children}
 		</FilterContext.Provider>
 	);

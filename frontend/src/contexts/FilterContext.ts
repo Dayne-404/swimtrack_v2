@@ -3,12 +3,15 @@ import { createContext, useContext } from 'react';
 // Create the context type
 interface FilterContextType {
 	filters: WorksheetFilters;
+	users: User[];
 	updateFilter: (field: keyof WorksheetFilters, value: string | number) => void;
-	buildFilterQuery: () => URLSearchParams
+	updateUsers: (users: User[]) => void;
+	buildFilterQuery: () => URLSearchParams;
 	clearFilter: (filter?: {
-		field: keyof WorksheetFilters,
-		value: (number | string) | (number[] | string[])
+		field: keyof WorksheetFilters;
+		value: (number | string) | (number[] | string[]);
 	}) => void;
+	clearUsers: (userToRemove?: User | User[]) => void;
 }
 
 // Create the context
