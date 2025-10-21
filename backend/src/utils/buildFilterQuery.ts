@@ -1,5 +1,6 @@
 import { FILTER_FIELDS } from '../config/worksheetOrdering';
 import WorksheetFilterFields, { NUMERIC_FIELDS } from '../config/worksheetFilterFields';
+import { toMilitaryTime } from './toMilitaryTime';
 
 /**
  * Builds a MongoDB query object for filtering worksheets based on the provided filter fields.
@@ -25,10 +26,19 @@ const buildFiltersQuery = (
 			let valuesArray = Array.isArray(value) ? value : [value];
 
 			valuesArray = valuesArray.map((val) => {
+				if (key === 'time' && typeof val === 'string') {
+					try {
+						return toMilitaryTime(val);
+					} catch (err) {
+						console.error('Time conversion error', err);
+						return val;
+					}
+				}
+
 				if (NUMERIC_FIELDS.has(key) && typeof val === 'string' && !isNaN(Number(val))) {
 					return Number(val);
 				}
-				
+
 				return val;
 			});
 

@@ -3,6 +3,7 @@ import Worksheet from '../models/Worksheet.model';
 import buildFiltersQuery from '../utils/buildFilterQuery';
 import buildSortQuery from '../utils/buildSortQuery';
 import { isAuthorized } from '../utils/authentication';
+import { toMilitaryTime } from '../utils/toMilitaryTime'
 
 export const getWorksheets = async (
 	req: Request,
@@ -44,6 +45,10 @@ export const createWorksheet = async (
 	next: NextFunction
 ): Promise<any> => {
 	try {
+		if (req.body.time) {
+			req.body.time = toMilitaryTime(req.body.time);
+		}
+
 		const worksheet = await Worksheet.create(req.body);
 		res.status(200).json({
 			worksheet,
@@ -96,12 +101,16 @@ export const updateWorksheet = async (
 				.json({ message: 'You are not authorized to update this worksheet' });
 		}
 
-		const requester = req.user; // assuming req.user is populated via middleware
+		const requester = req.user;
 		const isPrivileged = requester?.role === 'admin' || requester?.role === 'supervisor';
 
 		// Prevent changing the user unless privileged
 		if (!isPrivileged && 'user' in req.body) {
 			delete req.body.user;
+		}
+
+		if (req.body.time) {
+			req.body.time = toMilitaryTime(req.body.time);
 		}
 
 		const updatedWorksheet = await Worksheet.findByIdAndUpdate(worksheetId, req.body, {

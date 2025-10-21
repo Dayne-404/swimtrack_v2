@@ -48,7 +48,7 @@ const WorksheetSchema: Schema<WorksheetDocument> = new Schema(
 		},
 		time: {
 			type: String,
-			match: [/^([01]\d|2[0-3]):([0-5]\d)$/, 'Please enter a valid time in HH:MM format'],
+			match: [/^([01]\d|2[0-3])[0-5]\d$/, 'Please enter a valid time in HHMM 24-hour format'],
 			required: [true, 'Time is required'],
 		},
 		location: {

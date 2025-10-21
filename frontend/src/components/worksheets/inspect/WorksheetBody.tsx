@@ -18,8 +18,6 @@ interface Props {
 const WorksheetBody = ({ level, students, setStudents, validationErrors, isEditing, disabled }: Props) => {
 	const skills = LEVELS[level].skills;
 
-	console.log('STUDENTS: ', students);
-
 	return (
 		<Box sx={{ width: '100%', overflowX: 'auto' }}>
 			<TableContainer sx={{ minWidth: '100%' }}>
