@@ -4,6 +4,7 @@ export const DEFAULT_SORTING: WorksheetSortFields = {
     session: 0,
     day: 0,
     time: 0,
+    location: 0,
     createdAt: 1, // default to newest first
     updatedAt: 0,
 };

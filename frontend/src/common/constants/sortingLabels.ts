@@ -3,8 +3,13 @@ export const SORT_LABELS_BY_FIELD: {
 } = {
 	level: {
 		0: 'No Sort',
-		1: 'Highest',
-		2: 'Lowest',
+		1: 'Lowest',
+		2: 'Highest',
+	},
+	year: {
+		0: 'No Sort',
+		1: 'Earliest',
+		2: 'Latest',
 	},
 	session: {
 		0: 'No Sort',
@@ -21,10 +26,10 @@ export const SORT_LABELS_BY_FIELD: {
 		1: 'Earliest',
 		2: 'Latest',
 	},
-	year: {
+	location: {
 		0: 'No Sort',
-		1: 'Earliest',
-		2: 'Latest',
+		1: 'Rec',
+		2: 'Dun'
 	},
 	createdAt: {
 		0: 'No Sort',

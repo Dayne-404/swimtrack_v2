@@ -9,4 +9,4 @@ export interface WorksheetSortFields {
     updatedAt?: number;
 }
 
-export const SORT_FIELDS = ['level', 'year', 'session', 'day', 'time', 'createdAt', 'updatedAt'];
+export const SORT_FIELDS = ['level', 'year', 'session', 'day', 'time', 'location', 'createdAt', 'updatedAt'];

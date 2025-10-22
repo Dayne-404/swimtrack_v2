@@ -11,7 +11,8 @@
 ### Worksheet Inspect
 
 - [x] Error Handling on submit and displaying those errors on frontend
-- [ ] Worksheet Deletion handling
+- [ ] Remove instructor search from library filter
+- [x] Worksheet Deletion handling
 - [ ] Worksheet level change modal
 - [ ] Leaving page before saving when changes are made popup
 - [ ] Ensure backend handles data properly

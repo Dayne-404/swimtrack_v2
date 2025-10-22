@@ -22,6 +22,7 @@ export const getWorksheets = async (
 
 		const sortQuery = buildSortQuery(sort as string[]);
 
+		console.log('SORT: ', sort);
 		console.log('Filter Query: ', filterQuery);
 		console.log('Sort Query: ', sortQuery);
 

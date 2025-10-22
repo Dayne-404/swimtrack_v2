@@ -40,6 +40,7 @@ declare global {
 		| 'day'
 		| 'time'
 		| 'year'
+		| 'location'
 		| 'createdAt'
 		| 'updatedAt';
 

@@ -46,6 +46,7 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 
 	const [editing, setEditing] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(false);
+	const [initalLoading, setInitalLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		if (!accessToken || !worksheetId) return;
@@ -68,6 +69,8 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 				initalRef.current = formattedWorksheet;
 			} catch (error) {
 				console.log('Failed to fetch worksheet', error);
+			} finally {
+				setInitalLoading(false);
 			}
 		};
 
@@ -100,7 +103,7 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 					students,
 				}),
 			})) as Worksheet;
-			
+
 			updatedWorksheet.time = toStandardTime(updatedWorksheet.time);
 
 			setUserMeta([updatedWorksheet.user]);
@@ -137,7 +140,7 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 				}}
 			/>
 
-			{!worksheetMeta || !userMeta ? (
+			{!worksheetMeta || !userMeta || initalLoading ? (
 				<Stack width="100%" height="100%" justifyContent="center" alignItems="center">
 					Getting worksheet details...
 				</Stack>
