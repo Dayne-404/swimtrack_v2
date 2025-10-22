@@ -27,7 +27,7 @@ export const useApi = () => {
 				},
 			});
 		},
-		[accessToken, setAccessToken, setUser, logout] // ✅ dependencies
+		[accessToken, setAccessToken, setUser, logout]
 	);
 
 	return { apiRequest };

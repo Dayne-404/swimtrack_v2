@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { useState, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteModal from '../../modals/DeleteModal';
 
@@ -9,6 +9,8 @@ interface Props {
 	buttonText?: string;
 	title?: string;
 	handleDelete: () => void;
+	open: boolean;
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DeleteButton = ({
@@ -17,9 +19,9 @@ const DeleteButton = ({
 	title,
 	children,
 	buttonText,
+	open,
+	setOpen
 }: Props) => {
-	const [open, setOpen] = useState<boolean>(false);
-
 	return (
 		<>
 			<DeleteModal

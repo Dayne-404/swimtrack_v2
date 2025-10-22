@@ -37,6 +37,7 @@ const DeleteModal = ({
 					<Button
 						fullWidth
 						variant="outlined"
+						disabled={loading}
 						onClick={() => {
 							if (onCancel) {
 								onCancel();
@@ -48,6 +49,7 @@ const DeleteModal = ({
 						Cancel
 					</Button>
 					<LoadingButton
+						disabled={loading}
 						loading={loading}
 						text="Delete Forever"
 						color="error"

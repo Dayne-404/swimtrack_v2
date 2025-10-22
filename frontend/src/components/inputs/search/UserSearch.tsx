@@ -113,7 +113,7 @@ const UserSearch = ({
 					variant="outlined"
 					fullWidth
 					helperText={helperText}
-					error={!!helperText || false}
+					error={helperText?.trim() !== ''}
 					slotProps={{
 						input: {
 							...params.InputProps,

@@ -5,6 +5,10 @@ import BackButton from '../../inputs/buttons/BackButton';
 import { useUser } from '../../../contexts/UserContext';
 import DeleteButton from '../../inputs/buttons/DeleteButton';
 import { WORKSHEET_DATA } from '../../../common/constants/worksheetData';
+import { useState } from 'react';
+import { useAlert } from '../../../contexts/AlertContext';
+import { useApi } from '../../../common/hooks/useApi';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
 	worksheet: Worksheet | null;
@@ -13,14 +17,41 @@ interface Props {
 		setEditing: (editing: boolean) => void;
 		onCancelEdit?: () => void;
 	};
-	loadingState?: {
-		isLoading: boolean;
-		setLoading: (loading: boolean) => void;
-	};
+	// loadingState?: {
+	// 	isLoading: boolean;
+	// 	setLoading: (loading: boolean) => void;
+	// };
 }
 
-const WorksheetToolbar = ({ worksheet, editState, loadingState }: Props) => {
+const WorksheetToolbar = ({ worksheet, editState }: Props) => {
 	const { user } = useUser();
+	const { apiRequest } = useApi();
+	const [loading, setLoading] = useState<boolean>(false);
+	const { showAlert } = useAlert();
+	const [open, setOpen] = useState<boolean>(false);
+	const navigate = useNavigate();
+
+	const deleteWorksheet = async () => {
+		if (!worksheet?._id) return false;
+
+		try {
+			setLoading(true);
+			await apiRequest({
+				endpoint: `/worksheets/${worksheet._id}`,
+				method: 'DELETE',
+			});
+			showAlert('Worksheet deleted successfully!');
+
+			navigate(-1);
+		} catch (error) {
+			setOpen(false);
+			console.error('Failed to delete worksheet:', error);
+			showAlert('Failed to delete worksheet', 'error');
+		} finally {
+			setOpen(false);
+			setLoading(false);
+		}
+	};
 
 	const isOwnedByUser =
 		worksheet?.user?._id === user?._id || user?.role === 'admin' || user?.role === 'supervisor';
@@ -32,17 +63,6 @@ const WorksheetToolbar = ({ worksheet, editState, loadingState }: Props) => {
 			editState.onCancelEdit?.();
 		}
 		editState.setEditing(!editState.isEditing);
-	};
-
-	const handleDelete = () => {
-		if (!worksheet?._id || !loadingState) return;
-
-		console.log(`Deleting worksheet with ID: ${worksheet._id}`);
-		loadingState.setLoading(true);
-
-		// Simulate deletion logic
-		// TODO: Replace with actual delete API
-		setTimeout(() => loadingState.setLoading(false), 500);
 	};
 
 	const getWorksheetLevelLabel = () => {
@@ -67,8 +87,13 @@ const WorksheetToolbar = ({ worksheet, editState, loadingState }: Props) => {
 						{editState?.isEditing ? 'Cancel' : 'Edit'}
 					</Button>
 
-					<DeleteButton loading={loadingState?.isLoading} handleDelete={handleDelete}>
-						<Typography textAlign='center'>
+					<DeleteButton
+						loading={loading}
+						open={open}
+						setOpen={setOpen}
+						handleDelete={deleteWorksheet}
+					>
+						<Typography textAlign="center">
 							You will be deleting this <strong>{getWorksheetLevelLabel()}</strong>{' '}
 							worksheet with <strong>{worksheet.students?.length ?? 0}</strong>{' '}
 							student(s).
