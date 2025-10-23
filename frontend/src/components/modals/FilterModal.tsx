@@ -11,11 +11,12 @@ import UserSearch from '../inputs/search/UserSearch';
 interface Props {
 	isOpen: boolean;
 	setOpen: (value: boolean) => void;
+	showUserSearch?: boolean;
 	params: URLSearchParams;
 	setParams: (value: URLSearchParams) => void;
 }
 
-const FilterModal = ({ isOpen, setOpen, params, setParams }: Props) => {
+const FilterModal = ({ isOpen, setOpen, showUserSearch = true, params, setParams }: Props) => {
 	const { users, updateUsers, buildFilterQuery } = useFilter();
 
 	const handleClose = () => {
@@ -34,14 +35,16 @@ const FilterModal = ({ isOpen, setOpen, params, setParams }: Props) => {
 		<BasicModal title="Filters" isOpen={isOpen} handleClose={handleClose}>
 			<Stack mt={3} mb={3} spacing={2}>
 				<Stack direction="row" spacing={1}>
-					<UserSearch
-						label="Instructor"
-						selected={users}
-						helperText=""
-						multiple
-						showSelectedInside={false}
-						onChange={updateUsers}
-					/>
+					{showUserSearch && (
+						<UserSearch
+							label="Instructor"
+							selected={users}
+							helperText=""
+							multiple
+							showSelectedInside={false}
+							onChange={updateUsers}
+						/>
+					)}
 					<FilterSelect
 						placeholder="Program"
 						field="level"

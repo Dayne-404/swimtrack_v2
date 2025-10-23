@@ -33,12 +33,12 @@ export const SORT_LABELS_BY_FIELD: {
 	},
 	createdAt: {
 		0: 'No Sort',
-		1: 'Newest',
+		1: 'Recent',
 		2: 'Oldest',
 	},
 	updatedAt: {
 		0: 'No Sort',
-		1: 'Newest',
-		2: 'Oldest',
+		1: 'Oldest',
+		2: 'Recent',
 	},
 };

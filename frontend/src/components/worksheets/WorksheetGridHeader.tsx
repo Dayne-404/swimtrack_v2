@@ -4,14 +4,12 @@ import SortIcon from '@mui/icons-material/Sort';
 
 interface Props {
 	disabled?: boolean;
-	includeInstructorSearch?: boolean;
 	setFilterModalOpen: (value: boolean) => void;
 	setSortModalOpen: (value: boolean) => void;
 }
 
 export const WorksheetGridHeader = ({
 	disabled,
-	//includeInstructorSearch, //TODO Will come back to this later
 	setFilterModalOpen,
 	setSortModalOpen,
 }: Props) => {

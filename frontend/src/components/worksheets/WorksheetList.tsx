@@ -14,11 +14,11 @@ interface Props {
 	worksheets?: Worksheet[];
 	totalWorksheets?: number;
 	specific?: boolean;
-	showUser?: boolean;
+	showUsers?: boolean;
 	showUpdatedAt?: boolean;
 }
 
-const WorksheetList = ({ worksheets = [], totalWorksheets, showUser, specific = false }: Props) => {
+const WorksheetList = ({ worksheets = [], totalWorksheets, showUsers = false, specific = false }: Props) => {
 	const [filterParams, setFilterParams] = useState<URLSearchParams>(DEFAULT_FILTER_QUERY);
 	const [sortParams, setSortParams] = useState<URLSearchParams>(DEFAULT_SORT_QUERY); 
 	const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
@@ -35,6 +35,7 @@ const WorksheetList = ({ worksheets = [], totalWorksheets, showUser, specific = 
 						setOpen={setFilterModalOpen}
 						params={filterParams}
 						setParams={setFilterParams}
+						showUserSearch={showUsers}
 					/>
 					<SortModal
 						isOpen={sortModalOpen}
@@ -49,7 +50,7 @@ const WorksheetList = ({ worksheets = [], totalWorksheets, showUser, specific = 
 					<WorksheetGrid
 						params={{ filter: filterParams, sort: sortParams }}
 						specific={specific}
-						showUser={showUser}
+						showUser={showUsers}
 					/>
 				</Stack>
 			</SortingProvider>

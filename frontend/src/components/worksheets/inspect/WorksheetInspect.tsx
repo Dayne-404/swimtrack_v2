@@ -14,7 +14,8 @@ import {
 	validateWorksheet,
 } from '../../../common/utils/worksheet';
 import { toStandardTime } from '../../../common/utils/time';
-
+import { useNavigationBlocker } from '../../../common/hooks/useNavigationBlocker';
+import { confirmDiscardIfUnsaved } from '../../../common/hooks/confirmDiscardIfUnsaved';
 interface Props {
 	propWorksheetId?: string;
 }
@@ -47,6 +48,23 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 	const [editing, setEditing] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [initalLoading, setInitalLoading] = useState<boolean>(true);
+
+	const hasUnsavedChanges = useMemo(() => {
+		if (!initalRef.current) return false;
+		const current = {
+			user: userMeta[0]?._id,
+			...worksheetMeta,
+			students,
+		};
+		const initial = {
+			user: initalRef.current.user._id,
+			...extractFormData(initalRef.current),
+			students: initalRef.current.students,
+		};
+		return JSON.stringify(current) !== JSON.stringify(initial);
+	}, [userMeta, worksheetMeta, students]);
+
+	useNavigationBlocker(editing);
 
 	useEffect(() => {
 		if (!accessToken || !worksheetId) return;
@@ -135,8 +153,14 @@ const WorksheetInspect = ({ propWorksheetId }: Props) => {
 				worksheet={initalRef.current}
 				editState={{
 					isEditing: editing,
-					setEditing: setEditing,
-					onCancelEdit: resetWorksheet,
+					setEditing: (nextEditing: boolean) => {
+						if (editing && !nextEditing) {
+							if (!confirmDiscardIfUnsaved(hasUnsavedChanges, resetWorksheet)) {
+								return;
+							}
+						}
+						setEditing(nextEditing);
+					},
 				}}
 			/>
 

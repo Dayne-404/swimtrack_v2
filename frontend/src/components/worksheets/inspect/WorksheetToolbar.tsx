@@ -12,10 +12,9 @@ import { useNavigate } from 'react-router-dom';
 
 interface Props {
 	worksheet: Worksheet | null;
-	editState?: {
+	editState: {
 		isEditing: boolean;
 		setEditing: (editing: boolean) => void;
-		onCancelEdit?: () => void;
 	};
 	// loadingState?: {
 	// 	isLoading: boolean;
@@ -56,15 +55,6 @@ const WorksheetToolbar = ({ worksheet, editState }: Props) => {
 	const isOwnedByUser =
 		worksheet?.user?._id === user?._id || user?.role === 'admin' || user?.role === 'supervisor';
 
-	const handleEditToggle = () => {
-		if (!editState) return;
-
-		if (editState.isEditing) {
-			editState.onCancelEdit?.();
-		}
-		editState.setEditing(!editState.isEditing);
-	};
-
 	const getWorksheetLevelLabel = () => {
 		if (worksheet?.level === 0 || worksheet?.level) {
 			return WORKSHEET_DATA.level[worksheet.level] ?? 'Unknown';
@@ -81,7 +71,7 @@ const WorksheetToolbar = ({ worksheet, editState }: Props) => {
 					<Button
 						color="primary"
 						variant="outlined"
-						onClick={handleEditToggle}
+						onClick={() => editState.setEditing(!editState.isEditing)}
 						startIcon={editState?.isEditing ? <DoNotDisturbIcon /> : <EditIcon />}
 					>
 						{editState?.isEditing ? 'Cancel' : 'Edit'}

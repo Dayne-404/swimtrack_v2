@@ -11,14 +11,14 @@
 ### Worksheet Inspect
 
 - [x] Error Handling on submit and displaying those errors on frontend
-- [ ] Remove instructor search from library filter
+- [x] Remove instructor search from library filter
 - [x] Worksheet Deletion handling
 - [ ] Worksheet level change modal
 - [ ] Leaving page before saving when changes are made popup
 - [ ] Ensure backend handles data properly
-- [ ] Investigate and improve sorting (time field especially)
-- [ ] Fix Sorting (Highest / Lowest is wrong)
-- [ ] Fix Flickering when students are loading / Add loading state
+- [x] Investigate and improve sorting (time field especially)
+- [x] Fix Sorting (Highest / Lowest is wrong)
+- [x] Fix Flickering when students are loading / Add loading state -- Possible improvement could be skeleton components
 
 ### Worksheet Create
 
